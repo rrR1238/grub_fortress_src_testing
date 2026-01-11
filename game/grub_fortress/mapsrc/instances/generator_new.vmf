@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "8870"
-	"mapversion" "33"
+	"mapversion" "34"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -89,7 +89,7 @@ bgimages_plus
 world
 {
 	"id" "1"
-	"mapversion" "33"
+	"mapversion" "34"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -157,6 +157,7 @@ entity
 	"Template01" "generator"
 	"Template02" "generator_model"
 	"Template03" "generator_glow"
+	"Template04" "generator_model_panel"
 	"origin" "0 0 72"
 	editor
 	{
@@ -198,6 +199,7 @@ entity
 	{
 		"OnBreak" "generator_modelKill0-1"
 		"OnBreak" "@logic_relay_counterTrigger0-1"
+		"OnBreak" "generator_model_panelKill0-1"
 	}
 	solid
 	{

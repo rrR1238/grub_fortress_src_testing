@@ -51,15 +51,15 @@
 				"sound_released"	"UI/buttonclickrelease.wav"
 				
 				"border_default"	"MainMenuButtonDefault"
-				"border_armed"		"MainMenuButtonArmed"
+				"border_armed"		"MainMenuButtonArmed_TFGrub"
 				"paintbackground"	"0"
 				
 				"defaultFgColor_override" "46 43 42 255"
-				"armedFgColor_override" "235 226 202 255"
+				"armedFgColor_override" "46 43 42 255"
 				"depressedFgColor_override" "46 43 42 255"
 				
-				"image_drawcolor"	"117 107 94 255"
-				"image_armedcolor"	"235 226 202 255"
+				"image_drawcolor"	"89 83 74 255"
+				"image_armedcolor"	"89 83 74 255"
 				"SubImage"
 				{
 					"ControlName"	"ImagePanel"
@@ -260,7 +260,7 @@
 			"pinCorner"		"0"
 			"visible"		"1"
 			"enabled"		"1"
-			"fgcolor_override"	"117 107 94 255"
+			"fgcolor_override"	"89 83 74 255"
 			"wrap"			"1"
 		}
 		
@@ -326,15 +326,15 @@
 			"sound_released"	"UI/buttonclickrelease.wav"
 			
 			"border_default"	"MainMenuButtonDefault"
-			"border_armed"		"MainMenuButtonArmed"
+			"border_armed"		"MainMenuButtonArmed_TFGrub"
 			"paintbackground"	"0"
 			
 			"defaultFgColor_override" "46 43 42 255"
-			"armedFgColor_override" "235 226 202 255"
+			"armedFgColor_override" "46 43 42 255"
 			"depressedFgColor_override" "46 43 42 255"
 			
-			"image_drawcolor"	"117 107 94 255"
-			"image_armedcolor"	"235 226 202 255"
+			"image_drawcolor"	"89 83 74 255"
+			"image_armedcolor"	"89 83 74 255"
 			"SubImage"
 			{
 				"ControlName"	"ImagePanel"
@@ -392,15 +392,15 @@
 			"sound_released"	"UI/buttonclickrelease.wav"
 			
 			"border_default"	"MainMenuButtonDefault"
-			"border_armed"		"MainMenuButtonArmed"
+			"border_armed"		"MainMenuButtonArmed_TFGrub"
 			"paintbackground"	"0"
 			
 			"defaultFgColor_override" "46 43 42 255"
-			"armedFgColor_override" "235 226 202 255"
+			"armedFgColor_override" "46 43 42 255"
 			"depressedFgColor_override" "46 43 42 255"
 			
-			"image_drawcolor"	"117 107 94 255"
-			"image_armedcolor"	"235 226 202 255"
+			"image_drawcolor"	"89 83 74 255"
+			"image_armedcolor"	"89 83 74 255"
 			"SubImage"
 			{
 				"ControlName"	"ImagePanel"
@@ -458,15 +458,15 @@
 			"sound_released"	"UI/buttonclickrelease.wav"
 			
 			"border_default"	"MainMenuButtonDefault"
-			"border_armed"		"MainMenuButtonArmed"
+			"border_armed"		"MainMenuButtonArmed_TFGrub"
 			"paintbackground"	"0"
 			
 			"defaultFgColor_override" "46 43 42 255"
-			"armedFgColor_override" "235 226 202 255"
+			"armedFgColor_override" "46 43 42 255"
 			"depressedFgColor_override" "46 43 42 255"
 			
-			"image_drawcolor"	"117 107 94 255"
-			"image_armedcolor"	"235 226 202 255"
+			"image_drawcolor"	"89 83 74 255"
+			"image_armedcolor"	"89 83 74 255"
 			"SubImage"
 			{
 				"ControlName"	"ImagePanel"
@@ -634,7 +634,7 @@
 			//"defaultFgColor_override" "235 226 202 255"
 			//"armedFgColor_override" "46 43 42 255"
 			"defaultFgColor_override" "46 43 42 255"
-			"armedFgColor_override" "235 226 202 255"
+			"armedFgColor_override" "46 43 42 255"
 			"depressedFgColor_override" "46 43 42 255"
 			
 			"image_drawcolor"	"235 226 202 255"
@@ -758,7 +758,7 @@
 			"wide"			"280"
 			"tall"			"95"
 			"PaintBackgroundType"	"2"
-			"fgcolor_override"	"117 107 94 255"
+			"fgcolor_override"	"89 83 74 255"
 			
 			"MOTD_TextPanel"
 			{
@@ -824,7 +824,7 @@
 			
 			"defaultFgColor_override" "235 226 202 255"
 			"defaultBgColor_override" "46 43 42 255"
-			"armedFgColor_override" "235 226 202 255"
+			"armedFgColor_override" "46 43 42 255"
 			"depressedFgColor_override" "235 226 202 255"
 		}	
 		
@@ -1075,10 +1075,10 @@
 			"paintbackground"	"0"
 			
 			"defaultFgColor_override" "46 43 42 255"
-			"armedFgColor_override" "235 226 202 255"
+			"armedFgColor_override" "46 43 42 255"
 			"depressedFgColor_override" "46 43 42 255"
 			
-			"image_drawcolor"	"117 107 94 255"
+			"image_drawcolor"	"89 83 74 255"
 			"image_armedcolor"	"200 80 60 255"
 			"SubImage"
 			{
@@ -1124,7 +1124,7 @@
 			"wide"			"210"
 			"tall"			"135"
 			"PaintBackgroundType"	"2"
-			"fgcolor_override"	"117 107 94 255"
+			"fgcolor_override"	"89 83 74 255"
 			
 			"Notifications_Control"
 			{
@@ -1227,15 +1227,15 @@
 			"sound_released"	"UI/buttonclickrelease.wav"
 			
 			"border_default"	"MainMenuButtonDefault"
-			"border_armed"		"MainMenuButtonArmed"
+			"border_armed"		"MainMenuButtonArmed_TFGrub"
 			"paintbackground"	"0"
 			
 			"defaultFgColor_override" "46 43 42 255"
-			"armedFgColor_override" "235 226 202 255"
+			"armedFgColor_override" "46 43 42 255"
 			"depressedFgColor_override" "46 43 42 255"
 			
-			"image_drawcolor"	"117 107 94 255"
-			"image_armedcolor"	"235 226 202 255"
+			"image_drawcolor"	"89 83 74 255"
+			"image_armedcolor"	"89 83 74 255"
 			"SubImage"
 			{
 				"ControlName"	"ImagePanel"
@@ -1293,15 +1293,15 @@
 			"sound_released"	"UI/buttonclickrelease.wav"
 			
 			"border_default"	"MainMenuButtonDefault"
-			"border_armed"		"MainMenuButtonArmed"
+			"border_armed"		"MainMenuButtonArmed_TFGrub"
 			"paintbackground"	"0"
 			
 			"defaultFgColor_override" "46 43 42 255"
-			"armedFgColor_override" "235 226 202 255"
+			"armedFgColor_override" "46 43 42 255"
 			"depressedFgColor_override" "46 43 42 255"
 			
-			"image_drawcolor"	"117 107 94 255"
-			"image_armedcolor"	"235 226 202 255"
+			"image_drawcolor"	"89 83 74 255"
+			"image_armedcolor"	"89 83 74 255"
 			"SubImage"
 			{
 				"ControlName"	"ImagePanel"
@@ -1359,15 +1359,15 @@
 			"sound_released"	"UI/buttonclickrelease.wav"
 			
 			"border_default"	"MainMenuButtonDefault"
-			"border_armed"		"MainMenuButtonArmed"
+			"border_armed"		"MainMenuButtonArmed_TFGrub"
 			"paintbackground"	"0"
 			
 			"defaultFgColor_override" "46 43 42 255"
-			"armedFgColor_override" "235 226 202 255"
+			"armedFgColor_override" "46 43 42 255"
 			"depressedFgColor_override" "46 43 42 255"
 			
-			"image_drawcolor"	"117 107 94 255"
-			"image_armedcolor"	"235 226 202 255"
+			"image_drawcolor"	"89 83 74 255"
+			"image_armedcolor"	"89 83 74 255"
 			"SubImage"
 			{
 				"ControlName"	"ImagePanel"
@@ -1439,15 +1439,15 @@
 			"sound_released"	"UI/buttonclickrelease.wav"
 			
 			"border_default"	"MainMenuButtonDefault"
-			"border_armed"		"MainMenuButtonArmed"
+			"border_armed"		"MainMenuButtonArmed_TFGrub"
 			"paintbackground"	"0"
 			
 			"defaultFgColor_override" "46 43 42 255"
-			"armedFgColor_override" "235 226 202 255"
+			"armedFgColor_override" "46 43 42 255"
 			"depressedFgColor_override" "46 43 42 255"
 			
-			"image_drawcolor"	"117 107 94 255"
-			"image_armedcolor"	"235 226 202 255"
+			"image_drawcolor"	"89 83 74 255"
+			"image_armedcolor"	"89 83 74 255"
 			"SubImage"
 			{
 				"ControlName"	"ImagePanel"
@@ -1488,11 +1488,11 @@
 		"command"		"showpromocodes"
 		
 		"border_default"	"MainMenuButtonDefault"
-		"border_armed"		"MainMenuButtonArmed"
+		"border_armed"		"MainMenuButtonArmed_TFGrub"
 		"paintbackground"	"0"
 		
 		"defaultFgColor_override" "46 43 42 255"
-		"armedFgColor_override" "235 226 202 255"
+		"armedFgColor_override" "46 43 42 255"
 		"depressedFgColor_override" "46 43 42 255"
 	}
 	"FreeTrialPanel"
@@ -1616,15 +1616,15 @@
 			"sound_released"	"UI/buttonclickrelease.wav"
 			
 			"border_default"	"MainMenuButtonDefault"
-			"border_armed"		"MainMenuButtonArmed"
+			"border_armed"		"MainMenuButtonArmed_TFGrub"
 			"paintbackground"	"0"
 			
 			"defaultFgColor_override" "46 43 42 255"
-			"armedFgColor_override" "235 226 202 255"
+			"armedFgColor_override" "46 43 42 255"
 			"depressedFgColor_override" "46 43 42 255"
 			
-			"image_drawcolor"	"117 107 94 255"
-			"image_armedcolor"	"235 226 202 255"
+			"image_drawcolor"	"89 83 74 255"
+			"image_armedcolor"	"89 83 74 255"
 
 			"SubImage"
 			{
@@ -1683,15 +1683,15 @@
 			"sound_released"	"UI/buttonclickrelease.wav"
 			
 			"border_default"	"MainMenuButtonDefault"
-			"border_armed"		"MainMenuButtonArmed"
+			"border_armed"		"MainMenuButtonArmed_TFGrub"
 			"paintbackground"	"0"
 			
 			"defaultFgColor_override" "46 43 42 255"
-			"armedFgColor_override" "235 226 202 255"
+			"armedFgColor_override" "46 43 42 255"
 			"depressedFgColor_override" "46 43 42 255"
 			
-			"image_drawcolor"	"117 107 94 255"
-			"image_armedcolor"	"235 226 202 255"
+			"image_drawcolor"	"89 83 74 255"
+			"image_armedcolor"	"89 83 74 255"
 
 			"SubImage"
 			{
@@ -1750,15 +1750,15 @@
 			"sound_released"	"UI/buttonclickrelease.wav"
 			
 			"border_default"	"MainMenuButtonDefault"
-			"border_armed"		"MainMenuButtonArmed"
+			"border_armed"		"MainMenuButtonArmed_TFGrub"
 			"paintbackground"	"0"
 			
 			"defaultFgColor_override" "46 43 42 255"
-			"armedFgColor_override" "235 226 202 255"
+			"armedFgColor_override" "46 43 42 255"
 			"depressedFgColor_override" "46 43 42 255"
 			
-			"image_drawcolor"	"117 107 94 255"
-			"image_armedcolor"	"235 226 202 255"
+			"image_drawcolor"	"89 83 74 255"
+			"image_armedcolor"	"89 83 74 255"
 
 			"SubImage"
 			{
@@ -1817,15 +1817,15 @@
 			"sound_released"	"UI/buttonclickrelease.wav"
 			
 			"border_default"	"MainMenuButtonDefault"
-			"border_armed"		"MainMenuButtonArmed"
+			"border_armed"		"MainMenuButtonArmed_TFGrub"
 			"paintbackground"	"0"
 			
 			"defaultFgColor_override" "46 43 42 255"
-			"armedFgColor_override" "235 226 202 255"
+			"armedFgColor_override" "46 43 42 255"
 			"depressedFgColor_override" "46 43 42 255"
 			
-			"image_drawcolor"	"117 107 94 255"
-			"image_armedcolor"	"235 226 202 255"
+			"image_drawcolor"	"89 83 74 255"
+			"image_armedcolor"	"89 83 74 255"
 
 			"SubImage"
 			{
@@ -1884,15 +1884,15 @@
 			"sound_released"	"UI/buttonclickrelease.wav"
 			
 			"border_default"	"MainMenuButtonDefault"
-			"border_armed"		"MainMenuButtonArmed"
+			"border_armed"		"MainMenuButtonArmed_TFGrub"
 			"paintbackground"	"0"
 			
 			"defaultFgColor_override" "46 43 42 255"
-			"armedFgColor_override" "235 226 202 255"
+			"armedFgColor_override" "46 43 42 255"
 			"depressedFgColor_override" "46 43 42 255"
 			
-			"image_drawcolor"	"117 107 94 255"
-			"image_armedcolor"	"235 226 202 255"
+			"image_drawcolor"	"89 83 74 255"
+			"image_armedcolor"	"89 83 74 255"
 
 			"SubImage"
 			{
@@ -1950,15 +1950,15 @@
 			"sound_released"	"UI/buttonclickrelease.wav"
 			
 			"border_default"	"MainMenuButtonDefault"
-			"border_armed"		"MainMenuButtonArmed"
+			"border_armed"		"MainMenuButtonArmed_TFGrub"
 			"paintbackground"	"0"
 			
 			"defaultFgColor_override" "46 43 42 255"
-			"armedFgColor_override" "235 226 202 255"
+			"armedFgColor_override" "46 43 42 255"
 			"depressedFgColor_override" "46 43 42 255"
 			
-			"image_drawcolor"	"117 107 94 255"
-			"image_armedcolor"	"235 226 202 255"
+			"image_drawcolor"	"89 83 74 255"
+			"image_armedcolor"	"89 83 74 255"
 			"SubImage"
 			{
 				"ControlName"	"ImagePanel"
@@ -2014,15 +2014,15 @@
 			"sound_released"	"UI/buttonclickrelease.wav"
 			
 			"border_default"	"MainMenuButtonDefault"
-			"border_armed"		"MainMenuButtonArmed"
+			"border_armed"		"MainMenuButtonArmed_TFGrub"
 			"paintbackground"	"0"
 			
 			"defaultFgColor_override" "46 43 42 255"
-			"armedFgColor_override" "235 226 202 255"
+			"armedFgColor_override" "46 43 42 255"
 			"depressedFgColor_override" "46 43 42 255"
 			
-			"image_drawcolor"	"117 107 94 255"
-			"image_armedcolor"	"235 226 202 255"
+			"image_drawcolor"	"89 83 74 255"
+			"image_armedcolor"	"89 83 74 255"
 			"SubImage"
 			{
 				"ControlName"	"ImagePanel"
@@ -2087,7 +2087,7 @@
 			"depressedFgColor_override" "46 43 42 255"
 			
 			"image_drawcolor"	"235 226 202 255"
-			"image_armedcolor"	"235 226 202 255"
+			"image_armedcolor"	"89 83 74 255"
 			
 			"SubImage"
 			{
@@ -2606,15 +2606,15 @@
 				"Command"		"tutorial"
 				
 				"border_default"	"MainMenuButtonDefault"
-				"border_armed"		"MainMenuButtonArmed"
+				"border_armed"		"MainMenuButtonArmed_TFGrub"
 				"paintbackground"	"0"
 				
 				"defaultFgColor_override" "46 43 42 255"
-				"armedFgColor_override" "235 226 202 255"
+				"armedFgColor_override" "46 43 42 255"
 				"depressedFgColor_override" "46 43 42 255"
 				
-				"image_drawcolor"	"117 107 94 255"
-				"image_armedcolor"	"235 226 202 255"
+				"image_drawcolor"	"89 83 74 255"
+				"image_armedcolor"	"89 83 74 255"
 				"SubImage"
 				{
 					"ControlName"	"ImagePanel"
@@ -2658,10 +2658,10 @@
 			"paintbackground"	"0"
 			
 			"defaultFgColor_override" "46 43 42 255"
-			"armedFgColor_override" "235 226 202 255"
+			"armedFgColor_override" "46 43 42 255"
 			"depressedFgColor_override" "46 43 42 255"
 			
-			"image_drawcolor"	"117 107 94 255"
+			"image_drawcolor"	"89 83 74 255"
 			"image_armedcolor"	"200 80 60 255"
 			"SubImage"
 			{
@@ -2774,15 +2774,15 @@
 				"Command"		"offlinepractice"
 				
 				"border_default"	"MainMenuButtonDefault"
-				"border_armed"		"MainMenuButtonArmed"
+				"border_armed"		"MainMenuButtonArmed_TFGrub"
 				"paintbackground"	"0"
 				
 				"defaultFgColor_override" "46 43 42 255"
-				"armedFgColor_override" "235 226 202 255"
+				"armedFgColor_override" "46 43 42 255"
 				"depressedFgColor_override" "46 43 42 255"
 				
-				"image_drawcolor"	"117 107 94 255"
-				"image_armedcolor"	"235 226 202 255"
+				"image_drawcolor"	"89 83 74 255"
+				"image_armedcolor"	"89 83 74 255"
 				"SubImage"
 				{
 					"ControlName"	"ImagePanel"
@@ -2826,10 +2826,10 @@
 			"paintbackground"	"0"
 			
 			"defaultFgColor_override" "46 43 42 255"
-			"armedFgColor_override" "235 226 202 255"
+			"armedFgColor_override" "46 43 42 255"
 			"depressedFgColor_override" "46 43 42 255"
 			
-			"image_drawcolor"	"117 107 94 255"
+			"image_drawcolor"	"89 83 74 255"
 			"image_armedcolor"	"200 80 60 255"
 			"SubImage"
 			{
@@ -2938,10 +2938,10 @@
 			"paintbackground"	"0"
 			
 			"defaultFgColor_override" "46 43 42 255"
-			"armedFgColor_override" "235 226 202 255"
+			"armedFgColor_override" "46 43 42 255"
 			"depressedFgColor_override" "46 43 42 255"
 			
-			"image_drawcolor"	"117 107 94 255"
+			"image_drawcolor"	"89 83 74 255"
 			"image_armedcolor"	"200 80 60 255"
 			"SubImage"
 			{
@@ -3050,10 +3050,10 @@
 			"paintbackground"	"0"
 			
 			"defaultFgColor_override" "46 43 42 255"
-			"armedFgColor_override" "235 226 202 255"
+			"armedFgColor_override" "46 43 42 255"
 			"depressedFgColor_override" "46 43 42 255"
 			
-			"image_drawcolor"	"117 107 94 255"
+			"image_drawcolor"	"89 83 74 255"
 			"image_armedcolor"	"200 80 60 255"
 			"SubImage"
 			{
@@ -3162,10 +3162,10 @@
 			"paintbackground"	"0"
 			
 			"defaultFgColor_override" "46 43 42 255"
-			"armedFgColor_override" "235 226 202 255"
+			"armedFgColor_override" "46 43 42 255"
 			"depressedFgColor_override" "46 43 42 255"
 			
-			"image_drawcolor"	"117 107 94 255"
+			"image_drawcolor"	"89 83 74 255"
 			"image_armedcolor"	"200 80 60 255"
 			"SubImage"
 			{
@@ -3274,10 +3274,10 @@
 			"paintbackground"	"0"
 			
 			"defaultFgColor_override" "46 43 42 255"
-			"armedFgColor_override" "235 226 202 255"
+			"armedFgColor_override" "46 43 42 255"
 			"depressedFgColor_override" "46 43 42 255"
 			
-			"image_drawcolor"	"117 107 94 255"
+			"image_drawcolor"	"89 83 74 255"
 			"image_armedcolor"	"200 80 60 255"
 			"SubImage"
 			{
@@ -3336,15 +3336,15 @@
 			"sound_released"	"UI/buttonclickrelease.wav"
 			
 			"border_default"	"MainMenuButtonDefault"
-			"border_armed"		"MainMenuButtonArmed"
+			"border_armed"		"MainMenuButtonArmed_TFGrub"
 			"paintbackground"	"0"
 			
 			"defaultFgColor_override" "46 43 42 255"
-			"armedFgColor_override" "235 226 202 255"
+			"armedFgColor_override" "46 43 42 255"
 			"depressedFgColor_override" "46 43 42 255"
 			
-			"image_drawcolor"	"117 107 94 255"
-			"image_armedcolor"	"235 226 202 255"
+			"image_drawcolor"	"89 83 74 255"
+			"image_armedcolor"	"89 83 74 255"
 			"SubImage"
 			{
 				"ControlName"	"ImagePanel"
@@ -3401,15 +3401,15 @@
 			"sound_released"	"UI/buttonclickrelease.wav"
 			
 			"border_default"	"MainMenuButtonDefault"
-			"border_armed"		"MainMenuButtonArmed"
+			"border_armed"		"MainMenuButtonArmed_TFGrub"
 			"paintbackground"	"0"
 			
 			"defaultFgColor_override" "46 43 42 255"
-			"armedFgColor_override" "235 226 202 255"
+			"armedFgColor_override" "46 43 42 255"
 			"depressedFgColor_override" "46 43 42 255"
 			
-			"image_drawcolor"	"117 107 94 255"
-			"image_armedcolor"	"235 226 202 255"
+			"image_drawcolor"	"89 83 74 255"
+			"image_armedcolor"	"89 83 74 255"
 			"SubImage"
 			{
 				"ControlName"	"ImagePanel"
