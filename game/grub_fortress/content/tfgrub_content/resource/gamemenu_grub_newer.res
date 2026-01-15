@@ -11,7 +11,7 @@
 	{
 		"label" "#MMenu_BrowseServers" 
 		"command" "OpenServerBrowser"
-		"subimage" "glyph_multiplayer"
+		"subimage" "glyph_spy_glass"
 		"OnlyAtMenu" "1"
 	}
 	"ServerBrowserIngameButton"
@@ -109,7 +109,7 @@
 	{
 		"label"	""
 		"command" 	"engine serverfinderdialog"
-		"subimage" "glyph_server"
+		"subimage" "glyph_multiplayer"
 		"tooltip"	"#Serverfinder_Title"
 		"OnlyAtMenu" "1"
 	}

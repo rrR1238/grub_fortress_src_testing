@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "8870"
-	"mapversion" "34"
+	"mapversion" "36"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -89,7 +89,7 @@ bgimages_plus
 world
 {
 	"id" "1"
-	"mapversion" "34"
+	"mapversion" "36"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -100,7 +100,7 @@ entity
 {
 	"id" "6"
 	"classname" "tf_glow"
-	"GlowColor" "255 0 0 255"
+	"GlowColor" "194 0 0 235"
 	"Mode" "0"
 	"target" "generator_model"
 	"targetname" "generator_glow"
