@@ -35,6 +35,7 @@
 #define ROUND_TIMER_2SECS	"Announcer.RoundEnds2seconds"
 #define ROUND_TIMER_1SECS	"Announcer.RoundEnds1seconds"
 
+#define ROUND_SETUP_MUSIC	"music.RoundBeginsMusic"
 #define ROUND_SETUP_60SECS	"Announcer.RoundBegins60Seconds"
 #define ROUND_SETUP_30SECS	"Announcer.RoundBegins30Seconds"
 #define ROUND_SETUP_10SECS	"Announcer.RoundBegins10Seconds"
@@ -84,6 +85,10 @@ extern bool IsInCommentaryMode();
 
 #if defined( GAME_DLL ) && defined( TF_DLL )
 ConVar tf_overtime_nag( "tf_overtime_nag", "0", FCVAR_NOTIFY, "Announcer overtime nag." );
+#endif
+
+#ifdef TF_CLIENT_DLL
+ConVar tfgrub_setup_music( "tfgrub_setup_music", "1", FCVAR_ARCHIVE, "Plays setup music at 30 seconds remaining during setup time" );
 #endif
 
 #ifdef CLIENT_DLL
@@ -279,6 +284,7 @@ void CTeamRoundTimer::Precache( void )
 	PrecacheScriptSound( ROUND_TIMER_3SECS );
 	PrecacheScriptSound( ROUND_TIMER_2SECS );
 	PrecacheScriptSound( ROUND_TIMER_1SECS );
+	PrecacheScriptSound( ROUND_SETUP_MUSIC );
 	PrecacheScriptSound( ROUND_SETUP_60SECS );
 	PrecacheScriptSound( ROUND_SETUP_30SECS );
 	PrecacheScriptSound( ROUND_SETUP_10SECS );
@@ -572,6 +578,13 @@ const char *CTeamRoundTimer::GetTimeWarningSound( int nWarning )
 		if ( m_nState == RT_STATE_SETUP )
 		{
 			pszRetVal = ROUND_SETUP_30SECS;
+#ifdef TF_CLIENT_DLL
+			C_BasePlayer *pPlayer = C_BasePlayer::GetLocalPlayer();
+			if ( pPlayer && tfgrub_setup_music.GetBool() )
+			{
+				pPlayer->EmitSound( ROUND_SETUP_MUSIC );
+			}
+#endif
 		}
 		else
 		{
