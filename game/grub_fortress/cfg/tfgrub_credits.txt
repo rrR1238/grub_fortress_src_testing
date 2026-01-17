@@ -28,6 +28,13 @@ DESCRIPTION INFO_OPTIONS
 		{ BOOL }
 		{ "1" }
 	}
+	"jarate"
+	{
+		"JarateIsCool - SFM class portrait renders"
+		"github.com/Grub-Fortress/grub_fortress_src/pull/1"
+		{ BOOL }
+		{ "1" }
+	}
 	"cheesie"
 	{
 		"cheesie_cake - Playtester"
