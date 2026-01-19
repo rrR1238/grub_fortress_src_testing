@@ -87,7 +87,6 @@ CItemSelectionPanel::CItemSelectionPanel(Panel *parent) : CBaseLoadoutPanel(pare
 	m_pOnlyAllowUniqueQuality = NULL;
 	m_pShowModItems = NULL;
 	m_pShowTF2Items = NULL;
-	m_pShowBackpack = NULL;
 	m_pShowSelection = NULL;
 	m_pNextPageButton = NULL;
 	m_pPrevPageButton = NULL;
@@ -132,7 +131,6 @@ void CItemSelectionPanel::ApplySchemeSettings( vgui::IScheme *pScheme )
 	m_pOnlyAllowUniqueQuality = dynamic_cast<vgui::CheckButton *>( FindChildByName("OnlyAllowUniqueQuality") );
 	m_pShowModItems = dynamic_cast<vgui::CheckButton *>( FindChildByName("ShowModItems") );
 	m_pShowTF2Items = dynamic_cast<vgui::CheckButton *>( FindChildByName("ShowTF2Items") );
-	m_pShowBackpack = dynamic_cast<CExButton*>( FindChildByName("ShowBackpack") );
 	m_pShowSelection = dynamic_cast<CExButton*>( FindChildByName("ShowSelection") );
 	m_pNextPageButton = dynamic_cast<CExButton*>( FindChildByName("NextPageButton") );
 	m_pPrevPageButton = dynamic_cast<CExButton*>( FindChildByName("PrevPageButton") );
@@ -272,7 +270,6 @@ void CItemSelectionPanel::PerformLayout( void )
 		}
 	}
 
-	m_pShowBackpack->SetVisible( !m_bShowingEntireBackpack && !m_bForceBackpack );
 	m_pShowSelection->SetVisible( m_bShowingEntireBackpack && !m_bForceBackpack );
 
 	m_pNextPageButton->SetVisible( true );

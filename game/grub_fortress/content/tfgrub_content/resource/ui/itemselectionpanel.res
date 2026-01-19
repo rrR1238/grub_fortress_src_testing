@@ -321,30 +321,6 @@
 		"command"		"checkbox_tf2item_changed"
 	}
 	
-	"ShowBackpack"
-	{
-		"ControlName"	"CExButton"
-		"fieldName"		"ShowBackpack"
-		"xpos"			"c100"
-		"ypos"			"340"
-		"zpos"			"20"
-		"wide"			"200"
-		"tall"			"25"
-		"autoResize"	"0"
-		"pinCorner"		"0"
-		"visible"		"1"
-		"enabled"		"1"
-		"tabPosition"	"0"
-		"labelText"		"#Selection_ShowBackpack"
-		"font"			"HudFontSmallBold"
-		"textAlignment"	"center"
-		"textinsetx"	"50"
-		"dulltext"		"0"
-		"brighttext"	"0"
-		"Command"		"show_backpack"
-		"sound_depressed"	"UI/buttonclick.wav"
-		"sound_released"	"UI/buttonclickrelease.wav"
-	}
 	"ShowSelection"
 	{
 		"ControlName"	"CExButton"

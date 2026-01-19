@@ -3251,6 +3251,7 @@ void CEconItemDescription::Generate_FlagsAttributes( const CLocalizationProvider
 					}
 				}
 
+				/*
 				if ( !pItemDef || (pItemDef->GetCapabilities() & ITEM_CAP_CAN_BE_CRAFTED_IF_PURCHASED) == 0 )
 				{
 					if ( pItemDef->IsBundle() )
@@ -3262,6 +3263,7 @@ void CEconItemDescription::Generate_FlagsAttributes( const CLocalizationProvider
 						vecLines.AddToTail( localized_localplayer_line_t( "#Attrib_CannotCraft", ATTRIB_COL_NEGATIVE ) );
 					}
 				}
+				*/
 			}
 		}
 	}
@@ -3279,10 +3281,12 @@ void CEconItemDescription::Generate_FlagsAttributes( const CLocalizationProvider
 			AddAttributeDescription( pLocalizationProvider, pAttrDef_ToolEscrowUntil, unEscrowTime );
 		}
 
+		/*
 		if ( !pEconItem->IsUsableInCrafting() )
 		{
 			vecLines.AddToTail( localized_localplayer_line_t( "#Attrib_CannotCraft", ATTRIB_COL_NEUTRAL ) );
 		}
+		*/
 	}
 	else if ( pEconItem->FindAttribute( pAttrDef_AlwaysTradableAndUsableInCrafting ) && pEconItem->IsTradable() )
 	{
@@ -3300,6 +3304,7 @@ void CEconItemDescription::Generate_FlagsAttributes( const CLocalizationProvider
 		{
 			vecLines.AddToTail( localized_localplayer_line_t( "#Attrib_SpecialItem", ATTRIB_COL_NEUTRAL ) );
 		}
+/*
 		else if ( eOrigin == kEconItemOrigin_Achievement )
 		{
 			vecLines.AddToTail( localized_localplayer_line_t( "#Attrib_AchievementItem", ATTRIB_COL_NEUTRAL ) );
@@ -3350,6 +3355,7 @@ void CEconItemDescription::Generate_FlagsAttributes( const CLocalizationProvider
 				}
 			}
 		}
+*/
 	}
 
 	if ( vecLines.Count() > 0 )
