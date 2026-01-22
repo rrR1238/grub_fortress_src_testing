@@ -3812,7 +3812,7 @@ void CTFCreateServerDialog::CreateControls()
 	//Panel *objParent = m_pPageOne;
 
 	IScheme *pScheme = scheme()->GetIScheme( GetScheme() );
-	vgui::HFont hTextFont = pScheme->GetFont( "HudFontSmallestBold", true );
+	vgui::HFont hTextFont = pScheme->GetFont( "HudFontSmallest", true );
 	Color tanDark = pScheme->GetColor( "TanDark", Color(255,0,0,255) );
 
 	Warning( "CreateControls: Starting to process objects, pObj=%p\n", pObj );
@@ -3918,7 +3918,7 @@ void CTFCreateServerDialog::CreateControls()
 
 			if ( pCtrl->type == O_CATEGORY )
 			{
-				pCtrl->pPrompt->SetFont( pScheme->GetFont( "HudFontSmallBold", true ) );
+				pCtrl->pPrompt->SetFont( pScheme->GetFont( "HudFontSmall", true ) );
 				pCtrl->pPrompt->SetFgColor( pScheme->GetColor( "TanLight", Color(255,0,0,255) ) );
 			}
 			else

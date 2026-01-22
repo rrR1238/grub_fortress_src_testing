@@ -382,6 +382,24 @@ not sure if it should be used as a weapon"
 			"hidden"	"0"
 			"effect_type"	"positive"
 		}
+		"5019"
+		{
+			"name"	"is experimental item"
+			"attribute_class"	"is_experimental_item_DISPLAY"
+			"description_string"	"#TFGRUB_ExperimentalItem_Display"
+			"description_format"	"value_is_additive"
+			"hidden"	"0"
+			"effect_type"	"community"
+		}
+		"5020"
+		{
+			"name"	"is experimental rebalance display"
+			"attribute_class"	"is_experimental_rebalance_DISPLAY"
+			"description_string"	"#TFGRUB_ExperimentalRebalance_Display"
+			"description_format"	"value_is_additive"
+			"hidden"	"0"
+			"effect_type"	"community"
+		}
 	}
 	"items"
 	{

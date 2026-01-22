@@ -4,7 +4,7 @@
 	{
 		"category1"
 		{
-			"label"		"SERVER PROFILE"
+			"label"		"Server Profile"
 			"type"		"CATEGORY"
 		}
 		"hostname"
@@ -15,12 +15,12 @@
 		}
 		"sv_tags"
 		{
-			"label"		"TAGS"
+			"label"		"Tags"
 			"type"		"STRING"
 		}
 		"category2"
 		{
-			"label"		"SERVER SLOTS AND BOTS"
+			"label"		"Server Slots and Bots"
 			"type"		"CATEGORY"
 		}
 		"maxplayers"
@@ -31,7 +31,7 @@
 		}
 		"tf_bot_quota"
 		{
-			"label"		"AMOUNT OF BOTS:"
+			"label"		"Amount of Bots:"
 			"type"		"STRING"
 			"val"		"0"
 		}
@@ -55,12 +55,12 @@
 		}
 		"cl_map_search"
 		{
-			"label"		"SEARCH MAPS"
+			"label"		"Search Maps"
 			"type"		"STRING"
 		}
 		"cl_map"
 		{
-			"label"		"SELECT MAP"
+			"label"		"Select Map"
 			"type"		"LIST"
 			"options"
 			{
@@ -91,133 +91,133 @@
 		}
 		"sv_password"
 		{
-			"label"		"SERVER PASSWORD"
+			"label"		"Server Password"
 			"type"		"STRING"
 		}
 		"category5"
 		{
-			"label"		"COMMUNICATION SETTINGS"
+			"label"		"Communication Settings"
 			"type"		"CATEGORY"
 		}
 		"sv_alltalk"
 		{
-			"label"		"ENABLE ALL TALK"
+			"label"		"Enable All Talk"
 			"type"		"BOOL"
 			"val"		"1"
 		}
 		"sv_voiceenable"
 		{
-			"label"		"ENABLE VOICE CHAT"
+			"label"		"Enable Voice Chat"
 			"type"		"BOOL"
 			"val"		"1"
 		}
 		"category6"
 		{
-			"label"		"ROUND AND TIME SETTINGS"
+			"label"		"Round and Time Settings"
 			"type"		"CATEGORY"
 		}
 		"mp_timelimit"
 		{
-			"label"		"TIME LIMIT (MINUTES)"
+			"label"		"Time Limit (In Minutes)"
 			"type"		"STRING"
 			"val"		"0"
 		}
 		"mp_winlimit"
 		{
-			"label"		"WIN LIMIT"
+			"label"		"Win Limit"
 			"type"		"STRING"
 			"val"		"0"
 		}
 		"mp_maxrounds"
 		{
-			"label"		"MAX ROUNDS"
+			"label"		"Max Rounds"
 			"type"		"STRING"
 			"val"		"0"
 		}
 		"mp_bonusroundtime"
 		{
-			"label"		"BONUS ROUND TIME (SECONDS)"
+			"label"		"Bonus Round Time (In Seconds)"
 			"type"		"STRING"
 			"val"		"15"
 		}
 		"mp_stalemate_enable"
 		{
-			"label"		"ENABLE STALEMATE/SUDDEN DEATH"
+			"label"		"Enable Stalemate / Sudden Death"
 			"type"		"BOOL"
 			"val"		"0"
 		}
 		"category7"
 		{
-			"label"		"TEAM SETTINGS"
+			"label"		"Team Settings"
 			"type"		"CATEGORY"
 		}
 		"mp_teams_unbalance_limit"
 		{
-			"label"		"TEAM BALANCE LIMIT"
+			"label"		"Team Balance Limit"
 			"type"		"STRING"
 			"val"		"1"
 		}
 		"mp_autoteambalance"
 		{
-			"label"		"AUTO TEAM BALANCE"
+			"label"		"Auto Team Balance"
 			"type"		"BOOL"
 			"val"		"1"
 		}
 		"mp_scrambleteams_auto"
 		{
-			"label"		"AUTO SCRAMBLE TEAMS"
+			"label"		"Auto Scramble Teams"
 			"type"		"BOOL"
 			"val"		"1"
 		}
 		"category8"
 		{
-			"label"		"NETWORK AND PERFORMANCE"
+			"label"		"Network and Performance"
 			"type"		"CATEGORY"
 		}
 		"sv_pure"
 		{
-			"label"		"SERVER PURE"
+			"label"		"Server Pure"
 			"type"		"LIST"
 			"options"
 			{
 				"OFF"		"0"
-				"PURE (WHITELIST)"		"1"
-				"PURE (STRICT)"		"2"
+				"Pure (Whitelist)"		"1"
+				"Pure (Strict)"		"2"
 			}
 			"val"		"0"
 		}
 		"sv_region"
 		{
-			"label"		"SERVER REGION"
+			"label"		"Server Region"
 			"type"		"LIST"
 			"options"
 			{
-				"AUTOMATIC"		"-1"
-				"US EAST"		"0"
-				"US WEST"		"1"
-				"SOUTH AMERICA"		"2"
-				"EUROPE"		"3"
-				"ASIA"		"4"
-				"AUSTRALIA"		"5"
-				"MIDDLE EAST"		"6"
-				"AFRICA"		"7"
+				"Automatic"		"-1"
+				"US East"		"0"
+				"US West"		"1"
+				"South America"		"2"
+				"Europe"		"3"
+				"Asia"		"4"
+				"Australia"		"5"
+				"Middle East"		"6"
+				"Africa"		"7"
 			}
 			"val"		"-1"
 		}
 		"sv_downloadurl"
 		{
-			"label"		"FAST DOWNLOAD URL"
+			"label"		"Fast Download URL"
 			"type"		"STRING"
 		}
 		"sv_allowupload"
 		{
-			"label"		"ALLOW UPLOADS"
+			"label"		"Allow Uploads"
 			"type"		"BOOL"
 			"val"		"1"
 		}
 		"sv_allowdownload"
 		{
-			"label"		"ALLOW DOWNLOADS"
+			"label"		"Allow Downloads"
 			"type"		"BOOL"
 			"val"		"1"
 		}
@@ -226,34 +226,39 @@
 	{
 		"category1"
 		{
-			"label"		"GENERAL"
+			"label"		"General"
 			"type"		"CATEGORY"
 		}
 		"mp_disable_respawn_times"
 		{
-			"label"		"DISABLE RESPAWN TIMES"
+			"label"		"Disable Spawn Times"
 			"type"		"BOOL"
 			"val"		"0"
 		}
 		"tf_classlimit"
 		{
-			"label"		"GLOBAL CLASS LIMIT"
+			"label"		"Global Class Limit"
 			"type"		"STRING"
 			"val"		"0"
 		}
 		"tf_weapon_criticals"
 		{
-			"label"		"ENABLE RANDOM CRITS"
-			"type"		"BOOL"
+			"label"		"Enable Random Crits"
+			"type"		"LIST"
+			"options"
+			{
+				"OFF"		"0"
+				"ON"		"1"
+			}
 			"val"		"0"
 		}
 		"tf_weapon_criticals_melee"
 		{
-			"label"		"ENABLE RANDOM CRITS ON MELEE"
+			"label"		"Enable Random Crits on Melee"
 			"type"		"LIST"
 			"options"
 			{
-				"ON (IGNORES WEAPON CRITICALS)"		"2"
+				"ON (Ignores Regular Weapon Criticals)"		"2"
 				"ON"		"1"
 				"OFF"		"0"
 			}
@@ -261,90 +266,90 @@
 		}
 		"tf_use_fixed_weaponspreads"
 		{
-			"label"		"USE FIXED WEAPON SPREAD"
+			"label"		"Use Fixed Weapon Spread"
 			"type"		"BOOL"
 			"val"		"0"
 		}
 		"cf_voicespam"
 		{
-			"label"		"ALLOW VOICE SPAM"
+			"label"		"Allow Voice Spam"
 			"type"		"BOOL"
 			"val"		"1"
 		}
 		"cf_max_voice_speak_delay"
 		{
-			"label"		"MAX VOICE SPEAK DELAY (SECONDS)"
+			"label"		"Max Voice Speak Delay (In Seconds)"
 			"type"		"STRING"
 			"val"		"1.500000"
 		}
 		"category3"
 		{
-			"label"		"TOURNAMENT MODE"
+			"label"		"Tournament Mode"
 			"type"		"CATEGORY"
 		}
 		"mp_tournament"
 		{
-			"label"		"ENABLE TOURNAMENT MODE"
+			"label"		"Enable Tournament Mode"
 			"type"		"BOOL"
 			"val"		"0"
 		}
 		"mp_highlander"
 		{
-			"label"		"ENABLE HIGHLANDER MODE"
+			"label"		"Enable Highlander Mode"
 			"type"		"BOOL"
 			"val"		"0"
 		}
 		"tf_tournament_classlimit_scout"
 		{
-			"label"		"SCOUT LIMIT"
+			"label"		"Scout Limit"
 			"type"		"STRING"
 			"val"		"-1"
 		}
 		"tf_tournament_classlimit_soldier"
 		{
-			"label"		"SOLDIER LIMIT"
+			"label"		"Soldier Limit"
 			"type"		"STRING"
 			"val"		"-1"
 		}
 		"tf_tournament_classlimit_pyro"
 		{
-			"label"		"PYRO LIMIT"
+			"label"		"Pyro Limit"
 			"type"		"STRING"
 			"val"		"-1"
 		}
 		"tf_tournament_classlimit_demoman"
 		{
-			"label"		"DEMOMAN LIMIT"
+			"label"		"Demoman Limit"
 			"type"		"STRING"
 			"val"		"-1"
 		}
 		"tf_tournament_classlimit_heavy"
 		{
-			"label"		"HEAVY LIMIT"
+			"label"		"Heavy Limit"
 			"type"		"STRING"
 			"val"		"-1"
 		}
 		"tf_tournament_classlimit_engineer"
 		{
-			"label"		"ENGINEER LIMIT"
+			"label"		"Engineer Limit"
 			"type"		"STRING"
 			"val"		"-1"
 		}
 		"tf_tournament_classlimit_medic"
 		{
-			"label"		"MEDIC LIMIT"
+			"label"		"Medic Limit"
 			"type"		"STRING"
 			"val"		"-1"
 		}
 		"tf_tournament_classlimit_sniper"
 		{
-			"label"		"SNIPER LIMIT"
+			"label"		"Sniper Limit"
 			"type"		"STRING"
 			"val"		"-1"
 		}
 		"tf_tournament_classlimit_spy"
 		{
-			"label"		"SPY LIMIT"
+			"label"		"Spy Limit"
 			"type"		"STRING"
 			"val"		"-1"
 		}
@@ -353,69 +358,69 @@
 	{
 		"category2"
 		{
-			"label"		"GENERAL"
+			"label"		"General"
 			"type"		"CATEGORY"
 		}
 		"cf_dropped_weapons_give_ammo"
 		{
-			"label"		"DROPPED WEAPONS GIVE AMMO (PRE-GM)"
+			"label"		"Dropped Weapons Give Ammo (Pre-GM)"
 			"type"		"BOOL"
 			"val"		"0"
 		}
 		"cf_pretoughbreak_switch"
 		{
-			"label"		"OLD WEAPON SWITCH SPEED (PRE-TB)"
+			"label"		"Old Weapon Switch Speed (Pre-TB)"
 			"type"		"BOOL"
 			"val"		"0"
 		}
 		"category_SCOUT"
 		{
-			"label"		"SCOUT"
+			"label"		"Scout"
 			"type"		"CATEGORY"
 		}
 		"cf_scout_stunball_old_stun"
 		{
-			"label"		"OLD SANDMAN STUN"
+			"label"		"Old Sandman Stun"
 			"type"		"BOOL"
 			"val"		"0"
 		}
 		"cf_enable_shortstop_shove"
 		{
-			"label"		"ENABLE SHORTSTOP SHOVE (PRE-MYM)"
+			"label"		"Enable Shortstop Shove (Pre-MYM)"
 			"type"		"BOOL"
 			"val"		"1"
 		}
 		"category_SOLDIER"
 		{
-			"label"		"SOLDIER"
+			"label"		"Soldier"
 			"type"		"CATEGORY"
 		}
 		"cf_revert_airstrike"
 		{
-			"label"		"REVERT AIRSTRIKE (PRE-TB)"
+			"label"		"Revert Airstrike (Pre-TB)"
 			"type"		"BOOL"
 			"val"		"0"
 		}
 		"category_PYRO"
 		{
-			"label"		"PYRO"
+			"label"		"Pyro"
 			"type"		"CATEGORY"
 		}
 		"cf_revert_airblast"
 		{
-			"label"		"REVERT AIRBLAST MECHANICS (PRE-JI)"
+			"label"		"Revert Airblast Mechanics (Pre-JI)"
 			"type"		"BOOL"
 			"val"		"0"
 		}
 		"cf_revert_flamethrower"
 		{
-			"label"		"REVERT FLAMETHROWER (PRE-BM)"
+			"label"		"Revert Flamethrower (Pre-BM)"
 			"type"		"BOOL"
 			"val"		"0"
 		}
 		"category_HEAVY"
 		{
-			"label"		"HEAVY"
+			"label"		"Heavy"
 			"type"		"CATEGORY"
 		}
 		"tfgrub_lunchbox_owner_can_heal"

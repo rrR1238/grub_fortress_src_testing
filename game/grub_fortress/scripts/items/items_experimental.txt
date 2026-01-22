@@ -32,6 +32,11 @@
 					"attribute_class"	"mod_teleporter_cost"
 					"value"				"2.5"
 				}
+				"is experimental item"
+				{
+					"attribute_class"	"is_experimental_item_DISPLAY"
+					"value"				"1"
+				}
 			}
 			"mouse_pressed_sound"	"ui/item_metal_weapon_pickup.wav"
 			"drop_sound"			"ui/item_metal_weapon_drop.wav"
@@ -94,6 +99,11 @@
 					"attribute_class"	"mult_maxammo_secondary"
 					"value"				"0.33"
 				}
+				"is experimental item"
+				{
+					"attribute_class"	"is_experimental_item_DISPLAY"
+					"value"				"1"
+				}
 			}
 		}
 		"34002" // The Lockwood
@@ -136,6 +146,11 @@
 				"scattergun has knockback"
 				{
 					"attribute_class"	"set_scattergun_has_knockback"
+					"value"				"1"
+				}
+				"is experimental item"
+				{
+					"attribute_class"	"is_experimental_item_DISPLAY"
 					"value"				"1"
 				}
 			}
@@ -183,6 +198,11 @@
 					"attribute_class"	"mult_clipsize"
 					"value"				"0.75"
 				}
+				"is experimental item"
+				{
+					"attribute_class"	"is_experimental_item_DISPLAY"
+					"value"				"1"
+				}
 			}
 			"visuals_red"
 			{
@@ -218,6 +238,11 @@
 					"attribute_class"	"mult_dmg"
 					"value"				"0.8"
 				}
+				"is experimental item"
+				{
+					"attribute_class"	"is_experimental_item_DISPLAY"
+					"value"				"1"
+				}
 			}
 		}
 		"34006" // PDA: Mini-Dispenser
@@ -247,6 +272,11 @@
 				{
 					"attribute_class"	"dispenser_build_rate_multiplier"
 					"value"		"2.5"
+				}
+				"is experimental item"
+				{
+					"attribute_class"	"is_experimental_item_DISPLAY"
+					"value"				"1"
 				}
 			}
 			"mouse_pressed_sound"	"ui/item_metal_weapon_pickup.wav"
@@ -308,6 +338,11 @@
 					"attribute_class" 	"mult_spread_scale"
 					"value"				"1.25"
 				}
+				"is experimental item"
+				{
+					"attribute_class"	"is_experimental_item_DISPLAY"
+					"value"				"1"
+				}
 			}
 		}
 		"34008" // The Frontline
@@ -354,6 +389,11 @@
 				{
 					"attribute_class"	"minigun_no_spin_sounds"
 					"value" 			"1"
+				}
+				"is experimental item"
+				{
+					"attribute_class"	"is_experimental_item_DISPLAY"
+					"value"				"1"
 				}
 			}	
 		}
@@ -494,6 +534,11 @@
 				{
 					"attribute_class"	"mult_crit_chance"
 					"value"				"0"
+				}
+				"is experimental item"
+				{
+					"attribute_class"	"is_experimental_item_DISPLAY"
+					"value"				"1"
 				}
 			}
 		}

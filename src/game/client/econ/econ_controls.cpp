@@ -1002,16 +1002,16 @@ void CEconItemDetailsRichText::UpdateDetailsForItem( const CEconItemDefinition *
 {
 	SetText( "" );
 
-	if ( !m_ToolList.Count() )
-	{
-		UpdateToolList();
-	}
+//	if ( !m_ToolList.Count() )
+//	{
+//		UpdateToolList();
+//	}
 
 	DataText_AppendStoreFlags( pDef );
 	DataText_AppendItemData( pDef );
 	DataText_AppendAttributeData( pDef );
 	DataText_AppendUsageData( pDef );
-	DataText_AppendToolUsage( pDef );
+//	DataText_AppendToolUsage( pDef );
 }
 
 //-----------------------------------------------------------------------------
