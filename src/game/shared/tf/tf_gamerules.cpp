@@ -4645,6 +4645,9 @@ bool CTFGameRules::RoundCleanupShouldIgnore( CBaseEntity *pEnt )
 	if ( FindInList( s_PreserveEnts, pEnt->GetClassname() ) )
 		return true;
 
+	if ( pEnt->IsEFlagSet( EFL_KEEP_ON_RECREATE_ENTITIES ) )
+		return true;
+
 	//There has got to be a better way of doing this.
 	if ( Q_strstr( pEnt->GetClassname(), "tf_weapon_" ) )
 		return true;
