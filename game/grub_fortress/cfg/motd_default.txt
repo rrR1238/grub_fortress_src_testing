@@ -10,7 +10,12 @@ TF:Grub weapon selection is:
 - The Big Owen (Heavy primary)
 - Metal Backpack (Engineer secondary)
 - Der Erwecker (Medic melee)
+- The Quickplay (Spy Watch)
 Maps unique to TF:Grub:
+- BD Bombyard
+- BD Hunted
 - CTF Warehouse
 - KOTH Landfall
 - KOTH Lumberyard
+- KOTH Well
+- PL Grubero (WIP Name)

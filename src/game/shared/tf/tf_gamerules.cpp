@@ -1124,7 +1124,7 @@ ConVar tf_gamemode_payload ( "tf_gamemode_payload", "0", FCVAR_REPLICATED | FCVA
 ConVar tf_gamemode_mvm ( "tf_gamemode_mvm", "0", FCVAR_REPLICATED | FCVAR_NOTIFY | FCVAR_DEVELOPMENTONLY );
 ConVar tf_gamemode_passtime ( "tf_gamemode_passtime", "0", FCVAR_REPLICATED | FCVAR_NOTIFY | FCVAR_DEVELOPMENTONLY );
 ConVar tf_gamemode_misc ( "tf_gamemode_misc", "0", FCVAR_REPLICATED | FCVAR_NOTIFY | FCVAR_DEVELOPMENTONLY );
-ConVar tf_gamemode_bd ( "tf_gamemode_bd", "0", FCVAR_REPLICATED | FCVAR_NOTIFY );
+ConVar tf_gamemode_bd ( "tf_gamemode_bd", "0", FCVAR_REPLICATED | FCVAR_NOTIFY | FCVAR_DEVELOPMENTONLY);
 
 ConVar tf_bot_count( "tf_bot_count", "0", FCVAR_NOTIFY | FCVAR_DEVELOPMENTONLY );
 

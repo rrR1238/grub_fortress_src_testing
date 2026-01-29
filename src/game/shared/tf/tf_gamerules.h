@@ -464,7 +464,14 @@ public:
 			flRetVal = m_flCTFCaptureBonusTime;
 		}
 
-		return flRetVal; 
+		if ( IsInBdMode() ) // prevent bonus crits in bomb delivery
+		{
+			return 0.0f;
+		}
+		else
+		{
+			return flRetVal; 
+		}
 	}
 
 	// populate vector with set of control points the player needs to capture
