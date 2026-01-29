@@ -69,6 +69,7 @@
 
 // Server specific.
 #else
+#include "vscript_server.h"
 #include "tf_player.h"
 #include "te_effect_dispatch.h"
 #include "tf_fx.h"
@@ -136,6 +137,7 @@ ConVar cf_player_parentables( "cf_player_parentables", "1", FCVAR_REPLICATED | F
 //ConVar tf_scout_dodge_move_penalty_duration( "tf_scout_dodge_move_penalty_duration", "3.0", FCVAR_DEVELOPMENTONLY | FCVAR_REPLICATED );
 //ConVar tf_scout_dodge_move_penalty( "tf_scout_dodge_move_penalty", "0.5", FCVAR_DEVELOPMENTONLY | FCVAR_REPLICATED );
 
+extern ConVar cf_condition_bombhead_bombinomicon;
 
 #ifdef GAME_DLL
 ConVar tf_boost_drain_time( "tf_boost_drain_time", "15.0", FCVAR_DEVELOPMENTONLY, "Time is takes for a full health boost to drain away from a player.", true, 0.1, false, 0 );
@@ -154,7 +156,6 @@ CON_COMMAND_F( tf_add_bombhead, "Add Merasmus Bomb Head Condition", 0 )
 		//playerVector[i]->m_Shared.AddCond( TF_COND_HALLOWEEN_BOMB_HEAD, 7 );
 	}
 }
-
 ConVar tf_debug_bullets( "tf_debug_bullets", "0", FCVAR_DEVELOPMENTONLY, "Visualize bullet traces." );
 #endif // _DEBUG
 
@@ -1095,6 +1096,31 @@ private:
 //-----------------------------------------------------------------------------
 void CTFPlayerShared::AddCond( ETFCond eCond, float flDuration /* = PERMANENT_CONDITION */, CBaseEntity *pProvider /*= NULL */)
 {
+#ifndef CLIENT_DLL
+	if ( ScriptHookEnabled( "OnAddCond" ) )
+	{
+		IScriptVM *pVM = g_pScriptVM;
+
+		ScriptVariant_t varTable;
+		pVM->CreateTable( varTable );
+
+		pVM->SetValue( varTable, "const_entity", ToHScript( m_pOuter ) );
+		pVM->SetValue( varTable, "provider", ToHScript( pProvider ) );
+		pVM->SetValue( varTable, "duration", flDuration );
+		pVM->SetValue( varTable, "condition", eCond );
+		pVM->SetValue( varTable, "cancel_condition", false );
+
+		if ( RunScriptHook( "OnAddCond", varTable ) )
+		{
+			if ( pVM->Get<bool>( varTable, "cancel_condition" ) )
+				return;
+			eCond = static_cast<ETFCond>( pVM->Get<int>( varTable, "condition" ) );
+			flDuration = pVM->Get<float>( varTable, "duration" );
+			pProvider = ToEnt( pVM->Get<HSCRIPT>( varTable, "provider" ) );
+		}
+	}
+#endif
+
 	Assert( eCond >= 0 && eCond < TF_COND_LAST );
 	Assert( eCond < m_ConditionData.Count() );
 
@@ -1156,6 +1182,29 @@ void CTFPlayerShared::AddCond( ETFCond eCond, float flDuration /* = PERMANENT_CO
 //-----------------------------------------------------------------------------
 void CTFPlayerShared::RemoveCond( ETFCond eCond, bool ignore_duration )
 {
+#ifndef CLIENT_DLL
+	if ( ScriptHookEnabled( "OnRemoveCond" ) )
+	{
+		IScriptVM *pVM = g_pScriptVM;
+
+		ScriptVariant_t varTable;
+		pVM->CreateTable( varTable );
+
+		pVM->SetValue( varTable, "const_entity", ToHScript( m_pOuter ) );
+		pVM->SetValue( varTable, "condition", eCond );
+		pVM->SetValue( varTable, "ignore_duration", ignore_duration );
+		pVM->SetValue( varTable, "cancel_removal", false );
+
+		if ( RunScriptHook( "OnRemoveCond", varTable ) )
+		{
+			if ( pVM->Get<bool>( varTable, "cancel_removal" ) )
+				return;
+			ignore_duration = pVM->Get<bool>( varTable, "ignoreDuration" );
+			eCond = static_cast<ETFCond>( pVM->Get<int>( varTable, "condition" ) );
+		}
+	}
+#endif
+
 	Assert( eCond >= 0 && eCond < TF_COND_LAST );
 	Assert( eCond < m_ConditionData.Count() );
 
@@ -2974,6 +3023,7 @@ void CTFPlayerShared::ConditionGameRulesThink( void )
 	TestAndExpireChargeEffect( MEDIGUN_CHARGE_INVULN );
 	TestAndExpireChargeEffect( MEDIGUN_CHARGE_CRITICALBOOST );
 	TestAndExpireChargeEffect( MEDIGUN_CHARGE_MEGAHEAL );
+	TestAndExpireChargeEffect( MEDIGUN_CHARGE_CLOAK );
 	//TestAndExpireChargeEffect( MEDIGUN_CHARGE_BULLET_RESIST );
 	//TestAndExpireChargeEffect( MEDIGUN_CHARGE_BLAST_RESIST );
 	//TestAndExpireChargeEffect( MEDIGUN_CHARGE_FIRE_RESIST );
@@ -4545,7 +4595,22 @@ void CTFPlayerShared::OnAddHalloweenBombHead( void )
 {
 #ifdef CLIENT_DLL
 	m_pOuter->HalloweenBombHeadUpdate();
-	m_pOuter->CreateBombonomiconHint();
+	//Some mappers don't want him.
+	ConVarRef book( "cf_condition_bombhead_bombinomicon" );
+	if ( book.IsValid() && book.GetBool() )
+	{
+		m_pOuter->CreateBombonomiconHint();
+	}
+
+	C_TFPlayer *pLocalPlayer = C_TFPlayer::GetLocalTFPlayer(); //Thriller port
+	if ( !TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_DOOMSDAY ) )
+	{
+		if ( pLocalPlayer == m_pOuter )
+		{
+			m_pOuter->EmitSound( "Player.bomb_attach" );
+			m_pOuter->EmitSound( "Player.bomb_fuse" );	
+		}
+	}
 #else
 	if ( InCond( TF_COND_HALLOWEEN_KART ) )
 	{
@@ -4562,6 +4627,15 @@ void CTFPlayerShared::OnRemoveHalloweenBombHead( void )
 #ifdef CLIENT_DLL
 	m_pOuter->HalloweenBombHeadUpdate();
 	m_pOuter->DestroyBombonomiconHint();
+
+	C_TFPlayer *pLocalPlayer = C_TFPlayer::GetLocalTFPlayer(); //Thriller port
+	if ( !TFGameRules()->IsHalloweenScenario( CTFGameRules::HALLOWEEN_SCENARIO_DOOMSDAY ) )
+	{
+		if ( pLocalPlayer == m_pOuter )
+		{
+			m_pOuter->StopSound( "Player.bomb_fuse" );	
+		}
+	}
 #else
 	if ( InCond( TF_COND_HALLOWEEN_KART ) )
 	{
@@ -6260,7 +6334,7 @@ void CTFPlayerShared::OnAddShieldCharge( void )
 
 #ifdef CLIENT_DLL
 	//MvM Versus - Robots scream with their filter!
-	bool bMvM = TFGameRules()->IsMannVsMachineMode() && m_pOuter->GetTeamNumber() == TF_TEAM_PVE_INVADERS || m_pOuter->IsRobot();
+	bool bMvM = TFGameRules()->IsMannVsMachineMode() && m_pOuter->GetTeamNumber() == TF_TEAM_PVE_INVADERS || TFGameRules()->IsMannVsMachineMode() && m_pOuter->GetTeamNumber() == TF_TEAM_PVE_DEFENDERS || m_pOuter->IsRobot();
 	if ( bMvM && TFObjectiveResource()->GetMvMEventPopfileType() != MVM_EVENT_POPFILE_HALLOWEEN )
 	{
 		m_pOuter->EmitSound( m_pOuter->IsMiniBoss() ? "Demo_MVM_M_Charge.Charging" : "Demo_MVM_Charge.Charging" );
@@ -8969,6 +9043,7 @@ void CTFPlayerShared::RecalculateChargeEffects( bool bInstantRemove )
 	SetChargeEffect( MEDIGUN_CHARGE_BULLET_RESIST,	aCharges[MEDIGUN_CHARGE_BULLET_RESIST].bActive,	bInstantRemove, g_MedigunEffects[ MEDIGUN_CHARGE_BULLET_RESIST ],	0.0f,						aCharges[MEDIGUN_CHARGE_BULLET_RESIST].pProvider );
 	SetChargeEffect( MEDIGUN_CHARGE_BLAST_RESIST,	aCharges[MEDIGUN_CHARGE_BLAST_RESIST].bActive,	bInstantRemove, g_MedigunEffects[ MEDIGUN_CHARGE_BLAST_RESIST ],	0.0f,						aCharges[MEDIGUN_CHARGE_BLAST_RESIST].pProvider );
 	SetChargeEffect( MEDIGUN_CHARGE_FIRE_RESIST,	aCharges[MEDIGUN_CHARGE_FIRE_RESIST].bActive,	bInstantRemove, g_MedigunEffects[ MEDIGUN_CHARGE_FIRE_RESIST ],		0.0f,						aCharges[MEDIGUN_CHARGE_FIRE_RESIST].pProvider );
+	SetChargeEffect( MEDIGUN_CHARGE_CLOAK,	        aCharges[MEDIGUN_CHARGE_CLOAK].bActive,     	bInstantRemove, g_MedigunEffects[ MEDIGUN_CHARGE_CLOAK ],			0.5f,					aCharges[MEDIGUN_CHARGE_CLOAK].pProvider );
 }
 
 //-----------------------------------------------------------------------------
@@ -12182,7 +12257,7 @@ void CTFPlayer::SetStepSoundTime( stepsoundtimes_t iStepSoundTime, bool bWalking
 const char *CTFPlayer::GetOverrideStepSound( const char *pszBaseStepSoundName )
 {
 
-	if( TFGameRules() && TFGameRules()->IsMannVsMachineMode() && GetTeamNumber() == TF_TEAM_PVE_INVADERS || IsRobot() )
+	if( TFGameRules() && TFGameRules()->IsMannVsMachineMode() && GetTeamNumber() == TF_TEAM_PVE_INVADERS || TFGameRules()->IsMannVsMachineMode() && GetTeamNumber() == TF_TEAM_PVE_DEFENDERS || IsRobot() )
 	{
 		if ( !IsMiniBoss() && !m_Shared.InCond( TF_COND_DISGUISED ) )
 			return "MVM.BotStep";

@@ -47,6 +47,9 @@ extern ConVar cl_hud_minmode;
 
 ConVar cl_mvm_wave_status_visible_during_wave( "cl_mvm_wave_status_visible_during_wave", "0", FCVAR_ARCHIVE, "Display full wave contents while a wave is active in MvM." );
 
+//Custom Fortress
+ConVar cf_mvm_announcer_count_spybots( "cf_mvm_announcer_count_spybots", "1", FCVAR_REPLICATED, "The Administrator Counts how many Spybots are left 6-1" );
+
 
 //-----------------------------------------------------------------------------
 // User Message Callbacks for CTFHudMannVsMachineStatus
@@ -1721,33 +1724,34 @@ void CTFHudMannVsMachineStatus::FireGameEvent( IGameEvent * event )
 						m_pWarningSwoop->StartSwoop();
 					}
 				}
-// 				else if ( m_nSpyMissionCount > nCount )
-// 				{
-// 					if ( pPlayer )
-// 					{
-// 						switch ( nCount )
-// 						{
-// 						case 6: 
-// 							pPlayer->EmitSound( "Announcer.mvm_spybot_death_six" );
-// 							break;
-// 						case 5:
-// 							pPlayer->EmitSound( "Announcer.mvm_spybot_death_five" );
-// 							break;
-// 						case 4:
-// 							pPlayer->EmitSound( "Announcer.mvm_spybot_death_four" );
-// 							break;
-// 						case 3:
-// 							pPlayer->EmitSound( "Announcer.mvm_spybot_death_three" );
-// 							break;
-// 						case 2:
-// 							pPlayer->EmitSound( "Announcer.mvm_spybot_death_two" );
-// 							break;
-// 						case 1:
-// 							pPlayer->EmitSound( "Announcer.mvm_spybot_death_one" );
-// 							break;
-// 						}
-// 					}
-// 				}
+				// Custom Fortress - Set a cvar later
+				else if ( m_nSpyMissionCount > nCount && cf_mvm_announcer_count_spybots.GetBool() )
+				{
+					if ( pPlayer )
+					{
+						switch ( nCount )
+						{
+						case 6: 
+							pPlayer->EmitSound( "Announcer.mvm_spybot_death_six" );
+							break;
+						case 5:
+							pPlayer->EmitSound( "Announcer.mvm_spybot_death_five" );
+							break;
+						case 4:
+							pPlayer->EmitSound( "Announcer.mvm_spybot_death_four" );
+							break;
+						case 3:
+							pPlayer->EmitSound( "Announcer.mvm_spybot_death_three" );
+							break;
+						case 2:
+							pPlayer->EmitSound( "Announcer.mvm_spybot_death_two" );
+							break;
+						case 1:
+							pPlayer->EmitSound( "Announcer.mvm_spybot_death_one" );
+							break;
+						}
+					}
+				}
 
 				m_nSpyMissionCount = nCount;
 			}

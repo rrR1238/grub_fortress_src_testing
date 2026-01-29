@@ -20,7 +20,7 @@
 #include "utlmap.h"
 
 #if defined( CLIENT_DLL )
-#define CBaseCombatWeapon C_BaseCombatWeapon
+class CBaseCombatWeapon;
 #endif
 
 // Hacky
@@ -316,6 +316,17 @@ public:
 	virtual void			AddViewKick( void );	// Add in the view kick for the weapon
 
 	virtual char			*GetDeathNoticeName( void );	// Get the string to print death notices with
+
+	inline const char* GetWeaponScriptName()
+	{
+		if (Q_strcmp(m_iszWeaponScriptName.Get(), "") > 0)
+		{
+			return m_iszWeaponScriptName.Get();
+		}
+		return GetClassname();
+	}	// get the name of the weapon in the weapon script file
+
+	virtual bool KeyValue(const char* szKeyName, const char* szValue) OVERRIDE; // override to set weapon script name
 
 	CBaseCombatCharacter	*GetOwner() const;
 	void					SetOwner( CBaseCombatCharacter *owner );
@@ -626,6 +637,7 @@ public:
 	// Weapon data
 	CNetworkVar( int, m_iState );				// See WEAPON_* definition
 	string_t				m_iszName;				// Classname of this weapon.
+	CNetworkString( m_iszWeaponScriptName, MAX_PATH );
 	CNetworkVar( int, m_iPrimaryAmmoType );		// "primary" ammo index into the ammo info array 
 	CNetworkVar( int, m_iSecondaryAmmoType );	// "secondary" ammo index into the ammo info array
 	CNetworkVar( int, m_iClip1 );				// number of shots left in the primary weapon clip, -1 it not used

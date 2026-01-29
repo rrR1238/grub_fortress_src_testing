@@ -923,7 +923,7 @@ void CTeamplayRoundBasedRules::SetSetup( bool bSetup )
 void CTeamplayRoundBasedRules::CheckWaitingForPlayers( void )
 {
 	// never waiting for players when loading a bug report, or training
-	if ( IsLoadingBugBaitReport() || gpGlobals->eLoadType == MapLoad_Background || !AllowWaitingForPlayers() )
+	if ( IsLoadingBugBaitReport() || gpGlobals->eLoadType == MapLoad_Background || !AllowWaitingForPlayers() || !mp_waitingforplayers_system.GetBool() )
 		return;
 
 	if ( mp_waitingforplayers_restart.GetBool() )
@@ -3019,7 +3019,7 @@ bool CTeamplayRoundBasedRules::ShouldCreateEntity( const char *pszClassName )
 //-----------------------------------------------------------------------------
 bool CTeamplayRoundBasedRules::RoundCleanupShouldIgnore( CBaseEntity *pEnt )
 {
-	return FindInList( s_PreserveEnts, pEnt->GetClassname() );
+	return ( FindInList( s_PreserveEnts, pEnt->GetClassname() ) || pEnt->IsEFlagSet( EFL_KEEP_ON_RECREATE_ENTITIES ) );
 }
 
 //-----------------------------------------------------------------------------

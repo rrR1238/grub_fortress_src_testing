@@ -253,6 +253,10 @@ ConVar tf_powerup_max_charge_time( "tf_powerup_max_charge_time", "30", FCVAR_CHE
 
 ConVar cf_spawn_with_throwable( "cf_spawn_with_throwable", "0", FCVAR_REPLICATED );
 
+ConVar cf_condition_bombhead_damage( "cf_condition_bombhead_damage", "40", FCVAR_REPLICATED, "Damage when times up." );
+ConVar cf_condition_bombhead_damage_boss( "cf_condition_bombhead_damage_boss", "100", FCVAR_REPLICATED, "Damage to merasmus." );
+ConVar cf_condition_bombhead_bombinomicon( "cf_condition_bombhead_bombinomicon", "1", FCVAR_REPLICATED, "Should Bombinomicon give you the bomb?." );
+
 extern ConVar tf_powerup_mode;
 extern ConVar tf_mvm_buybacks_method;
 extern ConVar tf_mvm_buybacks_per_wave;
@@ -6788,7 +6792,7 @@ void CTFPlayer::PostInventoryApplication( void )
 	m_iPlayerSkinOverride = iPlayerSkinOverride;
 
 	//MVM Versus - Remove the robo cosmetic if we are not a bot
-	bool bMVMRobot = TFGameRules()->IsMannVsMachineMode() && GetTeamNumber() == TF_TEAM_PVE_INVADERS && !IsFakeClient();
+	bool bMVMRobot = IsPVERobot() && !IsFakeClient();
 	bool bMVMHlwPopfile = TFGameRules()->IsMannVsMachineMode() && g_pPopulationManager->IsPopFileEventType(MVM_EVENT_POPFILE_HALLOWEEN);
 	//IF Not wearing Robot costume && Real MVM Robot || OR || It's Halloween && Real MvM Robot || NOT FOR BOTS
 	if ( !m_bIsRobot && !bMVMRobot || bMVMHlwPopfile && bMVMRobot )
@@ -9554,11 +9558,11 @@ bool CTFPlayer::IsClassMenuOpen( void )
 //-----------------------------------------------------------------------------
 void CTFPlayer::MerasmusPlayerBombExplode( bool bExcludeMe /*= true */ )
 {
-	float flDamage = 40.0f;
+	float flDamage = cf_condition_bombhead_damage.GetFloat();
 	// bomb head damage is 100 only for fighting Merasmus, lower for all other scenarios
 	if ( TFGameRules() && TFGameRules()->GetActiveBoss() && ( TFGameRules()->GetActiveBoss()->GetBossType() == HALLOWEEN_BOSS_MERASMUS ) )
 	{
-		flDamage = 100.0f;
+		flDamage = cf_condition_bombhead_damage_boss.GetFloat();
 	}
 
 	// explode!
@@ -12418,7 +12422,7 @@ int CTFPlayer::OnTakeDamage_Alive( const CTakeDamageInfo &info )
 			vDamagePos = WorldSpaceCenter();
 		}
 
-		if ( TFGameRules() && TFGameRules()->IsMannVsMachineMode() && GetTeamNumber() == TF_TEAM_PVE_INVADERS || IsMVMRobot() )
+		if ( IsPVERobot() || IsMVMRobot() )
 		{
 			if ( ( IsMiniBoss() && static_cast< float >( GetHealth() ) / GetMaxHealth() > 0.3f ) || realDamage < 50 )
 			{
@@ -14048,7 +14052,7 @@ void CTFPlayer::Event_Killed( const CTakeDamageInfo &info )
 	
 	SetGibbedOnLastDeath( bGib );
 
-	bool bIsMvMRobot = TFGameRules()->IsMannVsMachineMode() && IsBot() || IsMVMRobot();
+	bool bIsMvMRobot = IsPVERobot() || IsMVMRobot();
 	if ( bGib && !bIsMvMRobot && IsPlayerClass( TF_CLASS_SCOUT ) && RandomInt( 1, 100 ) <= SCOUT_ADD_BIRD_ON_GIB_CHANCE )
 	{
 		Vector vecPos = WorldSpaceCenter();
@@ -16817,7 +16821,7 @@ void CTFPlayer::PainSound( const CTakeDamageInfo &info )
 			if ( pData )
 			{
 				//Robots need to play their Robotic pain lines!
-				if(TFGameRules()->IsMannVsMachineMode() && GetTeamNumber() == TF_TEAM_PVE_INVADERS || IsMVMRobot() ) // MVM Versus - Wearable support)
+				if( IsPVERobot() || IsMVMRobot() ) // MVM Versus - Wearable support)
 				{
 					EmitSound( pData->GetDeathSound( IsMiniBoss() ? DEATH_SOUND_GENERIC_GIANT_MVM : DEATH_SOUND_GENERIC_MVM ) );
 				}
@@ -16924,7 +16928,7 @@ void CTFPlayer::DeathSound( const CTakeDamageInfo &info )
 
 	int nDeathSoundOffset = DEATH_SOUND_FIRST;
 
-	if ( TFGameRules() && TFGameRules()->IsMannVsMachineMode() && GetTeamNumber() == TF_TEAM_PVE_INVADERS || IsMVMRobot() )
+	if ( TFGameRules() && IsPVERobot() || IsMVMRobot() )
 	{
 		nDeathSoundOffset = IsMiniBoss() ? DEATH_SOUND_GIANT_MVM_FIRST : DEATH_SOUND_MVM_FIRST;
 	}
@@ -16999,7 +17003,8 @@ const char* CTFPlayer::GetSceneSoundToken( void )
 	if (iOverrideVoiceSoundSet == kVoiceSoundSet_Default)
 	{
 		//MvM Versus - We filter the voices depending if your playing MvM or wear the Robot Costume
-		if (TFGameRules() && TFGameRules()->IsMannVsMachineMode() && GetTeamNumber() == TF_TEAM_PVE_INVADERS && !bHalloweenMVM || IsMVMRobot() )
+		//Raid Mode
+		if ( TFGameRules() && IsPVERobot() && !bHalloweenMVM || IsMVMRobot() )
 		{
 			int iGiants = GetPlayerClass()->GetClassIndex();
 			if ( IsMiniBoss() )
@@ -19048,13 +19053,27 @@ bool CTFPlayer::IsZombieCostumeEquipped( void ) const
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose: Robot Costume
 //-----------------------------------------------------------------------------
 bool CTFPlayer::IsMVMRobot( void ) const
 {
 	int iRobot = 0;
 	CALL_ATTRIB_HOOK_INT( iRobot, robotrobotrobotrobot );
 	return iRobot != 0;
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: RAID and MVM - Bot Squad
+//-----------------------------------------------------------------------------
+bool CTFPlayer::IsPVERobot( void ) const
+{
+	if ( TFGameRules()->IsMannVsMachineMode() && GetTeamNumber() == TF_TEAM_PVE_INVADERS )
+		return true; 
+	
+//	if ( TFGameRules()->IsRaidMode() && GetTeamNumber() == TF_TEAM_PVE_DEFENDERS )
+//		return true;
+
+	return false;
 }
 
 //-----------------------------------------------------------------------------

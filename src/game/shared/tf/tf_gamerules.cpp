@@ -19,6 +19,7 @@
 #include "tf_logic_player_destruction.h"
 #include "tf_matchmaking_shared.h"
 #include "tf_progression_description.h"
+#include "tf_steam_branch.h"
 
 #ifdef CLIENT_DLL
 	#include <game/client/iviewport.h>
@@ -909,12 +910,12 @@ ConVar tf_training_client_message( "tf_training_client_message", "0", FCVAR_REPL
 
 #ifdef TF_RAID_MODE
 // Raid mode
-ConVar tf_gamemode_raid( "tf_gamemode_raid", "0", FCVAR_REPLICATED | FCVAR_NOTIFY );		// client needs access to this for IsRaidMode()
+ConVar tf_gamemode_raid( "tf_gamemode_raid", "0", FCVAR_REPLICATED | FCVAR_NOTIFY | FCVAR_DEVELOPMENTONLY );		// client needs access to this for IsRaidMode()
 ConVar tf_raid_enforce_unique_classes( "tf_raid_enforce_unique_classes", "0", FCVAR_REPLICATED | FCVAR_NOTIFY );
 ConVar tf_raid_respawn_time( "tf_raid_respawn_time", "5", FCVAR_REPLICATED | FCVAR_NOTIFY /*| FCVAR_CHEAT*/, "How long it takes for a Raider to respawn with his team after death." );
 ConVar tf_raid_allow_all_classes( "tf_raid_allow_all_classes", "1", FCVAR_REPLICATED | FCVAR_NOTIFY );
 
-ConVar tf_gamemode_boss_battle( "tf_gamemode_boss_battle", "0", FCVAR_REPLICATED | FCVAR_NOTIFY );
+ConVar tf_gamemode_boss_battle( "tf_gamemode_boss_battle", "0", FCVAR_REPLICATED | FCVAR_NOTIFY | FCVAR_DEVELOPMENTONLY );
 
 #ifdef GAME_DLL
 ConVar tf_raid_allow_overtime( "tf_raid_allow_overtime", "0"/*, FCVAR_CHEAT*/ );
@@ -4662,6 +4663,9 @@ void CTFGameRules::SetHUDType( int nHudType )
 bool CTFGameRules::RoundCleanupShouldIgnore( CBaseEntity *pEnt )
 {
 	if ( FindInList( s_PreserveEnts, pEnt->GetClassname() ) )
+		return true;
+
+	if ( pEnt->IsEFlagSet( EFL_KEEP_ON_RECREATE_ENTITIES ) )
 		return true;
 
 	//There has got to be a better way of doing this.
@@ -9928,10 +9932,11 @@ bool CTFGameRules::FPlayerCanTakeDamage( CBasePlayer *pPlayer, CBaseEntity *pAtt
 
 	// in PvE modes, if entities are on the same team, they can't hurt each other
 	// this is needed since not all entities will be players
+	// Unless forced - Custom Fortress
 	if ( IsPVEModeActive() && 
 			pPlayer->GetTeamNumber() == pAttacker->GetTeamNumber() && 
 			pPlayer != pAttacker && 
-			!info.IsForceFriendlyFire() )
+			!info.IsForceFriendlyFire() && !friendlyfire.GetBool() )
 	{
 		return false;
 	}
@@ -17799,7 +17804,6 @@ bool CTFGameRules::CanPlayerChooseClass( CBasePlayer *pPlayer, int iClass )
 	{
 		return true;
 	}
-	else
 #endif // TF_RAID_MODE
 
 	if ( iClassLimit == NO_CLASS_LIMIT )
@@ -18908,6 +18912,20 @@ void CTFGameRules::GetTaggedConVarList( KeyValues *pCvarTagList )
 
 		pCvarTagList->AddSubKey( pKV );
 	}
+
+#ifdef GAME_DLL
+	// Add Steam branch tag to server tags
+	// This allows filtering servers by their Steam branch (e.g., "beta" vs "public")
+	const char *pszBranch = GetSteamBranchName();
+	if ( pszBranch && pszBranch[0] )
+	{
+		KeyValues *pKVBranch = new KeyValues( "branch_tag" );
+		pKVBranch->SetString( "tag", CFmtStr( "branch_%s", pszBranch ).Access() );
+		pCvarTagList->AddSubKey( pKVBranch );
+		
+		DevMsg( "Server tagged with branch: branch_%s\n", pszBranch );
+	}
+#endif
 }
 
 //-----------------------------------------------------------------------------
