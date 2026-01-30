@@ -32,6 +32,16 @@
 			"effect_type"	"negative"
 			"stored_as_integer"	"0"
 		}
+		"522"
+		{
+			"name"	"damage causes airblast"
+			"attribute_class"	"damage_causes_airblast"
+			"description_format"	"value_is_additive"
+			"description_string"	"#Attrib_KnockbackOnHit"
+			"hidden"	"0"
+			"effect_type"	"positive"
+			"stored_as_integer"	"1"
+		}
 		"738"
 		{
 			"name"	"spunup_damage_resistance"
