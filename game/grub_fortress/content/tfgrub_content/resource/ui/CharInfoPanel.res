@@ -222,7 +222,7 @@
 	{
 		"ControlName"	"Label"
 		"fieldName"		"LocalInfo"
-		"xpos"			"c-115"
+		"xpos"			"c-150"
 		"ypos"			"438"
 		"zpos"			"2"
 		"wide"			"640"
