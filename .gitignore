@@ -53,6 +53,9 @@ config.cfg
 
 # shader files
 *.tmp
+# LUX gitignore changes from develop
+*.vcs
+*.inc
 
 # GCH
 *.h.gch
