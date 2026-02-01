@@ -54,7 +54,7 @@ config.cfg
 # shader files
 *.tmp
 # LUX gitignore changes from develop
-*.vcs
+src/materialsystem/stdshaders/shaders/fxc/*.vcs
 *.inc
 
 # GCH
