@@ -549,3 +549,4 @@ FodyWeavers.xsd
 *.prt
 *.vmx
 /game/grub_fortress/mapsrc/*.bsp
+/game/grub_fortress/mapsrc/dev/*.bsp
