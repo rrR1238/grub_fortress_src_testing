@@ -55,7 +55,8 @@ config.cfg
 *.tmp
 # LUX gitignore changes from develop
 src/materialsystem/stdshaders/shaders/fxc/*.vcs
-*.inc
+# keep included for Github Actions build
+#*.inc
 
 # GCH
 *.h.gch
