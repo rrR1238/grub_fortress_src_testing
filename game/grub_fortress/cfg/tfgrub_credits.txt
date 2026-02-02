@@ -101,6 +101,13 @@ DESCRIPTION INFO_OPTIONS
 		{ BOOL }
 		{ "1" }
 	}
+	"lux"
+	{
+		"LUX - ShiroDkxtro2"
+		"github.com/LUX-Shaders-Team/LUX-Shaders"
+		{ BOOL }
+		{ "1" }
+	}
 	"uvf"
 	{
 		"Ultimate Visual Fix Pack - agrastiOs, Nonhuman, Nonhuman, Whurr, PieSavvy, JarateKing, FlaminSarge"
@@ -147,6 +154,13 @@ DESCRIPTION INFO_OPTIONS
 	{
 		"Hactica - Ultimate Weapon Animation Fixes"
 		"gamebanana.com/wips/86367"
+		{ BOOL }
+		{ "1" }
+	}
+	"chickenman"
+	{
+		"Chickenman - Sniper Hand Fix"
+		"gamebanana.com/mods/439875"
 		{ BOOL }
 		{ "1" }
 	}
