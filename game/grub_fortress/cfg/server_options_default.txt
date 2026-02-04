@@ -354,80 +354,80 @@
 			"val"		"-1"
 		}
 	}
-	"BALANCE"
-	{
-		"category2"
-		{
-			"label"		"General"
-			"type"		"CATEGORY"
-		}
-		"cf_dropped_weapons_give_ammo"
-		{
-			"label"		"Dropped Weapons Give Ammo (Pre-GM)"
-			"type"		"BOOL"
-			"val"		"0"
-		}
-		"cf_pretoughbreak_switch"
-		{
-			"label"		"Old Weapon Switch Speed (Pre-TB)"
-			"type"		"BOOL"
-			"val"		"0"
-		}
-		"category_SCOUT"
-		{
-			"label"		"Scout"
-			"type"		"CATEGORY"
-		}
-		"cf_scout_stunball_old_stun"
-		{
-			"label"		"Old Sandman Stun"
-			"type"		"BOOL"
-			"val"		"0"
-		}
-		"cf_enable_shortstop_shove"
-		{
-			"label"		"Enable Shortstop Shove (Pre-MYM)"
-			"type"		"BOOL"
-			"val"		"1"
-		}
-		"category_SOLDIER"
-		{
-			"label"		"Soldier"
-			"type"		"CATEGORY"
-		}
-		"cf_revert_airstrike"
-		{
-			"label"		"Revert Airstrike (Pre-TB)"
-			"type"		"BOOL"
-			"val"		"0"
-		}
-		"category_PYRO"
-		{
-			"label"		"Pyro"
-			"type"		"CATEGORY"
-		}
-		"cf_revert_airblast"
-		{
-			"label"		"Revert Airblast Mechanics (Pre-JI)"
-			"type"		"BOOL"
-			"val"		"0"
-		}
-		"cf_revert_flamethrower"
-		{
-			"label"		"Revert Flamethrower (Pre-BM)"
-			"type"		"BOOL"
-			"val"		"0"
-		}
-		"category_HEAVY"
-		{
-			"label"		"Heavy"
-			"type"		"CATEGORY"
-		}
-		"tfgrub_lunchbox_owner_can_heal"
-		{
-			"label"		"#TFGRUB_Lunchbox_OwnerPickup"
-			"type"		"BOOL"
-			"val"		"0"
-		}
-	}
+//	"BALANCE"
+//	{
+//		"category2"
+//		{
+//			"label"		"General"
+//			"type"		"CATEGORY"
+//		}
+//		"cf_dropped_weapons_give_ammo"
+//		{
+//			"label"		"Dropped Weapons Give Ammo (Pre-GM)"
+//			"type"		"BOOL"
+//			"val"		"0"
+//		}
+//		"cf_pretoughbreak_switch"
+//		{
+//			"label"		"Old Weapon Switch Speed (Pre-TB)"
+//			"type"		"BOOL"
+//			"val"		"0"
+//		}
+//		"category_SCOUT"
+//		{
+//			"label"		"Scout"
+//			"type"		"CATEGORY"
+//		}
+//		"cf_scout_stunball_old_stun"
+//		{
+//			"label"		"Old Sandman Stun"
+//			"type"		"BOOL"
+//			"val"		"0"
+//		}
+//		"cf_enable_shortstop_shove"
+//		{
+//			"label"		"Enable Shortstop Shove (Pre-MYM)"
+//			"type"		"BOOL"
+//			"val"		"1"
+//		}
+//		"category_SOLDIER"
+//		{
+//			"label"		"Soldier"
+//			"type"		"CATEGORY"
+//		}
+//		"cf_revert_airstrike"
+//		{
+//			"label"		"Revert Airstrike (Pre-TB)"
+//			"type"		"BOOL"
+//			"val"		"0"
+//		}
+//		"category_PYRO"
+//		{
+//			"label"		"Pyro"
+//			"type"		"CATEGORY"
+//		}
+//		"cf_revert_airblast"
+//		{
+//			"label"		"Revert Airblast Mechanics (Pre-JI)"
+//			"type"		"BOOL"
+//			"val"		"0"
+//		}
+//		"cf_revert_flamethrower"
+//		{
+//			"label"		"Revert Flamethrower (Pre-BM)"
+//			"type"		"BOOL"
+//			"val"		"0"
+//		}
+//		"category_HEAVY"
+//		{
+//			"label"		"Heavy"
+//			"type"		"CATEGORY"
+//		}
+//		"tfgrub_lunchbox_owner_can_heal"
+//		{
+//			"label"		"#TFGRUB_Lunchbox_OwnerPickup"
+//			"type"		"BOOL"
+//			"val"		"0"
+//		}
+//	}
 }
