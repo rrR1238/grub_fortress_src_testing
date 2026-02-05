@@ -10,7 +10,7 @@
 
 // Version Number used to be based on amount of commits
 // Since v1.00 its arbitrary
-ConVar lux_version("lux_version", "1.80");
+ConVar lux_version("lux_version", "1.80 (LUX-TFGrub)");
 ConVar lux_oldshaders("lux_oldshaders", "0", FCVAR_RELOAD_MATERIALS);
 
 //==========================================================================//
@@ -110,7 +110,9 @@ ConVar lux_phong_defaulthalflambert("lux_phong_defaulthalflambert", "1", FCVAR_A
 ConVar lux_envmap_forcelerp("lux_envmap_forcelerp", "0", FCVAR_RELOAD_MATERIALS, "Force $EnvMapLerp on all Shaders that support it. Reload Materials after setting this.");
 ConVar lux_envmap_lerptime("lux_envmap_lerptime", "1.5", FCVAR_NONE, "The Time it will take to transition between two Cubemaps, in Seconds.");
 ConVar lux_envmap_flipbasealpha("lux_envmap_flipbasealpha", "1", FCVAR_NONE, "By default BaseMapAlpha is flipped for the EnvMapMask. This isn't the case since Alien Swarm. This disables the default flip Behaviour.");
-
+#ifdef TFGrub
+ConVar lux_phong_forcelambert_value("lux_phong_forcelambert_value", "0", FCVAR_ARCHIVE, "1. Force Full-Lambert on VertexLitGeneric - Phong \n 2. Force Half-Lambert on VertexLitGeneric - Phong");
+#endif
 //==========================================================================//
 // Cable Shader
 //==========================================================================//

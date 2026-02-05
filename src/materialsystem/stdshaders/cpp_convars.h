@@ -97,7 +97,9 @@ extern ConVar lux_phong_defaulthalflambert;
 extern ConVar lux_envmap_forcelerp;
 extern ConVar lux_envmap_lerptime;
 extern ConVar lux_envmap_flipbasealpha;
-
+#ifdef TFGrub
+extern ConVar lux_phong_forcelambert_value;
+#endif
 //==========================================================================//
 // Cable Shader
 //==========================================================================//

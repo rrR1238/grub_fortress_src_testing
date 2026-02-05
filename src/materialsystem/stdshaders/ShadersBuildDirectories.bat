@@ -26,4 +26,4 @@ rem Mod Projects using LUX
 set PROCESS_LIST=%PROCESS_LIST% tf2classified_win64.exe
 set PROCESS_LIST=%PROCESS_LIST% fc_tfsdk_win64.exe
 set PROCESS_LIST=%PROCESS_LIST% mod_hl2mp.exe
-set PROCESS_LIST=%PROCESS_LIST% grub_fortress.exe
+set PROCESS_LIST=%PROCESS_LIST% grub_fortress_win64.exe

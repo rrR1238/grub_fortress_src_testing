@@ -496,10 +496,28 @@ SHADER_DRAW
 
 		if(bHasPhong)
 		{
+#ifdef TFGrub
+			if (lux_phong_forcelambert_value.GetInt() == 1)
+			{
+				pContextData->m_bHalfLambert = false;
+			}
+			else if (lux_phong_forcelambert_value.GetInt() == 2)
+			{
+				pContextData->m_bHalfLambert = true;
+			}
+			else
+			{
+				if (GetBool(PhongDisableHalfLambert))
+					pContextData->m_bHalfLambert = false;
+				else if (lux_phong_defaulthalflambert.GetBool())
+					pContextData->m_bHalfLambert = true;
+			}
+#else
 			if (GetBool(PhongDisableHalfLambert))
 				pContextData->m_bHalfLambert = false;
 			else if (lux_phong_defaulthalflambert.GetBool())
 				pContextData->m_bHalfLambert = true;
+#endif
 		}
 		else
 			pContextData->m_bHalfLambert = HasFlag(MATERIAL_VAR_HALFLAMBERT);

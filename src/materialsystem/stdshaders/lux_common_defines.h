@@ -19,6 +19,7 @@
 
 // #define SDK2013SP
 #define TF2SDK
+#define TFGrub
 // #define ASW - Not supported
 
 // This is only required for Parabellum
@@ -115,7 +116,9 @@
 // This will make Ropes use the Spline Shader instead.
 // Mapbase used to force splineropes, if you're on MP Mapbase and your Ropes are broken, comment this!
 // -- Changing this does NOT require a Shader recompile
-//#define SPLINEROPES
+#ifndef TFGrub
+#define SPLINEROPES
+#endif
 
 // Makes the Shaders use the Alien Swarm HeightFogFactor Code ( which is much simpler and cheaper )
 // The resulting Mask does not look 1:1 with the SDK.
