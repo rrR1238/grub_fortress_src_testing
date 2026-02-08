@@ -4364,10 +4364,15 @@ void CTFGameRules::Activate()
 			m_nGameType.Set( TF_GAMETYPE_RD );
 			tf_beta_content.SetValue( 1 );
 		}
-		else
+		else if ( CTFRobotDestructionLogic::GetRobotDestructionLogic()->GetType() == CTFRobotDestructionLogic::TYPE_PLAYER_DESTRUCTION )
 		{
 			tf_gamemode_pd.SetValue( 1 );
 			m_nGameType.Set( TF_GAMETYPE_PD );
+		}
+		else
+		{
+			m_nGameType.Set( TF_GAMETYPE_CP );
+			tf_gamemode_cp.SetValue( 1 );
 		}
 	}
 	else if ( pMannVsMachineLogic )

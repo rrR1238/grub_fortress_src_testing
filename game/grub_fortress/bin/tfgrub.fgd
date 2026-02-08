@@ -312,6 +312,40 @@
 @PointClass base(Targetname,EnableDisable) = tf_logic_bd : 	"Bomb Delivery Entity. This is used to detect an Bomb Delivery map and also to do round specific stuff."
 [	
 ]
+
+@PointClass base(Targetname) = tf_logic_dom : "Domination Entity. This is used to detect a Domination map."
+[
+	input ScoreRedPoints(void) : "Score points for red."
+	input ScoreBluePoints(void) : "Score points for blue."
+	input EnableMaxScoreUpdating(void) : "Allow the max score to update based on player count."
+	input DisableMaxScoreUpdating(void) : "Disallow the max score to update based on player count."
+	input SetCountdownTimer(integer) : "Set the countdown time and start the timer."
+	input SetCountdownImage(string) : "Set the countdown image."
+	
+	red_respawn_time(float) : "Red Respawn Time (in seconds)" : 10 : "Respawn times for Red"
+	blue_respawn_time(float) : "Blue Respawn Time (in seconds)" : 10 : "Respawn times for Blue"
+	min_points(integer) : "Min Points" : 10 : "The minimum points to win"
+	finale_length(float) : "Finale Length" : 30 : "The amount of time from after max score is reached a team will win."
+	res_file(string) : "HUD Res File" : "resource/UI/HudObjectiveDomination.res" : "What res file to use for the HUD"
+
+	output OnBlueHitMaxPoints(void) : "Sent when Blue hits the max points."
+	output OnRedHitMaxPoints(void) : "Sent when Red hits the max points."
+	output OnBlueLeaveMaxPoints(void) : "Sent when blue goes from max points to fewer."
+	output OnRedLeaveMaxPoints(void) : "Sent when red goes from max points to fewer."
+	output OnBlueHitZeroPoints(void) : "Sent when Blue hits 0 points."
+	output OnRedHitZeroPoints(void) : "Sent when Red hits 0 points"
+	output OnBlueHasPoints(void) : "Sent when Blue goes from 0 to any points"
+	output OnRedHasPoints(void) : "Sent when Red goes from 0 to any points"
+
+	output OnRedFinalePeriodEnd(void) : "Sent when the red finale period ends."
+	output OnBlueFinalePeriodEnd(void) : "Sent when the blue finale period ends."
+
+	output OnRedScoreChanged(float) : "Send when score changes, and is a value representing total progress from [0..1]."
+	output OnBlueScoreChanged(float) : "Send when score changes, and is a value representing total progress from [0..1]."
+
+	output OnCountdownTimerExpired(void) : "Sent when the countdown timer expires."
+]
+
 //=====================================
 // Brush Entities
 //=====================================

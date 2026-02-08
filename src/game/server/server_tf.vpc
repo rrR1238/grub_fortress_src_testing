@@ -360,6 +360,8 @@ $Project "Server (Grub Fortress)"
 			$File	"$SRCDIR\game\shared\tf\tf_robot_destruction_robot.h"
 			$File	"$SRCDIR\game\shared\tf\tf_logic_player_destruction.cpp"
 			$File	"$SRCDIR\game\shared\tf\tf_logic_player_destruction.h"
+			$File	"$SRCDIR\game\shared\tf\tf_logic_dom.cpp"
+			$File	"$SRCDIR\game\shared\tf\tf_logic_dom.h"
 			$File	"$SRCDIR\game\server\tf\tf_voteissues.h"
 			$File	"$SRCDIR\game\server\tf\tf_voteissues.cpp"
 			{
