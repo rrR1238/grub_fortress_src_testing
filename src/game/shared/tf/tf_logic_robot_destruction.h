@@ -186,7 +186,7 @@ public:
 	int		GetMaxPoints() const { return m_nMaxPoints.Get(); }
 	float	GetFinaleWinTime( int nTeam ) const;
 	float	GetFinaleLength() const { return m_flFinaleLength; }
-	void	PlaySoundInfoForScoreEvent( CTFPlayer* pPlayer, bool bPositive, int nNewScore, int nTeam, RDScoreMethod_t eMethod = SCORE_UNDEFINED );
+	virtual void	PlaySoundInfoForScoreEvent( CTFPlayer* pPlayer, bool bPositive, int nNewScore, int nTeam, RDScoreMethod_t eMethod = SCORE_UNDEFINED );
 	RDScoreMethod_t GetLastScoreMethod( int nTeam ) const { return (RDScoreMethod_t)m_eWinningMethod[ nTeam ]; }
 
 #ifdef CLIENT_DLL

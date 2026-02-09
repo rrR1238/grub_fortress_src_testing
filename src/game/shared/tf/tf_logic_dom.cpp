@@ -1,6 +1,6 @@
 //========= Copyright Valve Corporation, All rights reserved. ============//
 //
-// Purpose: Entities for use in the Robot Destruction TF2 game mode.
+// Purpose: Entities for use in the Domination TF:Grub game mode. (Modified PD logic)
 //
 //=========================================================================//
 
@@ -8,10 +8,7 @@
 #include "tf_logic_dom.h"
 
 #ifdef GAME_DLL
-#include "tf_player.h"
 #include "tf_gamerules.h"
-#else
-#include "c_tf_player.h"
 #endif // GAME_DLL
 
 #ifdef GAME_DLL
@@ -52,11 +49,8 @@ END_NETWORK_TABLE()
 CTFDomLogic::CTFDomLogic()
 {
 #ifdef GAME_DLL
-	m_iszPropModelName = MAKE_STRING( "models/flag/flag.mdl" );
 	ListenForGameEvent( "player_disconnect" );
-	m_bMaxScoreUpdatingAllowed = false;
-	m_nFlagResetDelay = 60;
-	m_nHealDistance = 450;
+	m_bMaxScoreUpdatingAllowed = true;
 #endif // GAME_DLL
 	m_bUsingCountdownImage = false;
 
@@ -190,20 +184,6 @@ void CTFDomLogic::InputSetCountdownImage( inputdata_t& inputdata )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CTFDomLogic::PlaySound( const char *pszSound, CTFPlayer *pPlayer )
-{
-	EmitSound_t params;
-	params.m_pSoundName = pszSound;
-	params.m_flSoundTime = 0;
-	params.m_pflSoundDuration = 0;
-	params.m_SoundLevel = SNDLVL_70dB;
-	CPASFilter filter( pPlayer->GetAbsOrigin() );
-	pPlayer->EmitSound( filter, pPlayer->entindex(), params );
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
 void CTFDomLogic::TeamWin( int nTeam )
 {
 	if ( TFGameRules() )
@@ -212,3 +192,8 @@ void CTFDomLogic::TeamWin( int nTeam )
 	}
 }
 #endif // GAME_DLL
+
+void CTFDomLogic::PlaySoundInfoForScoreEvent( CTFPlayer* pPlayer, bool bPositive, int nNewScore, int nTeam, RDScoreMethod_t eMethod )
+{
+	return;
+}
