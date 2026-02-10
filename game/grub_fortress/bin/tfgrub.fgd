@@ -325,6 +325,7 @@
 	red_respawn_time(float) : "Red Respawn Time (in seconds)" : 10 : "Respawn times for Red"
 	blue_respawn_time(float) : "Blue Respawn Time (in seconds)" : 10 : "Respawn times for Blue"
 	min_points(integer) : "Min Points" : 10 : "The minimum points to win"
+	points_per_player(integer) : "Point Per Player" : 5 : "How many points to increase the max points by per player"
 	finale_length(float) : "Finale Length" : 30 : "The amount of time from after max score is reached a team will win."
 	res_file(string) : "HUD Res File" : "resource/UI/HudObjectiveDomination.res" : "What res file to use for the HUD"
 
