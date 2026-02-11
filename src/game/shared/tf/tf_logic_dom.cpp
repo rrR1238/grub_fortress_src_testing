@@ -195,5 +195,5 @@ void CTFDomLogic::TeamWin( int nTeam )
 
 void CTFDomLogic::PlaySoundInfoForScoreEvent( CTFPlayer* pPlayer, bool bPositive, int nNewScore, int nTeam, RDScoreMethod_t eMethod )
 {
-	return;
+	return; // No score sounds in domination
 }

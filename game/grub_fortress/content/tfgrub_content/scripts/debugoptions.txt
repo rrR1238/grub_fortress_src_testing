@@ -30,6 +30,14 @@ DebugMenu
 		{
 			"command" "ent_fire team_round_timer resume"
 		}
+		"Disable Game Timer"
+		{
+			"command" "ent_fire team_round_timer disable"
+		}
+		"Enable Game Timer"
+		{
+			"command" "ent_fire team_round_timer enable"
+		}
 		"Disable SpawnTimes"
 		{
 			"command" "toggle mp_disable_respawn_times 1 0"
@@ -42,17 +50,17 @@ DebugMenu
 		{
 			"command"	"buddha"
 		}
-		"FPS"
+		"Toggle FPS View"
 		{
 			"command"	"toggle cl_showfps 0 1"
 		}
-		"Position"
+		"Toggle Position View"
 		{
 			"command"	"toggle cl_showpos 0 1"
 		}
-		"RESTART/UPDATE MENU"
+		"Execute Debug Config"
 		{
-			"command" "gamemenucommand RestartWithNewLanguage"
+			"command"	"exec devtesting.cfg"
 		}
 	}
 	"Spawnables"
@@ -92,6 +100,17 @@ DebugMenu
 		"NAV| Skeleton BLU"
 		{
 			"command"	"ent_create tf_zombie teamnum 3"
+		}
+	}
+	"LUX"
+	{
+		"Default Half-Lambert Toggle - Phong"
+		{
+			"command" 	"toggle lux_phong_defaulthalflambert 0 1"
+		}
+		"Force Lambert Value - Phong"
+		{
+			"command"	"toggle lux_phong_forcelambert_value 0 1 2"
 		}
 	}
 	"Rendering"
