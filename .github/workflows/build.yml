@@ -219,3 +219,35 @@ jobs:
         with:
           name: ${{ matrix.artifact_name }}-tfgrub_folder
           path: game/grub_fortress/
+          
+  publish_dev_build:
+    name: Push Windows Dev Build
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && needs.build.result == 'success'
+
+    steps:
+      - name: Download Windows TFGrub artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: tfgrub-windows-tfgrub_folder
+          path: artifact
+
+      - name: Clone dev repository
+        run: |
+          git clone https://x-access-token:${{ secrets.TFGRUB_DEV_TOKEN }}@github.com/Grub-Fortress/grub_fortress_dev.git target_repo
+
+      - name: Replace repo contents with new Windows build
+        run: |
+          cd target_repo
+          find . -mindepth 1 -maxdepth 1 ! -name ".git" -exec rm -rf {} +
+          cp -r ../artifact/* .
+
+      - name: Commit and push
+        run: |
+          cd target_repo
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add .
+          git commit -m "Dev build from ${{ github.sha }}" || echo "No changes"
+          git push
