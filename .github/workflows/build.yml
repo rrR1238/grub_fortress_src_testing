@@ -245,17 +245,17 @@ jobs:
 
       - name: Clean-up
         run: |
-        cd target_repo
-            rm -f cfg/devtesting.cfg
-            rm -f bin/*.fgd
-            rm -rf "models"
-            rm -rf "materials"
-            rm -rf "particles"
-            rm -rf "sound"
-            rm -rf "media"
-            rm -rf "mapsrc"
-            rm -rf "materialsrc"
-            rm -rf "content/tfgrub_content_hammer"
+            cd target_repo
+                rm -f cfg/devtesting.cfg
+                rm -f bin/*.fgd
+                rm -rf "models"
+                rm -rf "materials"
+                rm -rf "particles"
+                rm -rf "sound"
+                rm -rf "media"
+                rm -rf "mapsrc"
+                rm -rf "materialsrc"
+                rm -rf "content/tfgrub_content_hammer"
 
       - name: Commit and push
         run: |
