@@ -257,8 +257,8 @@ jobs:
                 rm -rf "materialsrc"
                 rm -rf "content/tfgrub_content_hammer"
                 
-        - name: Dev Build Specific stuff
-          run: |
+      - name: Dev Build Specific stuff
+        run: |
             cd target_repo
             rm -f gameinfo.txt
             mv gameinfo_dev.txt gameinfo.txt
