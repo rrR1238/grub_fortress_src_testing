@@ -256,6 +256,19 @@ jobs:
                 rm -rf "mapsrc"
                 rm -rf "materialsrc"
                 rm -rf "content/tfgrub_content_hammer"
+                
+        - name: Dev Build Specific stuff
+          run: |
+            cd target_repo
+            rm -f gameinfo.txt
+            mv gameinfo_dev.txt gameinfo.txt
+            
+            cd resource
+            for file in grub_fortress_*; do
+              if [ -f "$file" ]; then
+                mv "$file" "grub_fortress_dev_${file#grub_fortress_}"
+              fi
+            done
 
       - name: Commit and push
         run: |
