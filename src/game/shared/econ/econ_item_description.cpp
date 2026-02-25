@@ -387,7 +387,7 @@ void CEconItemDescription::GenerateDescriptionLines( const CLocalizationProvider
 		Generate_XifierToolTargetItem( pLocalizationProvider, pEconItem );
 		Generate_LootListDesc( pLocalizationProvider, pEconItem );
 		Generate_EventDetail( pLocalizationProvider, pEconItem );
-		Generate_ItemSetDesc( pLocalizationProvider, pEconItem );
+//		Generate_ItemSetDesc( pLocalizationProvider, pEconItem );
 #ifdef PROJECT_TF
 		Generate_UnusualifierEffectList( pLocalizationProvider, pEconItem );
 #endif // PROJECT_TF
