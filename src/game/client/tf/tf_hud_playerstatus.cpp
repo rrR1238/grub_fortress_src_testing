@@ -36,7 +36,7 @@
 
 using namespace vgui;
 
-ConVar cl_hud_playerclass_use_playermodel( "cl_hud_playerclass_use_playermodel", "1", FCVAR_ARCHIVE, "Use player model in player class HUD." );
+ConVar cl_hud_playerclass_use_playermodel( "cl_hud_playerclass_use_playermodel", "0", FCVAR_ARCHIVE, "Use player model in player class HUD." );
 
 
 ConVar cl_hud_playerclass_playermodel_showed_confirm_dialog( "cl_hud_playerclass_playermodel_showed_confirm_dialog", "0", FCVAR_ARCHIVE | FCVAR_HIDDEN );
