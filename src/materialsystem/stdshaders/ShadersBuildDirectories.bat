@@ -7,12 +7,12 @@
 rem sourcedir = Where to compile Shaders to ( shaders\ )
 rem targetdir = Where to copy compiled Shaders to ( game\..\shaders\ )
 set sourcedir="shaders"
-set targetdir="..\..\..\game\grub_fortress\content\tfgrub_content\shaders"
+set targetdir="..\..\..\game\tfgrub\content\tfgrub_content\shaders"
 
 rem SOURCE_DIR = Source Code Root ( src\ )
 rem GAME_DIR = Mod Folder with GameInfo.txt
 set SOURCE_DIR="..\..\"
-set GAME_DIR="..\..\..\game\grub_fortress"
+set GAME_DIR="..\..\..\game\tfgrub"
 
 rem Process Names we will try to call to ask for Shader reloads
 rem Will check in Order
@@ -26,4 +26,4 @@ rem Mod Projects using LUX
 set PROCESS_LIST=%PROCESS_LIST% tf2classified_win64.exe
 set PROCESS_LIST=%PROCESS_LIST% fc_tfsdk_win64.exe
 set PROCESS_LIST=%PROCESS_LIST% mod_hl2mp.exe
-set PROCESS_LIST=%PROCESS_LIST% grub_fortress_win64.exe
+set PROCESS_LIST=%PROCESS_LIST% tfgrub_win64.exe

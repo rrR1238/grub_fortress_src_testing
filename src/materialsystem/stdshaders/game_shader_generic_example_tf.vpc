@@ -6,7 +6,7 @@
 
 $Macro SRCDIR		"..\.."
 $Macro OUTBINNAME "game_shader_generic_example"
-$Macro GAMENAME "grub_fortress"
+$Macro GAMENAME "tfgrub"
 $Include "$SRCDIR\materialsystem\stdshaders\game_shader_generic_lux.vpc"
 
 $Project "Game Shaders (LUX - TFGrub)"

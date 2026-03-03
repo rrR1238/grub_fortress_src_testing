@@ -85,7 +85,7 @@
 			"options"
 			{
 				"#Start_Server_SteamNetworking"		"1"
-				"#Server_Visibility_Local"		"0"
+				"LAN"								"0"
 			}
 			"val"		"1"
 		}

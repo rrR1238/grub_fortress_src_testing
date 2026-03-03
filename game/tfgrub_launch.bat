@@ -36,39 +36,39 @@ if /i "%choice%"=="Q" exit
 goto menu
 
 :option1
-start "" "grub_fortress_win64.exe"
+start "" "tfgrub_win64.exe"
 goto end
 
 :option2
-start "" "grub_fortress_win64.exe" -dev -multirun -novid +mp_disable_respawn_times 1 +maxplayers 25
+start "" "tfgrub_win64.exe" -dev -multirun -novid +mp_disable_respawn_times 1 +maxplayers 25
 goto end
 
 :option3
-start "" "grub_fortress_win64.exe" -dev -multirun -novid +mp_disable_respawn_times 1 +maxplayers 25 +map devtest
+start "" "tfgrub_win64.exe" -dev -multirun -novid +mp_disable_respawn_times 1 +maxplayers 25 +map devtest
 goto end
 
 :option4
-start "" "grub_fortress_win64.exe" -nolux
+start "" "tfgrub_win64.exe" -nolux
 goto end
 
 :option5
-start "" "grub_fortress_win64.exe" -novid -insecure
+start "" "tfgrub_win64.exe" -novid -insecure
 goto end
 
 :option6
-start "" "grub_fortress_win64.exe" -novid -steam
+start "" "tfgrub_win64.exe" -novid -steam
 goto end
 
 :option7
-start "" "grub_fortress_win64.exe" -oldmenu
+start "" "tfgrub_win64.exe" -oldmenu
 goto end
 
 :option8
-start "" "grub_fortress_win64.exe" -oldermenu
+start "" "tfgrub_win64.exe" -oldermenu
 goto end
 
 :option9
-start "" "grub_fortress_win64.exe" -tools -nop4 +sv_lan 1 +map devtest +mp_disable_respawn_times 1
+start "" "tfgrub_win64.exe" -tools -nop4 +sv_lan 1 +map devtest +mp_disable_respawn_times 1
 goto end
 
 :end

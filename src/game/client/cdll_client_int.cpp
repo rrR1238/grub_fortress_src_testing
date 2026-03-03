@@ -156,6 +156,8 @@
 
 extern vgui::IInputInternal *g_InputInternal;
 
+const char *COM_GetModDirectory(); 
+
 //=============================================================================
 // HPE_BEGIN
 // [dwenger] Necessary for stats display
@@ -1003,6 +1005,12 @@ int CHLClient::Init( CreateInterfaceFn appSystemFactory, CreateInterfaceFn physi
 	if ( IsPC() && (g_pEngineClientReplay = (IEngineClientReplay *)appSystemFactory( ENGINE_REPLAY_CLIENT_INTERFACE_VERSION, NULL )) == NULL )
 		return false;
 #endif
+
+	if ( V_strstr( COM_GetModDirectory(), "tfgrub" ) == 0 && V_strstr(COM_GetModDirectory(), "tfgrub_dev" ) == 0 )
+	{
+		ConColorMsg( Color( 60, 238, 60, 255 ), "%s\n", COM_GetModDirectory() );
+		Error("The game's directory must have the exact name \"tfgrub\" in order for the mod to work correctly. Please change it.");
+	}
 
 	if (!g_pMatSystemSurface)
 		return false;

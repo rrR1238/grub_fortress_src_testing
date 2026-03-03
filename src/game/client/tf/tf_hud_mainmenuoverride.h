@@ -72,6 +72,9 @@ public:
 	~CHudMainMenuOverride( void );
 
 	void		 AttachToGameUI( void );
+
+	virtual void ShowBetaPopup();
+
 	virtual const char *GetName( void ){ return PANEL_MAINMENUOVERRIDE; }
 	virtual void SetData( KeyValues *data ){}
 	virtual void Reset(){ Update(); SetVisible( true ); }
@@ -158,6 +161,7 @@ public:
 	CEconItemView *m_pIconData;
 	CUtlVector< item_definition_index_t > m_vecIconDefs;
 #endif
+	bool		m_bShowBetaPopup;
 
 protected:
 	virtual void PaintTraverse( bool Repaint, bool allowForce = true ) OVERRIDE;

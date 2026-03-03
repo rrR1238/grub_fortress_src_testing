@@ -86,6 +86,8 @@ ConVar cl_mainmenu_operation_motd_reset("cl_mainmenu_operation_motd_reset", "0",
 ConVar cl_mainmenu_safemode("cl_mainmenu_safemode", "0", FCVAR_NONE, "Enable safe mode", cc_tf_safemode_toggle);
 ConVar cl_mainmenu_updateglow("cl_mainmenu_updateglow", "1", FCVAR_ARCHIVE | FCVAR_HIDDEN);
 
+ConVar tfgrub_showpopup( "tfgrub_showpopup", "1", FCVAR_ARCHIVE, "Controls the Popup which appears at startup." );
+
 void cc_promotional_codes_button_changed(IConVar* pConVar, const char* pOldString, float flOldValue)
 {
 	IViewPortPanel* pMMOverride = (gViewPortInterface->FindPanelByName(PANEL_MAINMENUOVERRIDE));
@@ -545,6 +547,8 @@ CHudMainMenuOverride::CHudMainMenuOverride(IViewPort* pViewPort) : BaseClass(NUL
 	m_bGeneratingIcons = false;
 	m_pIconData = NULL;
 #endif
+
+	m_bShowBetaPopup = true;
 
 	m_bHaveNewMOTDs = false;
 	m_bMOTDShownAtStartup = false;
@@ -1557,6 +1561,12 @@ void CHudMainMenuOverride::OnUpdateMenu(void)
 	if (!IsLayoutInvalid())
 	{
 		m_bStabilizedInitialLayout = true;
+	}
+
+	if ( m_bStabilizedInitialLayout && m_bShowBetaPopup && tfgrub_showpopup.GetBool() )
+	{
+		ShowBetaPopup();
+		m_bShowBetaPopup = false;
 	}
 }
 
@@ -3407,4 +3417,9 @@ CON_COMMAND(showquitconfirmdialog, "Show a quit confirmation dialog")
 			if ( bConfirmed )
 				engine->ClientCmd_Unrestricted( "quit\n" );
 		} );
+}
+
+void CHudMainMenuOverride::ShowBetaPopup()
+{
+	ShowMessageBox( "#TFGrub_BetaPopupTitle", "#TFGrub_BetaPopupMessage", "#GameUI_OK" );
 }

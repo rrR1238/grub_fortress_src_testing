@@ -138,8 +138,8 @@ jobs:
           fi
           
           # Check game binaries
-          if [ -d "game/grub_fortress/bin/linux64" ]; then
-            for lib in game/grub_fortress/bin/linux64/*.so; do
+          if [ -d "game/tfgrub/bin/linux64" ]; then
+            for lib in game/tfgrub/bin/linux64/*.so; do
               if [ -f "$lib" ]; then
                 echo "Checking $lib:"
                 file "$lib" | grep -q "ELF 64-bit" || {
@@ -153,14 +153,14 @@ jobs:
           fi
           
           # Check main executable
-          if [ -f "game/grub_fortress_linux64" ]; then
-            echo "Checking game/grub_fortress_linux64:"
-            file "game/grub_fortress_linux64" | grep -q "ELF 64-bit" || {
-              echo "ERROR: grub_fortress_linux64 is not 64-bit!"
-              file "game/grub_fortress_linux64"
+          if [ -f "game/tfgrub_linux64" ]; then
+            echo "Checking game/tfgrub_linux64:"
+            file "game/tfgrub_linux64" | grep -q "ELF 64-bit" || {
+              echo "ERROR: tfgrub_linux64 is not 64-bit!"
+              file "game/tfgrub_linux64"
               exit 1
             }
-            echo "✓ grub_fortress_linux64 is 64-bit"
+            echo "✓ tfgrub_linux64 is 64-bit"
           fi
           
           echo "All binaries verified as 64-bit ✓"
@@ -169,9 +169,9 @@ jobs:
       - name: Clean and strip (Linux)
         if: runner.os == 'Linux'
         run: |
-          find game/grub_fortress/bin/linux64 -type f -executable -exec strip --strip-all {} +
-          if [ -f game/grub_fortress_linux64 ]; then
-            strip --strip-all game/grub_fortress_linux64
+          find game/tfgrub/bin/linux64 -type f -executable -exec strip --strip-all {} +
+          if [ -f game/tfgrub_linux64 ]; then
+            strip --strip-all game/tfgrub_linux64
           fi
         shell: bash
 
@@ -206,7 +206,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact_name }}-binaries
-          path: game/grub_fortress/bin
+          path: game/tfgrub/bin
 
       - name: Upload Game Folder
         uses: actions/upload-artifact@v4
@@ -218,7 +218,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact_name }}-tfgrub_folder
-          path: game/grub_fortress/
+          path: game/tfgrub/
           
   publish_dev_build:
     name: Push Windows Dev Build
@@ -235,7 +235,7 @@ jobs:
 
       - name: Clone dev repository
         run: |
-          git clone https://x-access-token:${{ secrets.TFGRUB_DEV_TOKEN }}@github.com/Grub-Fortress/grub_fortress_dev.git target_repo
+          git clone https://x-access-token:${{ secrets.TFGRUB_DEV_TOKEN }}@github.com/Grub-Fortress/tfgrub_dev.git target_repo
 
       - name: Replace repo contents with new Windows build
         run: |
@@ -264,9 +264,9 @@ jobs:
             mv gameinfo_dev.txt gameinfo.txt
             
             cd resource
-            for file in grub_fortress_*; do
+            for file in tfgrub_*; do
               if [ -f "$file" ]; then
-                mv "$file" "grub_fortress_dev_${file#grub_fortress_}"
+                mv "$file" "tfgrub_dev_${file#tfgrub_}"
               fi
             done
 
