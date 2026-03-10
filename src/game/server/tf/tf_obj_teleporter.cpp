@@ -52,6 +52,8 @@ int g_iTeleporterRechargeTimes[4] =
 	3
 };
 
+extern ConVar tf_mvm_engineer_teleporter_uber_duration;
+
 IMPLEMENT_SERVERCLASS_ST( CObjectTeleporter, DT_ObjectTeleporter )
 	SendPropInt( SENDINFO(m_iState), 5 ),
 	SendPropTime( SENDINFO(m_flRechargeTime) ),
@@ -60,6 +62,7 @@ IMPLEMENT_SERVERCLASS_ST( CObjectTeleporter, DT_ObjectTeleporter )
 	SendPropFloat( SENDINFO(m_flYawToExit), 8, 0, 0.0, 360.0f ),
 	SendPropBool( SENDINFO(m_bMatchBuilding) ),
 	SendPropBool( SENDINFO(m_bIsMVMTeleporter) ),
+	SendPropBool(SENDINFO(m_bIsMVMTele)),
 END_SEND_TABLE()
 
 BEGIN_DATADESC( CObjectTeleporter )
@@ -168,6 +171,38 @@ void CObjectTeleporter::TeleporterSend( CTFPlayer *pPlayer )
 	}
 }
 
+bool CObjectTeleporter::CanBeUpgraded(CTFPlayer* pPlayer)
+{
+	// Already upgrading
+	if (IsUpgrading())
+		return false;
+
+	if (IsMiniBuilding() || IsDisposableBuilding() || IsMvMTele())
+		return false;
+
+	// only engineers
+	if (!ClassCanBuild(pPlayer->GetPlayerClass()->GetClassIndex(), GetType()))
+		return false;
+
+	// max upgraded
+	if (m_iUpgradeLevel >= OBJ_MAX_UPGRADE_LEVEL)
+		return false;
+
+	return true;
+}
+
+int CObjectTeleporter::GetMaxUpgradeLevel()
+{
+	if (IsMvMTele())
+		return 1;
+
+	return BaseClass::GetMaxUpgradeLevel();
+}
+
+int CObjectTeleporter::IsMvMTele(void) {
+	return m_bIsMVMTele;
+}
+
 //-----------------------------------------------------------------------------
 // Purpose: Receive a teleporting player 
 //-----------------------------------------------------------------------------
@@ -207,8 +242,9 @@ void CObjectTeleporter::TeleporterReceive( CTFPlayer *pPlayer, float flDelay )
 		break;
 	}
 
-	EmitSound( "Building_Teleporter.Receive" );
-
+	if (!IsMvMTele()) {
+		EmitSound("Building_Teleporter.Receive");
+	}
 	SetState( TELEPORTER_STATE_RECEIVING );
 	m_flMyNextThink = gpGlobals->curtime + BUILD_TELEPORTER_FADEOUT_TIME;
 
@@ -295,6 +331,10 @@ void CObjectTeleporter::FirstSpawn()
 
 	SetMaxHealth( iHealth );
 	SetHealth( iHealth );
+	if (IsMvMTele()) {
+		SetMaxHealth(65);
+		SetHealth(65);
+	}
 
 	BaseClass::FirstSpawn();
 }
@@ -475,6 +515,9 @@ void CObjectTeleporter::OnGoActive( void )
 		EmitSound("MVM.Robot_Teleporter_Activate");
 		m_bIsMVMTeleporter.Set( true );
 	}
+	if (IsMvMTele()) {
+		EmitSound("MVM.Robot_Teleporter_Activate");
+	}
 
 	// match our partner's maxhealth
 	if ( IsMatchingTeleporterReady() )
@@ -520,6 +563,8 @@ void CObjectTeleporter::Precache()
 	PrecacheScriptSound( "Building_Teleporter.Ready" );
 	PrecacheScriptSound( "Building_Teleporter.Send" );
 	PrecacheScriptSound( "Building_Teleporter.Receive" );
+	PrecacheScriptSound("MVM.Robot_Teleporter_Deliver");
+	PrecacheScriptSound("MVM.Robot_Teleporter_Activate");
 	PrecacheScriptSound( "Building_Teleporter.SpinLevel1" );
 	PrecacheScriptSound( "Building_Teleporter.SpinLevel2" );
 	PrecacheScriptSound( "Building_Teleporter.SpinLevel3" );
@@ -874,13 +919,13 @@ void CObjectTeleporter::DeterminePlaybackRate( void )
 			break;
 
 		case TELEPORTER_STATE_RECHARGING:
-			{
+		{
+			if (!IsMvMTele()) {
 				// Recharge - spin down to low and back up to full speed over the recharge time
 
 				float flTotalTime = m_flCurrentRechargeDuration;
 				float flFirstStage = flTotalTime * 0.4;
 				float flSecondStage = flTotalTime * 0.6;
-
 				// 0 -> 4, spin to low
 				// 4 -> 6, stay at low
 				// 6 -> 10, spin to 1.0
@@ -889,28 +934,29 @@ void CObjectTeleporter::DeterminePlaybackRate( void )
 
 				float flLowSpinSpeed = 0.15f;
 
-				if ( flTimeSinceChange <= flFirstStage )
+				if (flTimeSinceChange <= flFirstStage)
 				{
-					flPlaybackRate = RemapVal( gpGlobals->curtime,
+					flPlaybackRate = RemapVal(gpGlobals->curtime,
 						m_flLastStateChangeTime,
 						m_flLastStateChangeTime + flFirstStage,
 						1.0f,
-						flLowSpinSpeed );
+						flLowSpinSpeed);
 				}
-				else if ( flTimeSinceChange > flFirstStage && flTimeSinceChange <= flSecondStage )
+				else if (flTimeSinceChange > flFirstStage && flTimeSinceChange <= flSecondStage)
 				{
 					flPlaybackRate = flLowSpinSpeed;
 				}
 				else
 				{
-					flPlaybackRate = RemapVal( gpGlobals->curtime,
+					flPlaybackRate = RemapVal(gpGlobals->curtime,
 						m_flLastStateChangeTime + flSecondStage,
 						m_flLastStateChangeTime + flTotalTime,
 						flLowSpinSpeed,
-						1.0f );
+						1.0f);
 				}
-			}		
-			break;
+			}
+		}
+		break;
 
 		default:
 			{
@@ -1082,10 +1128,19 @@ void CObjectTeleporter::RecieveTeleportingPlayer( CTFPlayer* pTeleportingPlayer 
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CObjectTeleporter::TeleporterThink( void )
+void CObjectTeleporter::TeleporterThink(void)
 {
-	if ( IsCarried() )
+	if (IsCarried())
 		return;
+
+	CALL_ATTRIB_HOOK_INT_ON_OTHER(GetBuilder(), m_bIsMVMTele, mvm_pda);
+
+	if (IsMvMTele() && !GetBuilder()->IsAlive() && (!IsPlasmaDisabled() || !HasSapper())) {
+		SetDisabled(1);
+	}
+	else {
+		SetDisabled(0);
+	}
 
 	SetContextThink( &CObjectTeleporter::TeleporterThink, gpGlobals->curtime + BUILD_TELEPORTER_NEXT_THINK, TELEPORTER_THINK_CONTEXT );
 
@@ -1147,7 +1202,12 @@ void CObjectTeleporter::TeleporterThink( void )
 		{
 			pMatch->TeleporterReceive( m_hTeleportingPlayer, 1.0 );
 
-			m_flCurrentRechargeDuration = (float)g_iTeleporterRechargeTimes[GetUpgradeLevel()];
+			if (!IsMvMTele()) {
+				m_flCurrentRechargeDuration = (float)g_iTeleporterRechargeTimes[GetUpgradeLevel()];
+			}
+			else {
+				m_flCurrentRechargeDuration = 0.1f;
+			}
 
 			if ( !m_bWasMapPlaced )
 			{
@@ -1180,7 +1240,12 @@ void CObjectTeleporter::TeleporterThink( void )
 				pTeleportingPlayer->TeleportEffect();
 				pTeleportingPlayer->m_Shared.RemoveCond( TF_COND_SELECTED_TO_TELEPORT );
 				CTF_GameStats.Event_PlayerUsedTeleport( GetBuilder(), pTeleportingPlayer );
-
+				if (IsMvMTele()) {
+					pTeleportingPlayer->EmitSound("MVM.Robot_Teleporter_Deliver");
+					float flUberTime = tf_mvm_engineer_teleporter_uber_duration.GetFloat();
+					pTeleportingPlayer->m_Shared.AddCond(TF_COND_INVULNERABLE, flUberTime);
+					pTeleportingPlayer->m_Shared.AddCond(TF_COND_INVULNERABLE_WEARINGOFF, flUberTime);
+				}
 				pTeleportingPlayer->SpeakConceptIfAllowed( MP_CONCEPT_TELEPORTED );
 
 				IGameEvent * event = gameeventmanager->CreateEvent( "player_teleported" );

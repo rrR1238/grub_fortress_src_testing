@@ -1163,6 +1163,12 @@ void CTFGrenadePipebombProjectile::DetonateThink( void )
 		ResetDeflected();
 		SetDeflectOwner( NULL );
 	}
+	
+	if (m_bThrown) {
+		if (m_bTouched) {
+			Detonate();
+		}
+	}
 
 	// If we received our crit via a medic, make sure they still exist.
 	if ( m_CritMedics.Count()  )
@@ -1240,7 +1246,7 @@ void CTFGrenadePipebombProjectile::ArmThink( void )
 			Assert( m_CritMedics.Count() );
 		}
 	}
-
+	
 	// Check for proximity detonation
 	int iProximityStickies = 0;
 	CALL_ATTRIB_HOOK_INT_ON_OTHER( GetLauncher(), iProximityStickies, mod_proximity_stickies );

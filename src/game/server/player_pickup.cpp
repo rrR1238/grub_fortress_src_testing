@@ -7,7 +7,8 @@
 //=============================================================================//
 #include "cbase.h"
 #include "player_pickup.h"
-
+#include "tf_player.h"
+#include "tf_weapon_grenade_pipebomb.h"
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
@@ -32,6 +33,24 @@ void Pickup_ForcePlayerToDropThisObject( CBaseEntity *pTarget )
 
 void Pickup_OnPhysGunDrop( CBaseEntity *pDroppedObject, CBasePlayer *pPlayer, PhysGunDrop_t Reason )
 {
+	if (pPlayer) {
+		if (Reason && Reason == THROWN_BY_PLAYER) {
+			Msg("Threw\n");
+		}
+		else {
+			Msg("Dropped\n");
+		}
+	}
+	CTFPlayer* tfPlayer = ToTFPlayer(pPlayer);
+	tfPlayer->ShowViewModel(1);
+	tfPlayer->m_bHasPickedUpEntity = 0;
+	tfPlayer->GetActiveTFWeapon()->Ready();
+	if (Reason == THROWN_BY_PLAYER) {
+		CTFGrenadePipebombProjectile* StickyBomb = dynamic_cast<CTFGrenadePipebombProjectile*>(pDroppedObject);
+		if (StickyBomb) {
+			StickyBomb->m_bThrown = 1;
+		}
+	}
 	IPlayerPickupVPhysics *pPickup = dynamic_cast<IPlayerPickupVPhysics *>(pDroppedObject);
 	if ( pPickup )
 	{
@@ -47,7 +66,19 @@ void Pickup_OnPhysGunPickup( CBaseEntity *pPickedUpObject, CBasePlayer *pPlayer,
 	{
 		pPickup->OnPhysGunPickup( pPlayer, reason );
 	}
-
+	if (pPlayer) {
+		Msg("Picked up\n");
+	}
+	CTFPlayer* tfPlayer = ToTFPlayer(pPlayer);
+	tfPlayer->GetActiveTFWeapon()->Lower();
+	tfPlayer->ShowViewModel(0);
+	tfPlayer->m_bHasPickedUpEntity = 1;
+	tfPlayer->GetActiveTFWeapon()->SendViewModelAnim(ACT_VM_HOLSTER);
+	CTFGrenadePipebombProjectile* StickyBomb = dynamic_cast<CTFGrenadePipebombProjectile*>(pPickedUpObject);
+	if (StickyBomb->m_iType == TF_GL_MODE_REGULAR) {
+		Msg("Pipebomb picked up\n");
+		StickyBomb->SetDetonateTimerLength(9999999);
+	}
 	// send phys gun pickup item event, but only in single player
 	if ( !g_pGameRules->IsMultiplayer() )
 	{

@@ -48,6 +48,9 @@ public:
 	virtual bool	IsPlacementPosValid( void );
 	virtual void	SetModel( const char *pModel );
 	virtual void	InitializeMapPlacedObject( void );
+	virtual int	IsMvMTele(void);
+	virtual int		GetMaxUpgradeLevel(void) OVERRIDE;
+	virtual bool	CanBeUpgraded(CTFPlayer* pPlayer) OVERRIDE;
 
 	virtual void	FinishedBuilding( void );
 
@@ -137,6 +140,7 @@ protected:
 	CNetworkVar( float, m_flYawToExit );
 	CNetworkVar( bool, m_bMatchBuilding );
 	CNetworkVar( bool, m_bIsMVMTeleporter );
+	CNetworkVar(bool, m_bIsMVMTele);
 
 	CHandle<CObjectTeleporter> m_hMatchingTeleporter;
 

@@ -56,6 +56,8 @@
 #include "tf_projectile_flare.h"
 #include "trigger_area_capture.h"
 #include "triggers.h"
+#include "player_pickup.h"
+#include "hl2/weapon_physcannon.h"
 #include "tf_weapon_medigun.h"
 #include "tf_weapon_invis.h"
 #include "hl2orange.spa.h"
@@ -1652,7 +1654,11 @@ void CTFPlayer::TFPlayerThink()
 
 		m_flSendPickupWeaponMessageTime = -1.f;
 	}
-
+	if (!GetUseEntity() && m_bHasPickedUpEntity) {
+		ShowViewModel(1);
+		GetActiveTFWeapon()->Ready();
+		m_bHasPickedUpEntity = 0;
+	}
 	// In doomsday event, kart can run over ghost to do stuff
 	if ( m_Shared.InCond( TF_COND_HALLOWEEN_KART ) )
 	{
@@ -3962,7 +3968,7 @@ void CTFPlayer::PrecacheTFPlayer()
 	PrecacheScriptSound( "TFPlayer.ReCharged" );
 	PrecacheScriptSound( "Camera.SnapShot" );
 	PrecacheScriptSound( "TFPlayer.Dissolve" );
-
+	PrecacheScriptSound("HL2Player.Use");
 	PrecacheScriptSound( "Saxxy.TurnGold" );
 
 	PrecacheScriptSound( "Icicle.TurnToIce" );
@@ -10190,7 +10196,7 @@ void HandleRageGain( CTFPlayer *pPlayer, unsigned int iRequiredBuffFlags, float 
 	if ( !pPlayer )
 		return;
 
-	if ( pPlayer->IsPlayerClass( TF_CLASS_SOLDIER ) )
+	if ( pPlayer->IsPlayerClass( TF_CLASS_SOLDIER ) || pPlayer->IsPlayerClass(TF_CLASS_ENGINEER) || pPlayer->IsPlayerClass(TF_CLASS_HEAVYWEAPONS) )
 	{
 		CTFBuffItem *pBuffItem = dynamic_cast<CTFBuffItem*>( pPlayer->Weapon_OwnsThisID( TF_WEAPON_BUFF_ITEM ) );
 		unsigned int iBuffId = pBuffItem ? pBuffItem->GetBuffType() : 0;
@@ -23123,19 +23129,220 @@ void CTFPlayer::OnAchievementEarned( int iAchievement )
 //-----------------------------------------------------------------------------
 // Purpose: Handles USE keypress
 //-----------------------------------------------------------------------------
-void CTFPlayer::PlayerUse ( void )
+void CTFPlayer::PlayerUse(void)
 {
-	if ( tf_allow_player_use.GetBool() == false )
+#if 0
+	// Was use pressed or released?
+	if (!((m_nButtons | m_afButtonPressed | m_afButtonReleased) & IN_USE))
+		return;
+
+	if (m_afButtonPressed & IN_USE)
 	{
-		if ( !IsObserver() && !IsInCommentaryMode() )
+		// Currently using a latched entity?
+		if (ClearUseEntity())
+		{
+			return;
+		}
+		else
+		{
+			if (m_afPhysicsFlags & PFLAG_DIROVERRIDE)
+			{
+				m_afPhysicsFlags &= ~PFLAG_DIROVERRIDE;
+				m_iTrain = TRAIN_NEW | TRAIN_OFF;
+				return;
+			}
+			//else
+			//{	// Start controlling the train!
+			//	CBaseEntity* pTrain = GetGroundEntity();
+			//	if (pTrain && !(m_nButtons & IN_JUMP) && (GetFlags() & FL_ONGROUND) && (pTrain->ObjectCaps() & FCAP_DIRECTIONAL_USE) && pTrain->OnControls(this))
+			//	{
+			//		m_afPhysicsFlags |= PFLAG_DIROVERRIDE;
+			//		m_iTrain = TrainSpeed(pTrain->m_flSpeed, ((CFuncTrackTrain*)pTrain)->GetMaxSpeed());
+			//		m_iTrain |= TRAIN_NEW;
+			//		EmitSound("HL2Player.TrainUse");
+			//		return;
+			//	}
+			//}
+		}
+
+		// Tracker 3926:  We can't +USE something if we're climbing a ladder
+		if (GetMoveType() == MOVETYPE_LADDER)
 		{
 			return;
 		}
 	}
-	if ( IsInAVehicle() )
+
+//	if (m_flTimeUseSuspended > gpGlobals->curtime)
+//	{
+//		// Something has temporarily stopped us being able to USE things.
+//		// Obviously, this should be used very carefully.(sjb)
+//		return;
+//	}
+
+	CBaseEntity* pUseEntity = FindUseEntity();
+
+	bool usedSomething = false;
+
+	// Found an object
+	if (pUseEntity)
+	{
+		//!!!UNDONE: traceline here to prevent +USEing buttons through walls			
+		int caps = pUseEntity->ObjectCaps();
+		variant_t emptyVariant;
+		//CTFGrenadePipebombProjectile* StickyBomb = dynamic_cast<CTFGrenadePipebombProjectile*>(pUseEntity);
+		//if (StickyBomb && StickyBomb->GetOwnerEntity() != this || StickyBomb->GetTeamNumber() != GetTeamNumber()) {
+		//	StickyBomb->m_bTouched = false;
+		//	StickyBomb->VPhysicsGetObject()->EnableMotion(true);
+		//	StickyBomb->ChangeTeam(GetTeamNumber());
+		//	StickyBomb->SetOwnerEntity(this);
+		//}
+		//CTFGrenadePipebombProjectile* PipeBomb = dynamic_cast<CTFGrenadePipebombProjectile*>(pUseEntity);
+		if (m_afButtonPressed & IN_USE)
+		{
+			// Robin: Don't play sounds for NPCs, because NPCs will allow respond with speech.
+			if (!pUseEntity->MyNPCPointer())
+			{
+				EmitSound("HL2Player.Use");
+			}
+		}
+
+		if (((m_nButtons & IN_USE) && (caps & FCAP_CONTINUOUS_USE)) ||
+			((m_afButtonPressed & IN_USE) && (caps & (FCAP_IMPULSE_USE | FCAP_ONOFF_USE))))
+		{
+			if (caps & FCAP_CONTINUOUS_USE)
+				m_afPhysicsFlags |= PFLAG_USING;
+//			if (FClassnameIs(pUseEntity, "obj_dispenser")) {
+				pUseEntity->AcceptInput("Use", this, this, emptyVariant, USE_TOGGLE);
+				usedSomething = true;
+//			}
+		}
+		// UNDONE: Send different USE codes for ON/OFF.  Cache last ONOFF_USE object to send 'off' if you turn away
+		else if ((m_afButtonReleased & IN_USE) && (pUseEntity->ObjectCaps() & FCAP_ONOFF_USE))	// BUGBUG This is an "off" use
+		{
+//			if (FClassnameIs(pUseEntity, "obj_dispenser")) {
+				pUseEntity->AcceptInput("Use", this, this, emptyVariant, USE_TOGGLE);
+
+				usedSomething = true;
+//			}
+		}
+
+#if	HL2_SINGLE_PRIMARY_WEAPON_MODE
+
+		//Check for weapon pick-up
+		if (m_afButtonPressed & IN_USE)
+		{
+			CBaseCombatWeapon* pWeapon = dynamic_cast<CBaseCombatWeapon*>(pUseEntity);
+
+			if ((pWeapon != NULL) && (Weapon_CanSwitchTo(pWeapon)))
+			{
+				//Try to take ammo or swap the weapon
+				if (Weapon_OwnsThisType(pWeapon->GetClassname(), pWeapon->GetSubType()))
+				{
+					Weapon_EquipAmmoOnly(pWeapon);
+				}
+				else
+				{
+					Weapon_DropSlot(pWeapon->GetSlot());
+					Weapon_Equip(pWeapon);
+				}
+
+				usedSomething = true;
+			}
+		}
+#endif
+	}
+	else if (m_afButtonPressed & IN_USE)
+	{
+		// Signal that we want to play the deny sound, unless the user is +USEing on a ladder!
+		// The sound is emitted in ItemPostFrame, since that occurs after GameMovement::ProcessMove which
+		// lets the ladder code unset this flag.
+//		m_bPlayUseDenySound = true;
+	}
+
+	// Debounce the use key
+	if (usedSomething && pUseEntity)
+	{
+		m_Local.m_nOldButtons |= IN_USE;
+		m_afButtonPressed &= ~IN_USE;
+	}
+#endif
+}
+
+
+void CTFPlayer::PickupObject(CBaseEntity* pObject, bool bLimitMassAndSize)
+{
+	// can't pick up what you're standing on
+	if (GetGroundEntity() == pObject)
 		return;
 
-	BaseClass::PlayerUse();
+	if (!IsPlayerClass(TF_CLASS_ENGINEER)) {
+		return;
+	}
+
+	if (!GetActiveTFWeapon()->CanHolster()) {
+		return;
+	}
+
+	if (bLimitMassAndSize == true)
+	{
+		if (CBasePlayer::CanPickupObject(pObject, 35, 128) == false)
+			return;
+	}
+
+	// Can't be picked up if NPCs are on me
+	if (pObject->HasNPCsOnIt())
+		return;
+
+	PlayerPickupObject(this, pObject);
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: 
+// Output : CBaseEntity
+//-----------------------------------------------------------------------------
+bool CTFPlayer::IsHoldingEntity(CBaseEntity* pEnt)
+{
+	return PlayerPickupControllerIsHoldingEntity(m_hUseEntity, pEnt);
+}
+
+float CTFPlayer::GetHeldObjectMass(IPhysicsObject* pHeldObject)
+{
+	float mass = PlayerPickupGetHeldObjectMass(m_hUseEntity, pHeldObject);
+	if (mass == 0.0f)
+	{
+//		mass = PhysCannonGetHeldObjectMass(GetActiveWeapon(), pHeldObject);
+	}
+	return mass;
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: Force the player to drop any physics objects he's carrying
+//-----------------------------------------------------------------------------
+void CTFPlayer::ForceDropOfCarriedPhysObjects(CBaseEntity* pOnlyIfHoldingThis)
+{
+	if (PhysIsInCallback())
+	{
+		variant_t value;
+//		g_EventQueue.AddEvent(this, "ForceDropPhysObjects", value, 0.01f, pOnlyIfHoldingThis, this);
+		return;
+	}
+
+#ifdef HL2_EPISODIC
+	if (hl2_episodic.GetBool())
+	{
+		CBaseEntity* pHeldEntity = PhysCannonGetHeldEntity(GetActiveWeapon());
+		if (pHeldEntity && pHeldEntity->ClassMatches("grenade_helicopter"))
+		{
+			return;
+		}
+	}
+#endif
+
+	// Drop any objects being handheld.
+	ClearUseEntity();
+
+	// Then force the physcannon to drop anything it's holding, if it's our active weapon
+//	PhysCannonForceDrop(GetActiveWeapon(), NULL);
 }
 
 //-----------------------------------------------------------------------------

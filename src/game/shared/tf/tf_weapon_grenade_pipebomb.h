@@ -63,6 +63,7 @@ public:
 	float		m_flChargeTime;
 	bool		m_bPulsed;
 	float		m_flFullDamage;
+	bool		m_bThrown;
 
 	void SetFullDamage( float flFullDamage ) { m_flFullDamage = flFullDamage; }
 

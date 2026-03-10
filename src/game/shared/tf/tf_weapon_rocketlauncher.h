@@ -54,7 +54,6 @@ public:
 	virtual void	ModifyEmitSoundParams( EmitSound_t &params );
 
 	virtual int		GetWeaponID( void ) const			{ return TF_WEAPON_ROCKETLAUNCHER; }
-
 	virtual void	Misfire( void );
 	virtual CBaseEntity *FireProjectile( CTFPlayer *pPlayer );
 	virtual void	ItemPostFrame( void );

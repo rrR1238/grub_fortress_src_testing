@@ -14266,7 +14266,9 @@ void CTFPlayerShared::PulseRageBuff( ERageBuffSlot eBuffSlot )
 	{
 		eBuffCond = g_SoldierBuffAttributeIDToConditionMap[iSoldierBuffType];
 	}
-
+	bool bLocal;
+	CALL_ATTRIB_HOOK_INT_ON_OTHER(m_pOuter, bLocal, banner_local);
+	if (!bLocal) {
 	float fMaxRadius = 450.0f;
 	CALL_ATTRIB_HOOK_FLOAT_ON_OTHER( m_pOuter, fMaxRadius, mod_soldier_buff_range );
 	const float fMaxRadiusSq = fMaxRadius * fMaxRadius;
@@ -14343,6 +14345,13 @@ void CTFPlayerShared::PulseRageBuff( ERageBuffSlot eBuffSlot )
 			}
 		}
 #endif
+	}
+	}
+	if (bLocal) {
+		if (eBuffCond != TF_COND_LAST)
+		{
+			m_pOuter->m_Shared.AddCond(eBuffCond, 1.2f);
+		}
 	}
 
 #ifdef CLIENT_DLL

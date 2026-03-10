@@ -243,7 +243,10 @@ public:
 	bool				HasItem( void ) const;					// Currently can have only one item at a time.
 	void				SetItem( CTFItem *pItem );
 	CTFItem				*GetItem( void ) const;
-	
+	virtual void		PickupObject(CBaseEntity* pObject, bool bLimitMassAndSize);
+	virtual	bool		IsHoldingEntity(CBaseEntity* pEnt);
+	virtual void		ForceDropOfCarriedPhysObjects(CBaseEntity* pOnlyIfHoldindThis);
+	virtual float		GetHeldObjectMass(IPhysicsObject* pHeldObject);
 	void				SaveLastWeaponSlot( void );
 	void				SetRememberLastWeapon( bool bRememberLastWeapon ) { m_bRememberLastWeapon = bRememberLastWeapon; }
 	void				SetRememberActiveWeapon( bool bRememberActiveWeapon ) { m_bRememberActiveWeapon = bRememberActiveWeapon; }
@@ -810,7 +813,7 @@ public:
 	QAngle				m_angTauntCamera;
 
 	CHandle< CBaseEntity > m_hTauntItem;
-
+	bool				m_bHasPickedUpEntity;
 	void				ClearTauntAttack();
 	float				GetTauntAttackTime() const { return m_flTauntAttackTime; }
 

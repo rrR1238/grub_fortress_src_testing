@@ -33,6 +33,7 @@ IMPLEMENT_CLIENTCLASS_DT(C_ObjectTeleporter, DT_ObjectTeleporter, CObjectTelepor
 	RecvPropFloat( RECVINFO(m_flYawToExit) ),
 	RecvPropBool( RECVINFO(m_bMatchBuilding) ),
 	RecvPropBool( RECVINFO(m_bIsMVMTeleporter) ),
+	RecvPropBool(RECVINFO(m_bIsMVMTele)),
 END_RECV_TABLE()
 
 //-----------------------------------------------------------------------------
@@ -193,8 +194,13 @@ void C_ObjectTeleporter::StopActiveEffects()
 void C_ObjectTeleporter::StartBeamEffects()
 {
 	StopBeamEffects();
-	Assert( m_hBuildingBeamEffect.m_pObject == NULL );
-	m_hBuildingBeamEffect = ParticleProp()->Create( "teleporter_mvm_bot_persist", PATTACH_ABSORIGIN );
+	Assert(m_hBuildingBeamEffect.m_pObject == NULL);
+	if (GetTeamNumber() == TF_TEAM_BLUE) {
+		m_hBuildingBeamEffect = ParticleProp()->Create("teleporter_mvm_bot_persist", PATTACH_ABSORIGIN);
+	}
+	if (GetTeamNumber() == TF_TEAM_RED) {
+		m_hBuildingBeamEffect = ParticleProp()->Create("teleporter_mvm_bot_persist_red", PATTACH_ABSORIGIN);
+	}
 }
 
 void C_ObjectTeleporter::StopBeamEffects()
@@ -235,14 +241,13 @@ void C_ObjectTeleporter::UpdateTeleporterEffects( void )
 	}
 
 	// In MVM, teleporter from invaders act as spawn point. Always play active effect
-	if ( TFGameRules() && TFGameRules()->IsMannVsMachineMode() )
+	if ((TFGameRules() && TFGameRules()->IsMannVsMachineMode()) || IsMvMTele())
 	{
-		if ( m_iState != TELEPORTER_STATE_BUILDING && GetTeamNumber() == TF_TEAM_PVE_INVADERS )
+		if (m_iState != TELEPORTER_STATE_BUILDING && GetObjectMode() != MODE_TELEPORTER_ENTRANCE)
 		{
 			StartChargedEffects();
 			StartActiveEffects();
-			if(m_bIsMVMTeleporter)
-				StartBeamEffects();
+			StartBeamEffects();
 			return;
 		}
 	}

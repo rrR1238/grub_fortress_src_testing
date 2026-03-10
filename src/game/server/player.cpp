@@ -2809,12 +2809,11 @@ bool CBasePlayer::IsUseableEntity( CBaseEntity *pEntity, unsigned int requiredCa
 
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose: (Make it so that only engineer can pick up objects. Add new interactions for him.)
 //-----------------------------------------------------------------------------
 bool CBasePlayer::CanPickupObject( CBaseEntity *pObject, float massLimit, float sizeLimit )
 {
 	// UNDONE: Make this virtual and move to HL2 player
-#ifdef HL2_DLL
 	//Must be valid
 	if ( pObject == NULL )
 		return false;
@@ -2855,9 +2854,9 @@ bool CBasePlayer::CanPickupObject( CBaseEntity *pObject, float massLimit, float 
 	if ( checkEnable )
 	{
 		// Allowing picking up of bouncebombs.
-		CBounceBomb *pBomb = dynamic_cast<CBounceBomb*>(pObject);
-		if( pBomb )
-			return true;
+//		CBounceBomb *pBomb = dynamic_cast<CBounceBomb*>(pObject);
+//		if( pBomb )
+//			return true;
 
 		// Allow pickup of phys props that are motion enabled on player pickup
 		CPhysicsProp *pProp = dynamic_cast<CPhysicsProp*>(pObject);
@@ -2880,9 +2879,6 @@ bool CBasePlayer::CanPickupObject( CBaseEntity *pObject, float massLimit, float 
 	}
 
 	return true;
-#else
-	return false;
-#endif
 }
 
 float CBasePlayer::GetHeldObjectMass( IPhysicsObject *pHeldObject )

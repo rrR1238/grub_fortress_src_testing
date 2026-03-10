@@ -28,7 +28,7 @@ public:
 	virtual void GetTargetIDDataString( OUT_Z_BYTECAP(iMaxLenInBytes) wchar_t *sDataString, int iMaxLenInBytes );
 
 	virtual void ClientThink( void );
-
+	virtual int	IsMvMTele(void) { return m_bIsMVMTele; };
 	virtual void UpdateOnRemove();
 
 	virtual CStudioHdr *OnNewModel( void );
@@ -76,6 +76,7 @@ private:
 	float m_flYawToExit;
 	bool m_bMatchBuilding;
 	bool m_bIsMVMTeleporter;
+	bool m_bIsMVMTele;
 	bool m_bOldMatchBuilding;
 
 	int m_iDirectionArrowPoseParam;
