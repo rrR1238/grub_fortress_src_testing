@@ -1,0 +1,8 @@
+"Sprite"
+{
+	"$spriteorientation" "vp_parallel"
+	"$spriteorigin" "[ 0.50 0.50 ]"
+	"$basetexture" "editor/team_train_watcher"
+	"$no_fullbright" 1
+	"$scale" 2 2
+}

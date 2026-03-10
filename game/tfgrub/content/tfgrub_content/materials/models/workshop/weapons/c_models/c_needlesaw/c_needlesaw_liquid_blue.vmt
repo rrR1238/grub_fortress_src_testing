@@ -1,0 +1,9 @@
+"Patch"
+{
+	include "materials/models/workshop/weapons/c_models/c_needlesaw/c_needlesaw_liquid.vmt"
+	
+	insert
+	{
+	"$basetexture" "models/workshop/weapons/c_models/c_needlesaw/c_needlesaw_blue"
+	}
+}

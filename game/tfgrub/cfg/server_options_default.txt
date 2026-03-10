@@ -1,0 +1,433 @@
+"options"
+{
+	"#GameUI_Server"
+	{
+		"category1"
+		{
+			"label"		"Server Profile"
+			"type"		"CATEGORY"
+		}
+		"hostname"
+		{
+			"label"		"#GameUI_ServerName"
+			"type"		"STRING"
+			"val"		"Grub Fortress"
+		}
+		"sv_tags"
+		{
+			"label"		"Tags"
+			"type"		"STRING"
+		}
+		"category2"
+		{
+			"label"		"Server Slots and Bots"
+			"type"		"CATEGORY"
+		}
+		"maxplayers"
+		{
+			"label"		"#GameUI_MaxPlayers"
+			"type"		"STRING"
+			"val"		"24"
+		}
+		"tf_bot_quota"
+		{
+			"label"		"Amount of Bots:"
+			"type"		"STRING"
+			"val"		"0"
+		}
+		"tf_bot_difficulty"
+		{
+			"label"		"#TF_Bot_Difficulty"
+			"type"		"LIST"
+			"options"
+			{
+				"#TF_Bot_Difficulty0"		"0"
+				"#TF_Bot_Difficulty1"		"1"
+				"#TF_Bot_Difficulty2"		"2"
+				"#TF_Bot_Difficulty3"		"3"
+			}
+			"val"		"0"
+		}
+		"category3"
+		{
+			"label"		"#GameUI_Map"
+			"type"		"CATEGORY"
+		}
+		"cl_map_search"
+		{
+			"label"		"Search Maps"
+			"type"		"STRING"
+		}
+		"cl_map"
+		{
+			"label"		"Select Map"
+			"type"		"LIST"
+			"options"
+			{
+				"#GameUI_RandomMap"		"-1"
+			}
+			"val"		"-1"
+		}
+		"map_preview"
+		{
+			"label"		"Unnamed"
+			"type"		"CATEGORY"
+		}
+		"category4"
+		{
+			"label"		"#IT_OtherOptions"
+			"type"		"CATEGORY"
+		}
+		"sv_use_steam_networking"
+		{
+			"label"		"#Start_Server_SteamNetworking"
+			"type"		"LIST"
+			"options"
+			{
+				"#Start_Server_SteamNetworking"		"1"
+				"LAN"								"0"
+			}
+			"val"		"1"
+		}
+		"sv_password"
+		{
+			"label"		"Server Password"
+			"type"		"STRING"
+		}
+		"category5"
+		{
+			"label"		"Communication Settings"
+			"type"		"CATEGORY"
+		}
+		"sv_alltalk"
+		{
+			"label"		"Enable All Talk"
+			"type"		"BOOL"
+			"val"		"1"
+		}
+		"sv_voiceenable"
+		{
+			"label"		"Enable Voice Chat"
+			"type"		"BOOL"
+			"val"		"1"
+		}
+		"category6"
+		{
+			"label"		"Round and Time Settings"
+			"type"		"CATEGORY"
+		}
+		"mp_timelimit"
+		{
+			"label"		"Time Limit (In Minutes)"
+			"type"		"STRING"
+			"val"		"0"
+		}
+		"mp_winlimit"
+		{
+			"label"		"Win Limit"
+			"type"		"STRING"
+			"val"		"0"
+		}
+		"mp_maxrounds"
+		{
+			"label"		"Max Rounds"
+			"type"		"STRING"
+			"val"		"0"
+		}
+		"mp_bonusroundtime"
+		{
+			"label"		"Bonus Round Time (In Seconds)"
+			"type"		"STRING"
+			"val"		"15"
+		}
+		"mp_stalemate_enable"
+		{
+			"label"		"Enable Stalemate / Sudden Death"
+			"type"		"BOOL"
+			"val"		"0"
+		}
+		"category7"
+		{
+			"label"		"Team Settings"
+			"type"		"CATEGORY"
+		}
+		"mp_teams_unbalance_limit"
+		{
+			"label"		"Team Balance Limit"
+			"type"		"STRING"
+			"val"		"1"
+		}
+		"mp_autoteambalance"
+		{
+			"label"		"Auto Team Balance"
+			"type"		"BOOL"
+			"val"		"1"
+		}
+		"mp_scrambleteams_auto"
+		{
+			"label"		"Auto Scramble Teams"
+			"type"		"BOOL"
+			"val"		"1"
+		}
+		"category8"
+		{
+			"label"		"Network and Performance"
+			"type"		"CATEGORY"
+		}
+		"sv_pure"
+		{
+			"label"		"Server Pure"
+			"type"		"LIST"
+			"options"
+			{
+				"OFF"		"0"
+				"Pure (Whitelist)"		"1"
+				"Pure (Strict)"		"2"
+			}
+			"val"		"0"
+		}
+		"sv_region"
+		{
+			"label"		"Server Region"
+			"type"		"LIST"
+			"options"
+			{
+				"Automatic"		"-1"
+				"US East"		"0"
+				"US West"		"1"
+				"South America"		"2"
+				"Europe"		"3"
+				"Asia"		"4"
+				"Australia"		"5"
+				"Middle East"		"6"
+				"Africa"		"7"
+			}
+			"val"		"-1"
+		}
+		"sv_downloadurl"
+		{
+			"label"		"Fast Download URL"
+			"type"		"STRING"
+		}
+		"sv_allowupload"
+		{
+			"label"		"Allow Uploads"
+			"type"		"BOOL"
+			"val"		"1"
+		}
+		"sv_allowdownload"
+		{
+			"label"		"Allow Downloads"
+			"type"		"BOOL"
+			"val"		"1"
+		}
+	}
+	"GAMEPLAY"
+	{
+		"category1"
+		{
+			"label"		"General"
+			"type"		"CATEGORY"
+		}
+		"mp_disable_respawn_times"
+		{
+			"label"		"Disable Spawn Times"
+			"type"		"BOOL"
+			"val"		"0"
+		}
+		"tf_classlimit"
+		{
+			"label"		"Global Class Limit"
+			"type"		"STRING"
+			"val"		"0"
+		}
+		"tf_weapon_criticals"
+		{
+			"label"		"Enable Random Crits"
+			"type"		"LIST"
+			"options"
+			{
+				"OFF"		"0"
+				"ON"		"1"
+			}
+			"val"		"0"
+		}
+		"tf_weapon_criticals_melee"
+		{
+			"label"		"Enable Random Crits on Melee"
+			"type"		"LIST"
+			"options"
+			{
+				"ON (Ignores Regular Weapon Criticals)"		"2"
+				"ON"		"1"
+				"OFF"		"0"
+			}
+			"val"		"2"
+		}
+		"tf_use_fixed_weaponspreads"
+		{
+			"label"		"Use Fixed Weapon Spread"
+			"type"		"BOOL"
+			"val"		"0"
+		}
+		"cf_voicespam"
+		{
+			"label"		"Allow Voice Spam"
+			"type"		"BOOL"
+			"val"		"1"
+		}
+		"cf_max_voice_speak_delay"
+		{
+			"label"		"Max Voice Speak Delay (In Seconds)"
+			"type"		"STRING"
+			"val"		"1.500000"
+		}
+		"category3"
+		{
+			"label"		"Tournament Mode"
+			"type"		"CATEGORY"
+		}
+		"mp_tournament"
+		{
+			"label"		"Enable Tournament Mode"
+			"type"		"BOOL"
+			"val"		"0"
+		}
+		"mp_highlander"
+		{
+			"label"		"Enable Highlander Mode"
+			"type"		"BOOL"
+			"val"		"0"
+		}
+		"tf_tournament_classlimit_scout"
+		{
+			"label"		"Scout Limit"
+			"type"		"STRING"
+			"val"		"-1"
+		}
+		"tf_tournament_classlimit_soldier"
+		{
+			"label"		"Soldier Limit"
+			"type"		"STRING"
+			"val"		"-1"
+		}
+		"tf_tournament_classlimit_pyro"
+		{
+			"label"		"Pyro Limit"
+			"type"		"STRING"
+			"val"		"-1"
+		}
+		"tf_tournament_classlimit_demoman"
+		{
+			"label"		"Demoman Limit"
+			"type"		"STRING"
+			"val"		"-1"
+		}
+		"tf_tournament_classlimit_heavy"
+		{
+			"label"		"Heavy Limit"
+			"type"		"STRING"
+			"val"		"-1"
+		}
+		"tf_tournament_classlimit_engineer"
+		{
+			"label"		"Engineer Limit"
+			"type"		"STRING"
+			"val"		"-1"
+		}
+		"tf_tournament_classlimit_medic"
+		{
+			"label"		"Medic Limit"
+			"type"		"STRING"
+			"val"		"-1"
+		}
+		"tf_tournament_classlimit_sniper"
+		{
+			"label"		"Sniper Limit"
+			"type"		"STRING"
+			"val"		"-1"
+		}
+		"tf_tournament_classlimit_spy"
+		{
+			"label"		"Spy Limit"
+			"type"		"STRING"
+			"val"		"-1"
+		}
+	}
+//	"BALANCE"
+//	{
+//		"category2"
+//		{
+//			"label"		"General"
+//			"type"		"CATEGORY"
+//		}
+//		"cf_dropped_weapons_give_ammo"
+//		{
+//			"label"		"Dropped Weapons Give Ammo (Pre-GM)"
+//			"type"		"BOOL"
+//			"val"		"0"
+//		}
+//		"cf_pretoughbreak_switch"
+//		{
+//			"label"		"Old Weapon Switch Speed (Pre-TB)"
+//			"type"		"BOOL"
+//			"val"		"0"
+//		}
+//		"category_SCOUT"
+//		{
+//			"label"		"Scout"
+//			"type"		"CATEGORY"
+//		}
+//		"cf_scout_stunball_old_stun"
+//		{
+//			"label"		"Old Sandman Stun"
+//			"type"		"BOOL"
+//			"val"		"0"
+//		}
+//		"cf_enable_shortstop_shove"
+//		{
+//			"label"		"Enable Shortstop Shove (Pre-MYM)"
+//			"type"		"BOOL"
+//			"val"		"1"
+//		}
+//		"category_SOLDIER"
+//		{
+//			"label"		"Soldier"
+//			"type"		"CATEGORY"
+//		}
+//		"cf_revert_airstrike"
+//		{
+//			"label"		"Revert Airstrike (Pre-TB)"
+//			"type"		"BOOL"
+//			"val"		"0"
+//		}
+//		"category_PYRO"
+//		{
+//			"label"		"Pyro"
+//			"type"		"CATEGORY"
+//		}
+//		"cf_revert_airblast"
+//		{
+//			"label"		"Revert Airblast Mechanics (Pre-JI)"
+//			"type"		"BOOL"
+//			"val"		"0"
+//		}
+//		"cf_revert_flamethrower"
+//		{
+//			"label"		"Revert Flamethrower (Pre-BM)"
+//			"type"		"BOOL"
+//			"val"		"0"
+//		}
+//		"category_HEAVY"
+//		{
+//			"label"		"Heavy"
+//			"type"		"CATEGORY"
+//		}
+//		"tfgrub_lunchbox_owner_can_heal"
+//		{
+//			"label"		"#TFGRUB_Lunchbox_OwnerPickup"
+//			"type"		"BOOL"
+//			"val"		"0"
+//		}
+//	}
+}

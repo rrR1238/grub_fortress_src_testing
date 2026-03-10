@@ -1,0 +1,363 @@
+@include "base.fgd"
+@include "tf.fgd"
+//=====================================
+// Overrides
+//=====================================
+@PointClass base(Targetname, TeamNum, MatchSummary, EnableDisable, Angles) studio("models/player/engineer.mdl") = info_player_teamspawn :
+	"This entity marks the spawn point for Team Fortress players."
+[
+	controlpoint(target_destination) : "Associated Control Point" : : "The team_control_point associated with this spawn. Ownership of control points will control this spawn point's enabled state."
+	
+	SpawnMode(choices) : "Spawn Mode" : 0 : "How the game decides when a player can spawn here.  Triggered mode will only allow players sent via a trigger_player_respawn_override (in which case this spawn must be named, and match the trigger)." =
+	[
+		0 : "Normal"
+		1 : "Triggered"
+	] 
+	
+	spawnflags(flags) =
+	[
+		1 :	   "Scout" : 1
+		2 :    "Sniper" : 1
+		4 :    "Soldier" : 1
+		8 :    "Demoman" : 1
+		16 :   "Medic" : 1
+		32 :   "Heavyweapons" : 1
+		64 :   "Pyro" : 1
+		128 :  "Spy" : 1
+		256 :  "Engineer" : 1
+	]
+	
+	TeamNum(choices) : "Team" : 0 : "Team" =
+	[
+		0 : "Any"
+		2 : "Red"
+		3 : "Blue"
+	]
+	input SetTeam(integer) : "Changes the entity's team."
+	
+	round_bluespawn(target_destination) : "Blue spawn for round" : : "Blue spawn point when the associated round is being played."
+	round_redspawn(target_destination) : "Red spawn for round" : : "Red spawn point when the associated round is being played."
+	skin(choices) : "[H] Team Skin" : 0 : "" =
+	[
+		0: "Red"
+		1: "Blue"
+	]
+]
+@PointClass iconsprite("editor/tf_gamerules.vmt") base(Targetname) = tf_gamerules : "Proxy entity for TF Gamerules"
+[	
+	hud_type(choices) : "Hud Type" : 0 : "Override the HUD type clients should display." =
+	[
+		0 : "Default"
+		1 : "CTF HUD"
+		2 : "CP HUD"
+		3 : "Payload HUD"
+	]
+	
+	ctf_overtime(choices) : "CTF Overtime" : 1 : "Allow Overtime for CTF maps." =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+
+	ropes_holiday_lights_allowed(choices) : "Holiday Ropes" : 1 : "Allow ropes with holiday lights during the holiday event." =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+
+	input SetRedTeamRespawnWaveTime(float) : "Set the RED team's respawn wave time"
+	input SetBlueTeamRespawnWaveTime(float) : "Set the BLU team's respawn wave time"
+	input AddRedTeamRespawnWaveTime(float) : "Add to the RED team's respawn wave time"
+	input AddBlueTeamRespawnWaveTime(float) : "Add to the BLU team's respawn wave time"
+	input SetRedTeamGoalString(string) : "Set the RED team's goal string to show in the hud"
+	input SetBlueTeamGoalString(string) : "Set the BLU team's goal string to show in the hud"
+	input SetRedTeamRole(integer) : "Set RED team role, 0=none, 1=defenders, 2=attackers"
+	input SetBlueTeamRole(integer) : "Set BLU team role, 0=none, 1=defenders, 2=attackers"
+	input SetRequiredObserverTarget(string) : "Sets the given entity (by name) to be the required observer target for all spectators. Must be cleared to allow spectators to cycle through targets normally again."
+	input AddRedTeamScore(integer) : "Add to the RED team score (can be a negative number)"
+	input AddBlueTeamScore(integer) : "Add to the BLU team score (can be a negative number)"
+	input SetStalemateOnTimelimit(bool) : "Determines whether mp_timelimit can end the match in the middle of a round."
+	input SetRedKothClockActive(void) : "Set the RED team clock active for KOTH maps."
+	input SetBlueKothClockActive(void) : "Set the BLU team clock active for KOTH maps."
+	input SetCTFCaptureBonusTime(float) : "Set the length (in seconds) of team crit time for CTF captures. 0 = none"
+	input PlayVORed(string) : "Play the given sound entry via the VO channel" 
+	input PlayVOBlue(string) : "Play the given sound entry via the VO channel"
+	input PlayVO(string) : "Play the given sound entry via the VO channel"
+	input HandleMapEvent(string) : "Handles map events. This will be different events for different maps."
+	input SetCustomUpgradesFile(string) : "Specifies the path relative to the game directory to the upgrades file to be used."
+	input SetRoundRespawnFreezeEnabled(integer) : "Enable/disable the player movement freeze period after a round begins."
+	input SetMapForcedTruceDuringBossFight(bool) : "Enable/disable truce between the teams during a fight with Monoculus or Merasmus."
+	
+	output OnWonByTeam1(void) : "Sent when RED wins the round."
+	output OnWonByTeam2(void) : "Sent when BLUE wins the round."
+	output Team1PlayersChanged(integer) : "Sent when RED team player count changes, due to a player joining or leaving the team."
+	output Team2PlayersChanged(integer) : "Sent when BLUE team player count changes, due to a player joining or leaving the team."
+	output OnPowerupImbalanceTeam1(void) : "Sent when BLUE team has a powerup kill advantage over the RED team. Initiate RED team assist measures now."
+	output OnPowerupImbalanceTeam2(void) : "Sent when RED team has a powerup kill advantage over the BLUE team. Initiate BLUE team assist measures now."
+	output OnPowerupImbalanceMeasuresOver(void) : "Sent when powerup imbalance measures should be stopped"
+	output OnStateEnterBetweenRounds(void) : "Fired when entering the between-rounds state (MvM and Competitive)."
+	output OnStateEnterPreRound(void) : "Fired when entering the pre-round state (just before round running)."
+	output OnStateExitPreRound(void) : "Fired when exiting the pre-round state (just before round running)."
+	output OnStateEnterRoundRunning(void) : "Fired when entering the round-running state."
+	output OnMatchSummaryStart(void) : "Fired when the match summary begins and players are spawned on stage."
+	output OnTruceStart(void) : "Sent when a truce starts."
+	output OnTruceEnd(void) : "Sent when a truce ends."
+]
+
+@PointClass iconsprite("editor/tf_logic_koth.vmt") base(Targetname) = tf_logic_koth : "King of the Hill Entity. This is used to detect a KOTH map."
+[	
+	timer_length(integer) : "Timer length (in seconds)" : 180 : "Initial timer length for each team."
+	unlock_point(integer) : "Unlock Point (in seconds)" : 30 : "Time to wait before unlocking the point in CP KOTH maps."
+
+	input SetRedTimer(integer)	:	"Set the time remaining for the RED timer."
+	input SetBlueTimer(integer)	:	"Set the time remaining for the BLUE timer."
+	input AddRedTimer(integer)	:	"Add time to the RED timer."
+	input AddBlueTimer(integer)	:	"Add time to the BLUE timer."
+]
+
+@PointClass iconsprite("editor/team_train_watcher.vmt") base(Targetname, TeamNum, EnableDisable) = team_train_watcher :
+	"Entity that tracks the train progress through train escort maps"
+[
+	train_can_recede(choices) : "Can the train recede?" : 1 : "Used to hide the HUD countdown." = 
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+	
+	train_recede_time(integer) : "Train recede time (in seconds)" : 0 : "Length of time before the train begins to recede. 0 = use TF2 default setting of 30 seconds."
+	
+	handle_train_movement(choices) : "Handle train movement?" : 0 : "Should the train watcher handle all train movement?" = 
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+	
+	speed_forward_modifier(float) : "Speed Forward Modifier" : 1 : "Applies the given modifier to all forward speeds. Only used if the watcher is handling the train movement. [0, 1]"
+	
+	env_spark_name(string) : "Train spark sprites" : "" : "Name of the env_spark entities used under the train for backward movement. They should all have the same entity name. Only used if the watcher is handling the train movement."
+	
+	train(target_destination) : "Train to watch."
+	start_node(target_destination) : "Node that the path starts at."
+	goal_node(target_destination) : "Node that the path ends at."
+	
+	linked_pathtrack_1(target_destination) : "Linked PathTrack 1"
+	linked_cp_1(target_destination) : "Linked CP 1"
+	
+	linked_pathtrack_2(target_destination) : "Linked PathTrack 2"
+	linked_cp_2(target_destination) : "Linked CP 2"
+	
+	linked_pathtrack_3(target_destination) : "Linked PathTrack 3"
+	linked_cp_3(target_destination) : "Linked CP 3"
+	
+	linked_pathtrack_4(target_destination) : "Linked PathTrack 4"
+	linked_cp_4(target_destination) : "Linked CP 4"
+	
+	linked_pathtrack_5(target_destination) : "Linked PathTrack 5"
+	linked_cp_5(target_destination) : "Linked CP 5"
+	
+	linked_pathtrack_6(target_destination) : "Linked PathTrack 6"
+	linked_cp_6(target_destination) : "Linked CP 6"
+	
+	linked_pathtrack_7(target_destination) : "Linked PathTrack 7"
+	linked_cp_7(target_destination) : "Linked CP 7"
+	
+	linked_pathtrack_8(target_destination) : "Linked PathTrack 8"
+	linked_cp_8(target_destination) : "Linked CP 8"
+		
+	hud_min_speed_level_1(float) : "Min Speed for Speed Level 1" : 30
+	hud_min_speed_level_2(float) : "Min Speed for Speed Level 2" : 60
+	hud_min_speed_level_3(float) : "Min Speed for Speed Level 3" : 90
+	
+	// Inputs
+	input SetNumTrainCappers(integer) : "Set Number of players capping the train"
+	input SetSpeedForwardModifier(float) : "Set the speed forward modifier. Only used if the watcher is handling the train movement. [0, 1]"
+	input SetTrainRecedeTime(integer) : "Set the number of seconds before the train starts to recede."
+	input SetTrainCanRecede(bool) : "Determines whether or not the train can recede."
+	input SetTrainRecedeTimeAndUpdate(integer) : "Set the number of seconds before the train starts to recede and update the current recede time."
+	
+	// Outputs
+	output OnTrainStartRecede(void)   : "Sent when the train should start receding"
+]
+
+@PointClass iconsprite("editor/tf_logic_multiple_escort.vmt") base(Targetname) = tf_logic_multiple_escort : "Multiple Escort Entity. This is used to detect a payload map with trains for both teams."
+[	
+]
+
+@BaseClass = GameType
+[
+	GameType(choices) : "Game Type" : 0 : "Type of game this flag will be used for." =
+	[
+		0 : "CTF"
+		1 : "Attack/Defend"
+		2 : "Territory Control"
+		3 : "Invade"
+		4 : "Resource Control"
+		5 : "Robot Destruction"
+		7 : "Bomb Delivery"
+	]
+]
+
+@PointClass base(Targetname, Parentname, GameType, TeamNum, EnableDisable, Angles) studioprop() = item_teamflag : "Team Fortress flag entity."
+[
+	ReturnTime(integer) : "Return time (in seconds)" : 60 : "Length of time (in seconds) before dropped flag/intelligence returns to base."
+	
+	NeutralType(choices) : "Neutral flag (Invade)" : 1 : "Only used for the Invade game type. When should a dropped Invade flag become neutral?" =
+	[
+		0 : "Never"
+		1 : "Default (30 seconds)"
+		2 : "Half of the Return Time."
+	] 
+	
+	ScoringType(choices) : "Scoring style (Invade)" : 0 : "Only used for the Invade game type. When the Invade flag is captured, how should the team be rewarded? 'Score' is the team score in the scoreboard. 'Capture count' is the team capture count used in the HUD." =
+	[
+		0 : "Increment score"
+		1 : "Increment capture count"
+	] 
+	
+	flag_model(string) : "Model" : "models/flag/briefcase.mdl" : "The model to be used for this entity."
+	model(studio) : "[H] Model" : "models/flag/briefcase.mdl" : "The model to be used for this entity inside the Hammer Editor."
+	skin(choices) : "[H] Team Skin" : 0 : "" =
+	[
+		0: "Red"
+		1: "Blue"
+	]
+	flag_icon(string) : "Icon" : "../hud/objectives_flagpanel_carried" : "The icons used for the HUD in some game modes. Format: materials/vgui/[materialname]_red and materials/vgui/[materialname]_blue"
+	flag_paper(string) : "Paper Particle" : "player_intel_papertrail" : "Particle effect used for the falling paper trail."
+	flag_trail(string) : "Trail Effect" : "flagtrail" : "Materials used for the trail effect. Format: materials/effects/[materialname]_red and materials/effects/[materialname]_blu"
+
+	trail_effect(choices) : "Use Trail Effect" : 1 : "Use trail effect when the player is carrying the flag." =
+	[
+		0 : "None"
+		1 : "All Effects"
+		2 : "Paper Trail Only"
+		3 : "Color Trail Only"
+	]
+
+	VisibleWhenDisabled(choices) : "Visible When Disabled" : 0 : "Flag appears semitransparent when disabled." =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+
+	ShotClockMode(choices) : "Shot Clock Mode" : 0 : "Flag uses shot-clock mode, which means that the timer doesn't reset to the full time when an attacking player touches it." =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+
+	PointValue(integer) : "Point Value" : 0 : "Player Destruction or Robot Destruction mode: Point value of this flag pickup."
+
+	ReturnBetweenWaves(choices) : "Return Between Waves" : 1 : "Used only for MvM mode. Determines if the flag should return home between waves." =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+
+	tags(string) : "tags" : "" : "Tags used for the AI bomb carrier to avoid nav areas that have matching tags. Tags need to be separated by empty space."
+
+	// Inputs
+	input ForceDrop(void) : "Force the flag to be dropped if it's being carried by a player."
+	input ForceReset(void) : "Force the flag to be dropped if it's being carried by a player, then reset the flag to its original location."
+	input ForceResetSilent(void) : "Force the flag to be dropped if it's being carried by a player, then reset the flag to its original location silently (no messages sent to players)."
+	input ForceResetAndDisableSilent(void) : "Force the flag to be dropped if it's being carried by a player, and disable the flag, then reset the flag to its original location silently (no messages sent to players)."
+	input SetReturnTime(integer) : "Set the length of time (in seconds) before dropped flag/intelligence returns to base."
+	input ShowTimer(integer) : "Show a visible timer (in seconds)."
+	input ForceGlowDisabled(integer) : "Forcably block the glow effect for this flag. 1 = glow blocked, 0 = normal behavior"
+		
+	// Outputs
+	output OnReturn(void)  : "Sent when the flag is returned via timer."
+	output OnPickup(void)  : "Sent when the flag is picked up."
+	output OnPickup1(void)  : "Sent with the player as the activator when the flag is picked up."
+	output OnPickupTeam1(void) : "Sent when the flag is picked up by RED."
+	output OnPickupTeam2(void) : "Sent when the flag is picked up by BLU."
+	output OnDrop(void)    : "Sent when the flag is dropped."
+	output OnDrop1(void)    : "Sent with the player as the activator when the flag is dropped."
+	output OnCapture(void) : "Sent when the flag is captured."
+	output OnCapture1(void) : "Sent with the player as the activator when the flag is captured."
+	output OnCapTeam1(void) : "Sent when the flag is captured by RED."
+	output OnCapTeam2(void) : "Sent when the flag is captured by BLU."
+	output OnTouchSameTeam(void) : "Sent when the flag is touched by a player on the same team (BLU player touches BLU flag, RED player touches RED flag)."
+]
+
+@PointClass color(0 0 255) sidelist(sides) iconsprite("editor/env_cubemap.vmt") = env_cubemap : 
+	"An entity that creates a sample point for the Cubic Environment Map."
+[
+	cubemapsize(choices) : "Cubemap Size" : 0 =
+	[
+		0 : "Default"
+		1 : "1x1"
+		2 : "2x2"
+		3 : "4x4"
+		4 : "8x8"
+		5 : "16x16"
+		6 : "32x32"
+		7 : "64x64"
+		8 : "128x128"
+		9 : "256x256"
+	]
+	sides(sidelist) : "Brush faces": : "(Optional) Brushes faces to directly attach to the env_cubemap. Press Pick then click on faces in the 3D View to select them. Use CTRL while clicking to add or remove from the selection."
+	parallaxobb(target_destination) : "Cubemap Bounds" : : "(Optional) assigns this cubemap a bounding box for parallax correction (brush entity tied to parallax_obb)."
+]
+
+
+//=====================================
+//
+// TF:Grub Unique Entities
+//
+//=====================================
+
+//=====================================
+// Point Entities
+//=====================================
+@PointClass base(Targetname,EnableDisable) = tf_logic_bd : 	"Bomb Delivery Entity. This is used to detect an Bomb Delivery map."
+[	
+]
+
+@PointClass base(Targetname) = tf_logic_dom : "Domination Entity. This is used to detect a Domination map."
+[
+	input ScoreRedPoints(void) : "Score points for red."
+	input ScoreBluePoints(void) : "Score points for blue."
+	input EnableMaxScoreUpdating(void) : "Allow the max score to update based on player count."
+	input DisableMaxScoreUpdating(void) : "Disallow the max score to update based on player count."
+	input SetCountdownTimer(integer) : "Set the countdown time and start the timer."
+	input SetCountdownImage(string) : "Set the countdown image."
+	
+	red_respawn_time(float) : "Red Respawn Time (in seconds)" : 10 : "Respawn times for Red"
+	blue_respawn_time(float) : "Blue Respawn Time (in seconds)" : 10 : "Respawn times for Blue"
+	min_points(integer) : "Min Points" : 200 : "The minimum points to win"
+	points_per_player(integer) : "Point Per Player" : 50 : "How many points to increase the max points by per player"
+	finale_length(float) : "Finale Length" : 0 : "The amount of time from after max score is reached a team will win."
+	res_file(string) : "HUD Res File" : "resource/UI/HudObjectiveDomination.res" : "What res file to use for the HUD"
+
+	output OnBlueHitMaxPoints(void) : "Sent when Blue hits the max points."
+	output OnRedHitMaxPoints(void) : "Sent when Red hits the max points."
+	output OnBlueLeaveMaxPoints(void) : "Sent when blue goes from max points to fewer."
+	output OnRedLeaveMaxPoints(void) : "Sent when red goes from max points to fewer."
+	output OnBlueHitZeroPoints(void) : "Sent when Blue hits 0 points."
+	output OnRedHitZeroPoints(void) : "Sent when Red hits 0 points"
+	output OnBlueHasPoints(void) : "Sent when Blue goes from 0 to any points"
+	output OnRedHasPoints(void) : "Sent when Red goes from 0 to any points"
+
+	output OnRedFinalePeriodEnd(void) : "Sent when the red finale period ends."
+	output OnBlueFinalePeriodEnd(void) : "Sent when the blue finale period ends."
+
+	output OnRedScoreChanged(float) : "Send when score changes, and is a value representing total progress from [0..1]."
+	output OnBlueScoreChanged(float) : "Send when score changes, and is a value representing total progress from [0..1]."
+
+	output OnCountdownTimerExpired(void) : "Sent when the countdown timer expires."
+]
+
+//=====================================
+// Brush Entities
+//=====================================
+@SolidClass = func_ladder : 
+	"Ladder. Players will be able to freely along this brush, as if it was a ladder. If you are using a model prop " +
+	"for the visual representation of the ladder in the map, apply the toolsinvisibleladder material to the " +
+	"func_ladder brush."
+[
+]
+
+@SolidClass = parallax_obb
+[
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+]
