@@ -964,10 +964,6 @@ void CTFPlayerModelPanel::EquipAllWearables( CEconItemView *pHeldItem )
 		CEconItemView *pItem = m_ItemsToCarry[i];
 		int iSlot = pItem->GetStaticData()->GetLoadoutSlot(m_iCurrentClassIndex);
 
-		// Skip items in HEAD, MISC, and MISC2 slots
-		if (iSlot == LOADOUT_POSITION_HEAD || iSlot == LOADOUT_POSITION_MISC || iSlot == LOADOUT_POSITION_MISC2)
-			continue;
-
 		// If it's a wearable item, we put it on.
 		if ( pItem->GetStaticData()->IsAWearable() )
 		{

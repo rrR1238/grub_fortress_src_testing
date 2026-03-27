@@ -1006,10 +1006,10 @@ int CHLClient::Init( CreateInterfaceFn appSystemFactory, CreateInterfaceFn physi
 		return false;
 #endif
 
-	if ( V_strstr( COM_GetModDirectory(), "tfgrub" ) == 0 && V_strstr(COM_GetModDirectory(), "tfgrub_dev" ) == 0 )
+	if ( V_strstr( COM_GetModDirectory(), "mti" ) == 0 && V_strstr(COM_GetModDirectory(), "mti" ) == 0 )
 	{
 		ConColorMsg( Color( 60, 238, 60, 255 ), "%s\n", COM_GetModDirectory() );
-		Error("The game's directory must have the exact name \"tfgrub\" in order for the mod to work correctly. Please change it.");
+		Error("The game's directory must have the exact name \"mti\" in order for the mod to work correctly. Please change it.");
 	}
 
 	if (!g_pMatSystemSurface)

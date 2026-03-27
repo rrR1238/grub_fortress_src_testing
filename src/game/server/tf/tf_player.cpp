@@ -208,6 +208,19 @@ ConVar tf_damageforcescale_self_soldier_badrj( "tf_damageforcescale_self_soldier
 ConVar tf_damageforcescale_pyro_jump( "tf_damageforcescale_pyro_jump", "8.5", FCVAR_CHEAT | FCVAR_DEVELOPMENTONLY );
 ConVar tf_damagescale_self_soldier( "tf_damagescale_self_soldier", "0.60", FCVAR_CHEAT | FCVAR_DEVELOPMENTONLY );
 
+void MisadorDebugging(IConVar* pVar, const char* pOldString, float flOldValue)
+{
+	ConVarRef var(pVar);
+	switch(var.GetInt()) {
+	case 1:
+		Msg("Round state: %d\n", TFGameRules()->InSetup());
+	}
+	var.SetValue(0);
+}
+
+// Prep time: 3
+// Running: 4
+ConVar tf_misador_test("tf_misador_test", "0", FCVAR_CHEAT, "Debugging", MisadorDebugging);
 
 ConVar tf_damage_range( "tf_damage_range", "0.5", FCVAR_DEVELOPMENTONLY );
 ConVar tf_damage_multiplier_blue( "tf_damage_multiplier_blue", "1.0", FCVAR_CHEAT, "All incoming damage to a blue player is multiplied by this value" );
@@ -776,7 +789,6 @@ BEGIN_SEND_TABLE_NOBASE( CTFPlayer, DT_TFLocalPlayerExclusive )
 	SendPropInt( SENDINFO( m_nExperienceLevel ), 7, SPROP_UNSIGNED ),
 	SendPropInt( SENDINFO( m_nExperienceLevelProgress ), 7, SPROP_UNSIGNED ),
 	SendPropBool( SENDINFO( m_bMatchSafeToLeave ) ),
-
 END_SEND_TABLE()
 
 // all players except the local player
@@ -23131,7 +23143,6 @@ void CTFPlayer::OnAchievementEarned( int iAchievement )
 //-----------------------------------------------------------------------------
 void CTFPlayer::PlayerUse(void)
 {
-#if 0
 	// Was use pressed or released?
 	if (!((m_nButtons | m_afButtonPressed | m_afButtonReleased) & IN_USE))
 		return;
@@ -23265,7 +23276,6 @@ void CTFPlayer::PlayerUse(void)
 		m_Local.m_nOldButtons |= IN_USE;
 		m_afButtonPressed &= ~IN_USE;
 	}
-#endif
 }
 
 
@@ -23295,6 +23305,8 @@ void CTFPlayer::PickupObject(CBaseEntity* pObject, bool bLimitMassAndSize)
 
 	PlayerPickupObject(this, pObject);
 }
+
+
 
 //-----------------------------------------------------------------------------
 // Purpose: 
@@ -25673,6 +25685,7 @@ bool CTFPlayer::PickupWeaponFromOther( CTFDroppedWeapon *pDroppedWeapon )
 
 	return false;
 }
+
 
 //-----------------------------------------------------------------------------
 // Purpose: 

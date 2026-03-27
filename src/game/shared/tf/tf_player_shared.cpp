@@ -13228,6 +13228,12 @@ int	CTFPlayer::GetMaxAmmo( int iAmmoIndex, int iClassIndex /*= -1*/ )
 	int iMax = ( iClassIndex == -1 ) ? m_PlayerClass.GetData()->m_aAmmoMax[iAmmoIndex] : GetPlayerClassData( iClassIndex )->m_aAmmoMax[iAmmoIndex];
 	if ( iAmmoIndex == TF_AMMO_PRIMARY )
 	{
+		//int test;
+		//CALL_ATTRIB_HOOK_INT(test, max_ammo);
+		//Msg("Ammo: %d\n", test);
+		//if (test > 0) {
+		//	return test;
+		//}
 		CALL_ATTRIB_HOOK_INT( iMax, mult_maxammo_primary );
 	}
 	else if ( iAmmoIndex == TF_AMMO_SECONDARY )
@@ -13253,7 +13259,6 @@ int	CTFPlayer::GetMaxAmmo( int iAmmoIndex, int iClassIndex /*= -1*/ )
 	{
 		iMax *= 2.0f;
 	}
-
 	return iMax;
 }
 

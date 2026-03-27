@@ -13,6 +13,7 @@
 #include "tier1/strtools.h"
 #include "buttons.h"
 #include "eventqueue.h"
+#include "tf_gamerules.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -45,6 +46,8 @@ BEGIN_DATADESC( CBaseButton )
 	DEFINE_FIELD( m_sNoise, FIELD_SOUNDNAME ),
 	DEFINE_FIELD( m_flUseLockedTime, FIELD_TIME ),
 	DEFINE_FIELD( m_bSolidBsp, FIELD_BOOLEAN ),
+	DEFINE_KEYFIELD(m_bLockedInSetupUp, FIELD_BOOLEAN, "lockedinsetup"),
+	DEFINE_KEYFIELD(m_bTeamLock, FIELD_BOOLEAN, "teamlock"),
 	
 	DEFINE_KEYFIELD( m_sounds, FIELD_INTEGER, "sounds" ),
 	
@@ -520,7 +523,14 @@ void CBaseButton::ButtonUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_
 	// UNDONE: Should this use ButtonResponseToTouch() too?
 	if (m_toggle_state == TS_GOING_UP || m_toggle_state == TS_GOING_DOWN )
 		return;		
-
+	if (m_bLockedInSetupUp && TFGameRules()->InSetup()) {
+		OnUseLocked(pActivator);
+		return;
+	}
+	if (m_bTeamLock && pActivator->GetTeamNumber() != GetTeamNumber()) {
+		OnUseLocked(pActivator);
+		return;
+	}
 	if (m_bLocked)
 	{
 		OnUseLocked( pActivator );

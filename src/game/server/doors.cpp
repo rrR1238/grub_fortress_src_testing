@@ -51,7 +51,8 @@ BEGIN_DATADESC( CBaseDoor )
 	DEFINE_KEYFIELD( m_flWaveHeight, FIELD_FLOAT, "WaveHeight" ),
 	DEFINE_KEYFIELD( m_flBlockDamage, FIELD_FLOAT, "dmg" ),
 	DEFINE_KEYFIELD( m_eSpawnPosition, FIELD_INTEGER, "spawnpos" ),
-
+	DEFINE_KEYFIELD(m_bLockedInSetupUp, FIELD_BOOLEAN, "lockedinsetup"),
+	DEFINE_KEYFIELD(m_bTeamLock, FIELD_BOOLEAN, "teamlock"),
 	DEFINE_KEYFIELD( m_bForceClosed, FIELD_BOOLEAN, "forceclosed" ),
 	DEFINE_FIELD( m_bDoorGroup, FIELD_BOOLEAN ),
 
@@ -724,6 +725,15 @@ void CBaseDoor::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE use
 
 	if( m_ChainTarget != NULL_STRING )
 		ChainUse();
+
+	if (m_bLockedInSetupUp && TFGameRules()->InSetup()) {
+		PlayLockSounds(this, &m_ls, TRUE, FALSE);
+		return;
+	}
+	if (m_bTeamLock && pActivator->GetTeamNumber() != GetTeamNumber()) {
+		PlayLockSounds(this, &m_ls, TRUE, FALSE);
+		return;
+	}
 
 	// We can't +use this if it can't be +used
 	if ( m_hActivator != NULL && m_hActivator->IsPlayer() && HasSpawnFlags( SF_DOOR_PUSE ) == false )

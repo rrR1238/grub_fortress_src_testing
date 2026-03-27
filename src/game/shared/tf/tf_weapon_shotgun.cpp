@@ -84,6 +84,76 @@ void CTFShotgun::PrimaryAttack()
 	BaseClass::PrimaryAttack();
 }
 
+void CTFShotgun::SecondaryAttack()
+{
+	bool bDoubleFire;
+	CALL_ATTRIB_HOOK_INT_ON_OTHER(GetOwner(), bDoubleFire, double_fire);
+	if (bDoubleFire) {
+		bool bFireOnce;
+		if (!CanAttack())
+			return;
+
+		// Are we capable of firing again?
+		if (m_flNextPrimaryAttack > gpGlobals->curtime)
+			return;
+		if (Clip1() == 0) {
+			return;
+		}
+		if (Clip1() > 1) {
+			bFireOnce = 0;
+		}
+		else {
+			bFireOnce = 1;
+		}
+		//	m_flNextSecondaryAttack = gpGlobals->curtime + 0.5;
+		//	OR
+		// m_flNextPrimaryAttack = gpGlobals->curtime + 0.5;
+		WeaponSound(SPECIAL1);
+		CTFPlayer* pPlayer = ToTFPlayer(GetPlayerOwner());
+		if (pPlayer)
+		{
+			SendWeaponAnim(ACT_VM_PRIMARYATTACK);
+			pPlayer->DoAnimationEvent(PLAYERANIMEVENT_ATTACK_PRIMARY);
+		}
+		if (bFireOnce) {
+			FX_FireBullets(
+				this,
+				pPlayer->entindex(),
+				pPlayer->Weapon_ShootPosition(),
+				pPlayer->EyeAngles() + pPlayer->GetPunchAngle(),
+				GetWeaponID(),
+				m_iWeaponMode,
+				CBaseEntity::GetPredictionRandomSeed(UseServerRandomSeed()) & 255,
+				GetWeaponSpread(),
+				GetProjectileDamage(),
+				IsCurrentAttackACrit());
+		}
+		if (!bFireOnce) {
+			FX_FireBullets(
+				this,
+				pPlayer->entindex(),
+				pPlayer->Weapon_ShootPosition(),
+				pPlayer->EyeAngles() + pPlayer->GetPunchAngle(),
+				GetWeaponID(),
+				m_iWeaponMode,
+				CBaseEntity::GetPredictionRandomSeed(UseServerRandomSeed()) & 255,
+				GetWeaponSpread(),
+				GetProjectileDamage(),
+				IsCurrentAttackACrit(), 2);
+		}
+		if (!bFireOnce) {
+			SetClip1(Clip1() - 2);
+		}
+		else {
+			SetClip1(Clip1() - 1);
+		}
+		// Set the weapon mode.
+		m_iWeaponMode = TF_WEAPON_PRIMARY_MODE;
+		m_flNextPrimaryAttack = gpGlobals->curtime + 1.5f;
+		BaseClass::SecondaryAttack();
+	}
+}
+
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------

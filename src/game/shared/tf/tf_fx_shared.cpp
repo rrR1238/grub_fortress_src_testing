@@ -155,67 +155,67 @@ Vector g_vecFixedWpnSpreadPelletsWideLarge[] =
 // Purpose: This runs on both the client and the server.  On the server, it 
 // only does the damage calculations.  On the client, it does all the effects.
 //-----------------------------------------------------------------------------
-void FX_FireBullets( CTFWeaponBase *pWpn, int iPlayer, const Vector &vecOrigin, const QAngle &vecAngles,
-					 int iWeapon, int iMode, int iSeed, float flSpread, float flDamage /* = -1.0f */, bool bCritical /* = false*/ )
+void FX_FireBullets(CTFWeaponBase* pWpn, int iPlayer, const Vector& vecOrigin, const QAngle& vecAngles,
+	int iWeapon, int iMode, int iSeed, float flSpread, float flDamage /* = -1.0f */, bool bCritical /* = false*/, int iBulletMultiplier)
 {
 	// Get the weapon information.
-	const char *pszWeaponAlias = WeaponIdToAlias( iWeapon );
-	if ( !pszWeaponAlias )
+	const char* pszWeaponAlias = WeaponIdToAlias(iWeapon);
+	if (!pszWeaponAlias)
 	{
-		DevMsg( 1, "FX_FireBullets: weapon alias for ID %i not found\n", iWeapon );
+		DevMsg(1, "FX_FireBullets: weapon alias for ID %i not found\n", iWeapon);
 		return;
 	}
 
-	WEAPON_FILE_INFO_HANDLE	hWpnInfo = LookupWeaponInfoSlot( pszWeaponAlias );
-	if ( hWpnInfo == GetInvalidWeaponInfoHandle() )
+	WEAPON_FILE_INFO_HANDLE	hWpnInfo = LookupWeaponInfoSlot(pszWeaponAlias);
+	if (hWpnInfo == GetInvalidWeaponInfoHandle())
 	{
-		DevMsg( 1, "FX_FireBullets: LookupWeaponInfoSlot failed for weapon %s\n", pszWeaponAlias );
+		DevMsg(1, "FX_FireBullets: LookupWeaponInfoSlot failed for weapon %s\n", pszWeaponAlias);
 		return;
 	}
 
-	CTFWeaponInfo *pWeaponInfo = static_cast<CTFWeaponInfo*>( GetFileWeaponInfoFromHandle( hWpnInfo ) );
-	if( !pWeaponInfo )
+	CTFWeaponInfo* pWeaponInfo = static_cast<CTFWeaponInfo*>(GetFileWeaponInfoFromHandle(hWpnInfo));
+	if (!pWeaponInfo)
 		return;
 
 	bool bDoEffects = false;
 
 #ifdef CLIENT_DLL
-	C_TFPlayer *pPlayer = ToTFPlayer( ClientEntityList().GetBaseEntity( iPlayer ) );
+	C_TFPlayer* pPlayer = ToTFPlayer(ClientEntityList().GetBaseEntity(iPlayer));
 #else
-	CTFPlayer *pPlayer = ToTFPlayer( UTIL_PlayerByIndex( iPlayer ) );
+	CTFPlayer* pPlayer = ToTFPlayer(UTIL_PlayerByIndex(iPlayer));
 #endif
-	if ( !pPlayer )
+	if (!pPlayer)
 		return;
 
-// Client specific.
+	// Client specific.
 #ifdef CLIENT_DLL
 	bDoEffects = true;
 
 	// The minigun has custom sound & animation code to deal with its windup/down.
-	if ( !pPlayer->IsLocalPlayer() 
-		&& iWeapon != TF_WEAPON_MINIGUN )
+	if (!pPlayer->IsLocalPlayer()
+		&& iWeapon != TF_WEAPON_MINIGUN)
 	{
 		// Fire the animation event.
-		if ( pPlayer && !pPlayer->IsDormant() )
+		if (pPlayer && !pPlayer->IsDormant())
 		{
-			if ( iMode == TF_WEAPON_PRIMARY_MODE )
+			if (iMode == TF_WEAPON_PRIMARY_MODE)
 			{
-				pPlayer->m_PlayerAnimState->DoAnimationEvent( PLAYERANIMEVENT_ATTACK_PRIMARY );
+				pPlayer->m_PlayerAnimState->DoAnimationEvent(PLAYERANIMEVENT_ATTACK_PRIMARY);
 			}
 			else
 			{
-				pPlayer->m_PlayerAnimState->DoAnimationEvent( PLAYERANIMEVENT_ATTACK_SECONDARY );
+				pPlayer->m_PlayerAnimState->DoAnimationEvent(PLAYERANIMEVENT_ATTACK_SECONDARY);
 			}
 		}
 
 		//FX_WeaponSound( pPlayer->entindex(), SINGLE, vecOrigin, pWeaponInfo );
 	}
 
-// Server specific.
+	// Server specific.
 #else
 	// If this is server code, send the effect over to client as temp entity and 
 	// dispatch one message for all the bullet impacts and sounds.
-	TE_FireBullets( pPlayer->entindex(), vecOrigin, vecAngles, iWeapon, iMode, iSeed, flSpread, bCritical );
+	TE_FireBullets(pPlayer->entindex(), vecOrigin, vecAngles, iWeapon, iMode, iSeed, flSpread, bCritical);
 
 	// Let the player remember the usercmd he fired a weapon on. Assists in making decisions about lag compensation.
 	pPlayer->NoteWeaponFired();
@@ -227,52 +227,52 @@ void FX_FireBullets( CTFWeaponBase *pWpn, int iPlayer, const Vector &vecOrigin, 
 
 #if !defined (CLIENT_DLL)
 	// Move other players back to history positions based on local player's lag
-	lagcompensation->StartLagCompensation( pPlayer, pPlayer->GetCurrentCommand() );
-	
+	lagcompensation->StartLagCompensation(pPlayer, pPlayer->GetCurrentCommand());
+
 	// PASSTIME custom lag compensation for the ball; see also tf_weapon_flamethrower.cpp
 	// it would be better if all entities could opt-in to this, or a way for lagcompensation to handle non-players automatically
-	if ( g_pPasstimeLogic && g_pPasstimeLogic->GetBall() )
+	if (g_pPasstimeLogic && g_pPasstimeLogic->GetBall())
 	{
-		g_pPasstimeLogic->GetBall()->StartLagCompensation( pPlayer, pPlayer->GetCurrentCommand() );
+		g_pPasstimeLogic->GetBall()->StartLagCompensation(pPlayer, pPlayer->GetCurrentCommand());
 	}
 #endif
 
 	// Get the shooting angles.
 	Vector vecShootForward, vecShootRight, vecShootUp;
-	AngleVectors( vecAngles, &vecShootForward, &vecShootRight, &vecShootUp );
+	AngleVectors(vecAngles, &vecShootForward, &vecShootRight, &vecShootUp);
 
 	// Initialize the static firing information.
 	FireBulletsInfo_t fireInfo;
 	fireInfo.m_vecSrc = vecOrigin;
-	if ( flDamage < 0.0f )
+	if (flDamage < 0.0f)
 	{
-		fireInfo.m_flDamage = pWeaponInfo->GetWeaponData( iMode ).m_nDamage;
+		fireInfo.m_flDamage = pWeaponInfo->GetWeaponData(iMode).m_nDamage;
 	}
 	else
 	{
 		fireInfo.m_flDamage = flDamage;
 	}
-	fireInfo.m_flDistance = pWeaponInfo->GetWeaponData( iMode ).m_flRange;
+	fireInfo.m_flDistance = pWeaponInfo->GetWeaponData(iMode).m_flRange;
 	fireInfo.m_iShots = 1;
-	fireInfo.m_vecSpread.Init( flSpread, flSpread, 0.0f );
+	fireInfo.m_vecSpread.Init(flSpread, flSpread, 0.0f);
 	fireInfo.m_iAmmoType = pWeaponInfo->iAmmoType;
 
 	// Ammo override
 	int iModUseMetalOverride = 0;
-	CALL_ATTRIB_HOOK_INT_ON_OTHER( pWpn, iModUseMetalOverride, mod_use_metal_ammo_type );
-	if ( iModUseMetalOverride )
+	CALL_ATTRIB_HOOK_INT_ON_OTHER(pWpn, iModUseMetalOverride, mod_use_metal_ammo_type);
+	if (iModUseMetalOverride)
 	{
 		fireInfo.m_iAmmoType = TF_AMMO_METAL;
 	}
 
 	// Setup the bullet damage type & roll for crit.
-	int	nDamageType	= DMG_GENERIC;
+	int	nDamageType = DMG_GENERIC;
 	int nCustomDamageType = TF_DMG_CUSTOM_NONE;
-	CTFWeaponBase *pWeapon = pPlayer->GetActiveTFWeapon(); // FIXME: Should this be pWpn?
-	if ( pWeapon )
+	CTFWeaponBase* pWeapon = pPlayer->GetActiveTFWeapon(); // FIXME: Should this be pWpn?
+	if (pWeapon)
 	{
-		nDamageType	= pWeapon->GetDamageType();
-		if ( pWeapon->IsCurrentAttackACrit() || bCritical )
+		nDamageType = pWeapon->GetDamageType();
+		if (pWeapon->IsCurrentAttackACrit() || bCritical)
 		{
 			nDamageType |= DMG_CRITICAL;
 		}
@@ -283,12 +283,12 @@ void FX_FireBullets( CTFWeaponBase *pWpn, int iPlayer, const Vector &vecOrigin, 
 	// Set tracer frequency based on weapon type
 	// Pistols, revolvers, and SMGs should have tracers on every shot
 	// Other weapons (except minigun which defaults to 0) show tracers every 2 shots
-	if ( iWeapon != TF_WEAPON_MINIGUN )
+	if (iWeapon != TF_WEAPON_MINIGUN)
 	{
-		if ( iWeapon == TF_WEAPON_PISTOL || 
-			 iWeapon == TF_WEAPON_PISTOL_SCOUT ||
-			 iWeapon == TF_WEAPON_REVOLVER ||
-			 iWeapon == TF_WEAPON_SMG )
+		if (iWeapon == TF_WEAPON_PISTOL ||
+			iWeapon == TF_WEAPON_PISTOL_SCOUT ||
+			iWeapon == TF_WEAPON_REVOLVER ||
+			iWeapon == TF_WEAPON_SMG)
 		{
 			fireInfo.m_iTracerFreq = 1;
 		}
@@ -304,46 +304,46 @@ void FX_FireBullets( CTFWeaponBase *pWpn, int iPlayer, const Vector &vecOrigin, 
 #if !defined (CLIENT_DLL)
 	// If this weapon fires multiple projectiles per shot, and can penetrate multiple
 	// targets, aggregate CTakeDamageInfo events and send them off as one event
-	CDmgAccumulator *pDmgAccumulator = pWpn ? pWpn->GetDmgAccumulator() : NULL;
-	if ( pDmgAccumulator )
+	CDmgAccumulator* pDmgAccumulator = pWpn ? pWpn->GetDmgAccumulator() : NULL;
+	if (pDmgAccumulator)
 	{
 		pDmgAccumulator->Start();
 	}
 #endif // !CLIENT
 
-	int nBulletsPerShot = pWeaponInfo->GetWeaponData( iMode ).m_nBulletsPerShot;
-	bool bFixedSpread = ( nDamageType & DMG_BUCKSHOT ) && ( nBulletsPerShot > 1 ) && IsFixedWeaponSpreadEnabled( pWpn );
-	if ( pWeapon )
+	int nBulletsPerShot = pWeaponInfo->GetWeaponData(iMode).m_nBulletsPerShot * iBulletMultiplier;
+	bool bFixedSpread = (nDamageType & DMG_BUCKSHOT) && (nBulletsPerShot > 1) && IsFixedWeaponSpreadEnabled(pWpn);
+	if (pWeapon)
 	{
-		CALL_ATTRIB_HOOK_FLOAT_ON_OTHER( pWeapon, nBulletsPerShot, mult_bullets_per_shot );
+		CALL_ATTRIB_HOOK_FLOAT_ON_OTHER(pWeapon, nBulletsPerShot, mult_bullets_per_shot * iBulletMultiplier);
 	}
-	for ( int iBullet = 0; iBullet < nBulletsPerShot; ++iBullet )
+	for (int iBullet = 0; iBullet < nBulletsPerShot; ++iBullet)
 	{
 		// Initialize random system with this seed.
-		RandomSeed( iSeed );	
+		RandomSeed(iSeed);
 
 		float x = 0.f;
 		float y = 0.f;
 
-		if ( bFixedSpread )
+		if (bFixedSpread)
 		{
-			if ( nBulletsPerShot >= 15 )
+			if (nBulletsPerShot >= 15)
 			{
 				int iSpread = iBullet;
-				while ( iSpread >= ARRAYSIZE( g_vecFixedWpnSpreadPelletsWideLarge ) )
+				while (iSpread >= ARRAYSIZE(g_vecFixedWpnSpreadPelletsWideLarge))
 				{
-					iSpread -= ARRAYSIZE( g_vecFixedWpnSpreadPelletsWideLarge );
+					iSpread -= ARRAYSIZE(g_vecFixedWpnSpreadPelletsWideLarge);
 				}
 				float flScalar = 1.f;
-				x = ( g_vecFixedWpnSpreadPelletsWideLarge[iSpread].x + random->RandomFloat( -0.07f, 0.07f ) ) * flScalar;
-				y = ( g_vecFixedWpnSpreadPelletsWideLarge[iSpread].y + random->RandomFloat( -0.07f, 0.07f ) ) * flScalar;
+				x = (g_vecFixedWpnSpreadPelletsWideLarge[iSpread].x + random->RandomFloat(-0.07f, 0.07f)) * flScalar;
+				y = (g_vecFixedWpnSpreadPelletsWideLarge[iSpread].y + random->RandomFloat(-0.07f, 0.07f)) * flScalar;
 			}
 			else
 			{
 				int iSpread = iBullet;
-				while ( iSpread >= ARRAYSIZE( g_vecFixedWpnSpreadPellets ) )
+				while (iSpread >= ARRAYSIZE(g_vecFixedWpnSpreadPellets))
 				{
-					iSpread -= ARRAYSIZE( g_vecFixedWpnSpreadPellets );
+					iSpread -= ARRAYSIZE(g_vecFixedWpnSpreadPellets);
 				}
 				float flScalar = 0.5f;
 				x = g_vecFixedWpnSpreadPellets[iSpread].x * flScalar;
@@ -354,52 +354,52 @@ void FX_FireBullets( CTFWeaponBase *pWpn, int iPlayer, const Vector &vecOrigin, 
 		{
 			float flVariance = 0.5f;
 
-			if ( iBullet == 0 && pWpn )
+			if (iBullet == 0 && pWpn)
 			{
 				bool bAccuracyBonus = false;
-				float flTimeSinceLastShot = ( gpGlobals->curtime - pWpn->m_flLastFireTime );
+				float flTimeSinceLastShot = (gpGlobals->curtime - pWpn->m_flLastFireTime);
 
-				if ( nBulletsPerShot > 1 && flTimeSinceLastShot > 0.25f )
+				if (nBulletsPerShot > 1 && flTimeSinceLastShot > 0.25f)
 				{
 					bAccuracyBonus = true;
 				}
-				else if ( nBulletsPerShot == 1 && flTimeSinceLastShot > 1.25f )
+				else if (nBulletsPerShot == 1 && flTimeSinceLastShot > 1.25f)
 				{
 					bAccuracyBonus = true;
 				}
 
-				if ( bAccuracyBonus )
+				if (bAccuracyBonus)
 				{
 					float flMult = 0.f;
 
 					// By default, all guns have perfect accuracy on the first shot (unless this attribute is present).
-					CALL_ATTRIB_HOOK_FLOAT_ON_OTHER( pWpn, flMult, mult_spread_scale_first_shot );
+					CALL_ATTRIB_HOOK_FLOAT_ON_OTHER(pWpn, flMult, mult_spread_scale_first_shot);
 
 					flVariance = flMult;
 				}
 			}
 
-			if ( flVariance != 0.f )
+			if (flVariance != 0.f)
 			{
-				x = RandomFloat( -flVariance, flVariance ) + RandomFloat( -flVariance, flVariance );
-				y = RandomFloat( -flVariance, flVariance ) + RandomFloat( -flVariance, flVariance );
+				x = RandomFloat(-flVariance, flVariance) + RandomFloat(-flVariance, flVariance);
+				y = RandomFloat(-flVariance, flVariance) + RandomFloat(-flVariance, flVariance);
 			}
 		}
 
 		// Initialize the variable firing information.
-		fireInfo.m_vecDirShooting = vecShootForward + ( x *  flSpread * vecShootRight ) + ( y * flSpread * vecShootUp );
+		fireInfo.m_vecDirShooting = vecShootForward + (x * flSpread * vecShootRight) + (y * flSpread * vecShootUp);
 		fireInfo.m_vecDirShooting.NormalizeInPlace();
 		fireInfo.m_bUseServerRandomSeed = pWpn && pWpn->UseServerRandomSeed();
 
 		// Fire a bullet.
-		pPlayer->FireBullet( pWpn, fireInfo, bDoEffects, nDamageType, nCustomDamageType );
+		pPlayer->FireBullet(pWpn, fireInfo, bDoEffects, nDamageType, nCustomDamageType);
 
 		// Use new seed for next bullet.
-		++iSeed; 
+		++iSeed;
 	}
 
 #if !defined (CLIENT_DLL)
-	if ( pDmgAccumulator )
+	if (pDmgAccumulator)
 	{
 		pDmgAccumulator->Process();
 	}
@@ -409,13 +409,13 @@ void FX_FireBullets( CTFWeaponBase *pWpn, int iPlayer, const Vector &vecOrigin, 
 	ApplyMultiDamage();
 
 #if !defined (CLIENT_DLL)
-	lagcompensation->FinishLagCompensation( pPlayer );
+	lagcompensation->FinishLagCompensation(pPlayer);
 
 	// PASSTIME custom lag compensation for the ball; see also tf_weapon_flamethrower.cpp
 	// it would be better if all entities could opt-in to this, or a way for lagcompensation to handle non-players automatically
-	if ( g_pPasstimeLogic && g_pPasstimeLogic->GetBall() )
+	if (g_pPasstimeLogic && g_pPasstimeLogic->GetBall())
 	{
-		g_pPasstimeLogic->GetBall()->FinishLagCompensation( pPlayer );
+		g_pPasstimeLogic->GetBall()->FinishLagCompensation(pPlayer);
 	}
 #endif
 

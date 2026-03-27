@@ -73,6 +73,15 @@ CTFWeaponBaseGun::CTFWeaponBaseGun()
 {
 	m_iWeaponMode = TF_WEAPON_PRIMARY_MODE;
 	m_iAmmoToAdd = 0;
+//	CTFPlayer* pPlayer = GetTFPlayerOwner();
+//	float flAmmo;
+//	CALL_ATTRIB_HOOK_INT(flAmmo, max_ammo);
+//	if (flAmmo) {
+//#ifdef GAME_DLL
+//		pPlayer->SetAmmoCount(flAmmo, m_iPrimaryAmmoType);
+//		Msg("Ammo: %d\n", flAmmo);
+//#endif
+//	}
 }
 
 //-----------------------------------------------------------------------------

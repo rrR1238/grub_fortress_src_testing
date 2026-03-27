@@ -296,7 +296,7 @@ CTFWeaponBase::CTFWeaponBase()
 
 	// Nothing collides with these, but they get touch calls.
 	AddSolidFlags( FSOLID_TRIGGER );
-
+	CTFPlayer* pPlayer = GetTFPlayerOwner();
 	// Weapons can fire underwater.
 	m_bFiresUnderwater = true;
 	m_bAltFiresUnderwater = true;
@@ -578,13 +578,14 @@ int	CTFWeaponBase::GetMaxClip1( void ) const
 	{
 		return Energy_GetMaxEnergy();
 	}
-
+	CTFPlayer* pPlayer = ToTFPlayer(GetOwner());
 	// Handle the itemdef mod first...
 	float flClip = BaseClass::GetMaxClip1();
 	if ( flClip >= 0 )
 	{
 		CALL_ATTRIB_HOOK_INT( flClip, mult_clipsize );
 	}
+
 
 	// Now handle in-game sources, otherwise we get weird numbers on things like the FAN
 	if ( flClip >= 0 )
@@ -593,7 +594,7 @@ int	CTFWeaponBase::GetMaxClip1( void ) const
 		flClip *= m_flClipScale;
 #endif
 
-		CTFPlayer *pPlayer = ToTFPlayer( GetOwner() );
+		
 		if ( pPlayer )
 		{
 			// Blast weps (low clip counts)
@@ -2643,7 +2644,6 @@ void CTFWeaponBase::ItemPostFrame( void )
 	{
 		return;
 	}
-
 	bool bNeedsReload = NeedsReloadForAmmo1( GetMaxClip1() ) || ( IsEnergyWeapon() && !Energy_FullyCharged() );
 
 	// If we're not shooting, and we want to autoreload, press our reload key
@@ -5197,7 +5197,7 @@ void CTFWeaponBase::ApplyOnHitAttributes( CBaseEntity *pVictimBaseEntity, CTFPla
 {
 	if ( !pAttacker )
 		return;
-
+	
 	CTFPlayer *pVictim = ToTFPlayer( pVictimBaseEntity );
 
 	// Ammo on hit

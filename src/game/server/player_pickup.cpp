@@ -33,22 +33,16 @@ void Pickup_ForcePlayerToDropThisObject( CBaseEntity *pTarget )
 
 void Pickup_OnPhysGunDrop( CBaseEntity *pDroppedObject, CBasePlayer *pPlayer, PhysGunDrop_t Reason )
 {
-	if (pPlayer) {
-		if (Reason && Reason == THROWN_BY_PLAYER) {
-			Msg("Threw\n");
-		}
-		else {
-			Msg("Dropped\n");
-		}
-	}
 	CTFPlayer* tfPlayer = ToTFPlayer(pPlayer);
 	tfPlayer->ShowViewModel(1);
 	tfPlayer->m_bHasPickedUpEntity = 0;
 	tfPlayer->GetActiveTFWeapon()->Ready();
 	if (Reason == THROWN_BY_PLAYER) {
-		CTFGrenadePipebombProjectile* StickyBomb = dynamic_cast<CTFGrenadePipebombProjectile*>(pDroppedObject);
-		if (StickyBomb) {
-			StickyBomb->m_bThrown = 1;
+		if (FClassnameIs(pDroppedObject, "tf_projectile_pipe_remote")) {
+			CTFGrenadePipebombProjectile* StickyBomb = dynamic_cast<CTFGrenadePipebombProjectile*>(pDroppedObject);
+			if (StickyBomb) {
+				StickyBomb->m_bThrown = 1;
+			}
 		}
 	}
 	IPlayerPickupVPhysics *pPickup = dynamic_cast<IPlayerPickupVPhysics *>(pDroppedObject);
@@ -66,18 +60,16 @@ void Pickup_OnPhysGunPickup( CBaseEntity *pPickedUpObject, CBasePlayer *pPlayer,
 	{
 		pPickup->OnPhysGunPickup( pPlayer, reason );
 	}
-	if (pPlayer) {
-		Msg("Picked up\n");
-	}
 	CTFPlayer* tfPlayer = ToTFPlayer(pPlayer);
 	tfPlayer->GetActiveTFWeapon()->Lower();
 	tfPlayer->ShowViewModel(0);
 	tfPlayer->m_bHasPickedUpEntity = 1;
 	tfPlayer->GetActiveTFWeapon()->SendViewModelAnim(ACT_VM_HOLSTER);
-	CTFGrenadePipebombProjectile* StickyBomb = dynamic_cast<CTFGrenadePipebombProjectile*>(pPickedUpObject);
-	if (StickyBomb->m_iType == TF_GL_MODE_REGULAR) {
-		Msg("Pipebomb picked up\n");
-		StickyBomb->SetDetonateTimerLength(9999999);
+	if (FClassnameIs(pPickedUpObject, "tf_projectile_pipe")) {
+		CTFGrenadePipebombProjectile* PipeBomb = dynamic_cast<CTFGrenadePipebombProjectile*>(pPickedUpObject);
+		if (PipeBomb->m_iType == TF_GL_MODE_REGULAR) {
+			PipeBomb->SetDetonateTimerLength(9999999);
+		}
 	}
 	// send phys gun pickup item event, but only in single player
 	if ( !g_pGameRules->IsMultiplayer() )

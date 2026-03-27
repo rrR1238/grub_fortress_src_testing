@@ -75,6 +75,8 @@ protected:
 	float	m_flUseLockedTime;		// Controls how often we fire the OnUseLocked output.
 
 	bool	m_bSolidBsp;
+	bool	m_bLockedInSetupUp;
+	bool	m_bTeamLock;
 
 	string_t	m_sNoise;			// The actual WAV file name of the sound.
 

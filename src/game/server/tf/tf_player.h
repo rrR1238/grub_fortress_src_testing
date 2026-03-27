@@ -18,6 +18,7 @@
 #include "ihasattributes.h"
 #include "tf_item_inventory.h"
 #include "vehicle_base.h"
+#include "hl_movedata.h"
 
 class CTFPlayer;
 class CTFTeam;
@@ -1657,7 +1658,7 @@ private:
 	double m_dMaxHealthDrainHealthAccumulator;
 
 	bool m_bAlreadyUsedExtendFreezeThisDeath = false;
-	
+
 	// begin passtime
 public:
 	bool SayAskForBall();

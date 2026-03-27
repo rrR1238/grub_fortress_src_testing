@@ -1,0 +1,600 @@
+"OPTIONS"
+{
+	"#GameUI_Server"
+	{
+		"category1"
+		{
+			"label"		"Server Profile"
+			"type"		"CATEGORY"
+		}
+		"hostname"
+		{
+			"label"		"#GameUI_ServerName"
+			"type"		"STRING"
+			"val"		"Grub Fortress"
+		}
+		"sv_tags"
+		{
+			"label"		"Tags"
+			"type"		"STRING"
+		}
+		"category2"
+		{
+			"label"		"Server Slots and Bots"
+			"type"		"CATEGORY"
+		}
+		"maxplayers"
+		{
+			"label"		"#GameUI_MaxPlayers"
+			"type"		"STRING"
+			"val"		"24"
+		}
+		"tf_bot_quota"
+		{
+			"label"		"Amount of Bots:"
+			"type"		"STRING"
+			"val"		"0"
+		}
+		"tf_bot_difficulty"
+		{
+			"label"		"#TF_Bot_Difficulty"
+			"type"		"LIST"
+			"OPTIONS"
+			{
+				"#TF_Bot_Difficulty0"		"0"
+				"#TF_Bot_Difficulty1"		"1"
+				"#TF_Bot_Difficulty2"		"2"
+				"#TF_Bot_Difficulty3"		"3"
+			}
+			"val"		"0"
+		}
+		"category3"
+		{
+			"label"		"#GameUI_Map"
+			"type"		"CATEGORY"
+		}
+		"cl_map_search"
+		{
+			"label"		"Search Maps"
+			"type"		"STRING"
+		}
+		"cl_map"
+		{
+			"label"		"Select Map"
+			"type"		"LIST"
+			"OPTIONS"
+			{
+				"#GameUI_RandomMap"		"-1"
+				"bd_bombyard"		"0"
+				"bd_hunted"		"1"
+				"ctf_warehouse"		"2"
+				"devtest"		"3"
+				"dev_lux_test"		"4"
+				"dom_grounds"		"5"
+				"dom_test"		"6"
+				"gen_test"		"7"
+				"koth_landfall"		"8"
+				"koth_lumberyard"		"9"
+				"koth_well"		"10"
+				"pl_grubero"		"11"
+				"2koth_abbey"		"12"
+				"arena_afterlife"		"13"
+				"arena_badlands"		"14"
+				"arena_byre"		"15"
+				"arena_granary"		"16"
+				"arena_lumberyard"		"17"
+				"arena_lumberyard_event"		"18"
+				"arena_nucleus"		"19"
+				"arena_offblast_final"		"20"
+				"arena_perks"		"21"
+				"arena_ravine"		"22"
+				"arena_sawmill"		"23"
+				"arena_watchtower"		"24"
+				"arena_well"		"25"
+				"background01"		"26"
+				"boss_jevil_v5"		"27"
+				"cppl_gavle"		"28"
+				"cp_5gorge"		"29"
+				"cp_altitude"		"30"
+				"cp_ambush_event"		"31"
+				"cp_badlands"		"32"
+				"cp_brew"		"33"
+				"cp_burghausen"		"34"
+				"cp_canaveral_5cp"		"35"
+				"cp_cargo"		"36"
+				"cp_carrier"		"37"
+				"cp_cloak"		"38"
+				"cp_coldfront"		"39"
+				"cp_conifer"		"40"
+				"cp_cowerhouse"		"41"
+				"cp_darkmarsh"		"42"
+				"cp_degrootkeep"		"43"
+				"cp_degrootkeep_rats"		"44"
+				"cp_dustbowl"		"45"
+				"cp_dustbowl_d"		"46"
+				"cp_egypt_final"		"47"
+				"cp_fastlane"		"48"
+				"cp_fortezza"		"49"
+				"cp_foundry"		"50"
+				"cp_freaky_fair"		"51"
+				"cp_freight_final1"		"52"
+				"cp_frostwatch"		"53"
+				"cp_fulgur"		"54"
+				"cp_gorge"		"55"
+				"cp_gorge_event"		"56"
+				"cp_granary"		"57"
+				"cp_gravelpit"		"58"
+				"cp_gravelpit_snowy"		"59"
+				"cp_gullywash_final1"		"60"
+				"cp_hadal"		"61"
+				"cp_hardwood_final"		"62"
+				"cp_junction_final"		"63"
+				"cp_lavapit_final"		"64"
+				"cp_manor_event"		"65"
+				"cp_mercenarypark"		"66"
+				"cp_metalworks"		"67"
+				"cp_mossrock"		"68"
+				"cp_mountainlab"		"69"
+				"cp_overgrown"		"70"
+				"cp_powerhouse"		"71"
+				"cp_process_final"		"72"
+				"cp_reckoner"		"73"
+				"cp_snakewater_final1"		"74"
+				"cp_snowplow"		"75"
+				"cp_spookeyridge"		"76"
+				"cp_standin_final"		"77"
+				"cp_steel"		"78"
+				"cp_steel_d"		"79"
+				"cp_sulfur"		"80"
+				"cp_sunshine"		"81"
+				"cp_sunshine_event"		"82"
+				"cp_vanguard"		"83"
+				"cp_well"		"84"
+				"cp_yukon_final"		"85"
+				"ctf_2fort"		"86"
+				"ctf_2fort_invasion"		"87"
+				"ctf_applejack"		"88"
+				"ctf_crasher"		"89"
+				"ctf_doublecross"		"90"
+				"ctf_doublecross_event"		"91"
+				"ctf_doublecross_snowy"		"92"
+				"ctf_foundry"		"93"
+				"ctf_frosty"		"94"
+				"ctf_gorge"		"95"
+				"ctf_haarp"		"96"
+				"ctf_hellfire"		"97"
+				"ctf_helltrain_event"		"98"
+				"ctf_landfall"		"99"
+				"ctf_pelican_peak"		"100"
+				"ctf_penguin_peak"		"101"
+				"ctf_pressure"		"102"
+				"ctf_sawmill"		"103"
+				"ctf_sidewinder"		"104"
+				"ctf_snowfall_final"		"105"
+				"ctf_thundermountain"		"106"
+				"ctf_turbine"		"107"
+				"ctf_turbine_winter"		"108"
+				"ctf_well"		"109"
+				"htf_marshlands"		"110"
+				"itemtest"		"111"
+				"koth_badlands"		"112"
+				"koth_bagel_event"		"113"
+				"koth_blowout"		"114"
+				"koth_boardwalk"		"115"
+				"koth_brazil"		"116"
+				"koth_cachoeira"		"117"
+				"koth_cascade"		"118"
+				"koth_demolition"		"119"
+				"koth_dusker"		"120"
+				"koth_harvest_event"		"121"
+				"koth_harvest_final"		"122"
+				"koth_highpass"		"123"
+				"koth_king"		"124"
+				"koth_krampus"		"125"
+				"koth_lakeside_event"		"126"
+				"koth_lakeside_final"		"127"
+				"koth_lazarus"		"128"
+				"koth_los_muertos"		"129"
+				"koth_mannhole"		"130"
+				"koth_maple_ridge_event"		"131"
+				"koth_megalo"		"132"
+				"koth_megaton"		"133"
+				"koth_moonshine_event"		"134"
+				"koth_nucleus"		"135"
+				"koth_overcast_final"		"136"
+				"koth_probed"		"137"
+				"koth_rotunda"		"138"
+				"koth_sawmill"		"139"
+				"koth_sawmill_event"		"140"
+				"koth_sharkbay"		"141"
+				"koth_slasher"		"142"
+				"koth_slaughter_event"		"143"
+				"koth_slime"		"144"
+				"koth_snowtower"		"145"
+				"koth_suijin"		"146"
+				"koth_synthetic_event"		"147"
+				"koth_toxic"		"148"
+				"koth_undergrove_event"		"149"
+				"koth_viaduct"		"150"
+				"koth_viaduct_event"		"151"
+				"koth_winter_ridge"		"152"
+				"mvm_bigrock"		"153"
+				"mvm_coaltown"		"154"
+				"mvm_decoy"		"155"
+				"mvm_ghost_town"		"156"
+				"mvm_mannhattan"		"157"
+				"mvm_mannworks"		"158"
+				"mvm_rottenburg"		"159"
+				"pass_brickyard"		"160"
+				"pass_district"		"161"
+				"pass_timbertown"		"162"
+				"pd_atom_smash"		"163"
+				"pd_circus"		"164"
+				"pd_cursed_cove_event"		"165"
+				"pd_farmageddon"		"166"
+				"pd_galleria"		"167"
+				"pd_mannsylvania"		"168"
+				"pd_monster_bash"		"169"
+				"pd_nutcracker"		"170"
+				"pd_pit_of_death_event"		"171"
+				"pd_selbyen"		"172"
+				"pd_snowville_event"		"173"
+				"pd_watergate"		"174"
+				"plr_bananabay"		"175"
+				"plr_cutter"		"176"
+				"plr_hacksaw"		"177"
+				"plr_hacksaw_event"		"178"
+				"plr_hightower"		"179"
+				"plr_hightower_event"		"180"
+				"plr_matterhorn"		"181"
+				"plr_nightfall_final"		"182"
+				"plr_pipeline"		"183"
+				"pl_aquarius"		"184"
+				"pl_badwater"		"185"
+				"pl_barnblitz"		"186"
+				"pl_bloodwater"		"187"
+				"pl_borneo"		"188"
+				"pl_breadspace"		"189"
+				"pl_cactuscanyon"		"190"
+				"pl_camber"		"191"
+				"pl_cashworks"		"192"
+				"pl_chilly"		"193"
+				"pl_citadel"		"194"
+				"pl_coal_event"		"195"
+				"pl_corruption"		"196"
+				"pl_embargo"		"197"
+				"pl_emerge"		"198"
+				"pl_enclosure_final"		"199"
+				"pl_fifthcurve_event"		"200"
+				"pl_frontier_final"		"201"
+				"pl_frostcliff"		"202"
+				"pl_goldrush"		"203"
+				"pl_hasslecastle"		"204"
+				"pl_hoodoo_final"		"205"
+				"pl_millstone_event"		"206"
+				"pl_odyssey"		"207"
+				"pl_patagonia"		"208"
+				"pl_phoenix"		"209"
+				"pl_pier"		"210"
+				"pl_precipice_event_final"		"211"
+				"pl_rumble_event"		"212"
+				"pl_rumford_event"		"213"
+				"pl_sludgepit_event"		"214"
+				"pl_snowycoast"		"215"
+				"pl_spineyard"		"216"
+				"pl_swiftwater_final1"		"217"
+				"pl_terror_event"		"218"
+				"pl_thundermountain"		"219"
+				"pl_upward"		"220"
+				"pl_venice"		"221"
+				"pl_wutville_event"		"222"
+				"raid_granary"		"223"
+				"rd_asteroid"		"224"
+				"sd_doomsday"		"225"
+				"sd_doomsday_event"		"226"
+				"tc_hydro"		"227"
+				"tow_dynamite"		"228"
+				"tr_dustbowl"		"229"
+				"tr_target"		"230"
+				"vsh_distillery"		"231"
+				"vsh_maul"		"232"
+				"vsh_nucleus"		"233"
+				"vsh_outburst"		"234"
+				"vsh_skirmish"		"235"
+				"vsh_tinyrock"		"236"
+				"zi_atoll"		"237"
+				"zi_blazehattan"		"238"
+				"zi_devastation_final1"		"239"
+				"zi_murky"		"240"
+				"zi_sanitarium"		"241"
+				"zi_woods"		"242"
+			}
+			"val"		"-1"
+		}
+		"map_preview"
+		{
+			"label"		"Unnamed"
+			"type"		"CATEGORY"
+		}
+		"category4"
+		{
+			"label"		"#IT_OtherOptions"
+			"type"		"CATEGORY"
+		}
+		"sv_use_steam_networking"
+		{
+			"label"		"#Start_Server_SteamNetworking"
+			"type"		"LIST"
+			"OPTIONS"
+			{
+				"#Start_Server_SteamNetworking"		"1"
+				"LAN"		"0"
+			}
+			"val"		"1"
+		}
+		"sv_password"
+		{
+			"label"		"Server Password"
+			"type"		"STRING"
+		}
+		"category5"
+		{
+			"label"		"Communication Settings"
+			"type"		"CATEGORY"
+		}
+		"sv_alltalk"
+		{
+			"label"		"Enable All Talk"
+			"type"		"BOOL"
+			"val"		"1"
+		}
+		"sv_voiceenable"
+		{
+			"label"		"Enable Voice Chat"
+			"type"		"BOOL"
+			"val"		"1"
+		}
+		"category6"
+		{
+			"label"		"Round and Time Settings"
+			"type"		"CATEGORY"
+		}
+		"mp_timelimit"
+		{
+			"label"		"Time Limit (In Minutes)"
+			"type"		"STRING"
+			"val"		"0"
+		}
+		"mp_winlimit"
+		{
+			"label"		"Win Limit"
+			"type"		"STRING"
+			"val"		"0"
+		}
+		"mp_maxrounds"
+		{
+			"label"		"Max Rounds"
+			"type"		"STRING"
+			"val"		"0"
+		}
+		"mp_bonusroundtime"
+		{
+			"label"		"Bonus Round Time (In Seconds)"
+			"type"		"STRING"
+			"val"		"15"
+		}
+		"mp_stalemate_enable"
+		{
+			"label"		"Enable Stalemate / Sudden Death"
+			"type"		"BOOL"
+			"val"		"0"
+		}
+		"category7"
+		{
+			"label"		"Team Settings"
+			"type"		"CATEGORY"
+		}
+		"mp_teams_unbalance_limit"
+		{
+			"label"		"Team Balance Limit"
+			"type"		"STRING"
+			"val"		"1"
+		}
+		"mp_autoteambalance"
+		{
+			"label"		"Auto Team Balance"
+			"type"		"BOOL"
+			"val"		"1"
+		}
+		"mp_scrambleteams_auto"
+		{
+			"label"		"Auto Scramble Teams"
+			"type"		"BOOL"
+			"val"		"1"
+		}
+		"category8"
+		{
+			"label"		"Network and Performance"
+			"type"		"CATEGORY"
+		}
+		"sv_pure"
+		{
+			"label"		"Server Pure"
+			"type"		"LIST"
+			"OPTIONS"
+			{
+				"OFF"		"0"
+				"Pure (Whitelist)"		"1"
+				"Pure (Strict)"		"2"
+			}
+			"val"		"0"
+		}
+		"sv_region"
+		{
+			"label"		"Server Region"
+			"type"		"LIST"
+			"OPTIONS"
+			{
+				"Automatic"		"-1"
+				"US East"		"0"
+				"US West"		"1"
+				"South America"		"2"
+				"Europe"		"3"
+				"Asia"		"4"
+				"Australia"		"5"
+				"Middle East"		"6"
+				"Africa"		"7"
+			}
+			"val"		"-1"
+		}
+		"sv_downloadurl"
+		{
+			"label"		"Fast Download URL"
+			"type"		"STRING"
+		}
+		"sv_allowupload"
+		{
+			"label"		"Allow Uploads"
+			"type"		"BOOL"
+			"val"		"1"
+		}
+		"sv_allowdownload"
+		{
+			"label"		"Allow Downloads"
+			"type"		"BOOL"
+			"val"		"1"
+		}
+	}
+	"GAMEPLAY"
+	{
+		"category1"
+		{
+			"label"		"General"
+			"type"		"CATEGORY"
+		}
+		"mp_disable_respawn_times"
+		{
+			"label"		"Disable Spawn Times"
+			"type"		"BOOL"
+			"val"		"0"
+		}
+		"tf_classlimit"
+		{
+			"label"		"Global Class Limit"
+			"type"		"STRING"
+			"val"		"0"
+		}
+		"tf_weapon_criticals"
+		{
+			"label"		"Enable Random Crits"
+			"type"		"LIST"
+			"OPTIONS"
+			{
+				"OFF"		"0"
+				"ON"		"1"
+			}
+			"val"		"0"
+		}
+		"tf_weapon_criticals_melee"
+		{
+			"label"		"Enable Random Crits on Melee"
+			"type"		"LIST"
+			"OPTIONS"
+			{
+				"ON (Ignores Regular Weapon Criticals)"		"2"
+				"ON"		"1"
+				"OFF"		"0"
+			}
+			"val"		"2"
+		}
+		"tf_use_fixed_weaponspreads"
+		{
+			"label"		"Use Fixed Weapon Spread"
+			"type"		"BOOL"
+			"val"		"0"
+		}
+		"cf_voicespam"
+		{
+			"label"		"Allow Voice Spam"
+			"type"		"BOOL"
+			"val"		"1"
+		}
+		"cf_max_voice_speak_delay"
+		{
+			"label"		"Max Voice Speak Delay (In Seconds)"
+			"type"		"STRING"
+			"val"		"1.500000"
+		}
+		"category3"
+		{
+			"label"		"Tournament Mode"
+			"type"		"CATEGORY"
+		}
+		"mp_tournament"
+		{
+			"label"		"Enable Tournament Mode"
+			"type"		"BOOL"
+			"val"		"0"
+		}
+		"mp_highlander"
+		{
+			"label"		"Enable Highlander Mode"
+			"type"		"BOOL"
+			"val"		"0"
+		}
+		"tf_tournament_classlimit_scout"
+		{
+			"label"		"Scout Limit"
+			"type"		"STRING"
+			"val"		"-1"
+		}
+		"tf_tournament_classlimit_soldier"
+		{
+			"label"		"Soldier Limit"
+			"type"		"STRING"
+			"val"		"-1"
+		}
+		"tf_tournament_classlimit_pyro"
+		{
+			"label"		"Pyro Limit"
+			"type"		"STRING"
+			"val"		"-1"
+		}
+		"tf_tournament_classlimit_demoman"
+		{
+			"label"		"Demoman Limit"
+			"type"		"STRING"
+			"val"		"-1"
+		}
+		"tf_tournament_classlimit_heavy"
+		{
+			"label"		"Heavy Limit"
+			"type"		"STRING"
+			"val"		"-1"
+		}
+		"tf_tournament_classlimit_engineer"
+		{
+			"label"		"Engineer Limit"
+			"type"		"STRING"
+			"val"		"-1"
+		}
+		"tf_tournament_classlimit_medic"
+		{
+			"label"		"Medic Limit"
+			"type"		"STRING"
+			"val"		"-1"
+		}
+		"tf_tournament_classlimit_sniper"
+		{
+			"label"		"Sniper Limit"
+			"type"		"STRING"
+			"val"		"-1"
+		}
+		"tf_tournament_classlimit_spy"
+		{
+			"label"		"Spy Limit"
+			"type"		"STRING"
+			"val"		"-1"
+		}
+	}
+}
