@@ -1,11 +1,9 @@
-# TF:Grub Source Code
-Keep in mind, most of it is pretty shitty
+# Misador's Testing Initiative.
+W.I.P. Based on the TF:Grub fork.
 
 ## Info
 
-[Discord](https://grub-fortress.github.io/discord)
-
-[Website](https://grub-fortress.github.io)
+[Discord](https://discord.gg/zJxQWjfC)
 
 ## Credits
 
