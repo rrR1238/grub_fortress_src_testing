@@ -72,15 +72,15 @@ Inside the cloned directory, navigate to `src`, run:
 ```bat
 creategameprojects.bat
 ```
-This will generate the Visual Studio project `grub_fortress.sln` which will be used to build Grub Fortess.
+This will generate the Visual Studio project `mti.sln` which will be used to build Grub Fortess.
 
 Then, on the menu bar, go to `Build > Build Solution`, and wait for everything to build.
 
-You can then select the `Client (Grub Fortress)` project you wish to run, right click and select `Set as Startup Project` and hit the big green `> Local Windows Debugger` button on the tool bar in order to launch your mod.
+You can then select the `Client (Misador's Testing Initiative)` project you wish to run, right click and select `Set as Startup Project` and hit the big green `> Local Windows Debugger` button on the tool bar in order to launch your mod.
 
 The default launch options should be already filled in for the `Release` configuration.
 
-### Linux (Not Tested For TF:Grub, pretty sure you will have to modify something to make it work)
+### Linux (Not Tested For MTI, pretty sure you will have to modify something to make it work)
 
 Requirements:
  - Source SDK 2013 Multiplayer installed via Steam
