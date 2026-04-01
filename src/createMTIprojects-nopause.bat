@@ -1,0 +1,1 @@
+devtools\bin\vpc.exe /tf /define:SOURCESDK /define:DISCORD_RPC +game +shaders /mksln mti.sln

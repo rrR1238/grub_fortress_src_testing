@@ -6,7 +6,7 @@
 
 $Macro SRCDIR		"..\.."
 $Macro GAMENAME 	"tf" [!$SOURCESDK]
-$Macro GAMENAME 	"tfgrub" [$SOURCESDK]
+$Macro GAMENAME 	"mti" [$SOURCESDK]
 
 // This code currently only builds on Windows (itemtest_lib and dependencies)
 $Conditional WORKSHOP_IMPORT_ENABLE	1 [$WINDOWS && !$SOURCESDK]
@@ -32,7 +32,7 @@ $Configuration
 	}
 }
 
-$Project "Client (Grub Fortress)"
+$Project "Client (Misador's Testing Initiative)"
 {
 	$Folder "Source Files"
 	{
