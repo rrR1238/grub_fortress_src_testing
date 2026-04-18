@@ -33,7 +33,9 @@ W.I.P. Based on the TF:Grub fork.
 - **Community Help/Contributions**
   - **BetaM** – Custom Items, Credits menu, misc. fixes  
     https://www.youtube.com/BetaM
-    
+
+  - **Vvis** – Code assistance, provided some code from the FC (Fortress Connected).
+
   - **Better Fortress 2** – The mod Grub Fortress is a fork of  
     https://github.com/ALIEN31ITA/Better-Fortress-2
     
