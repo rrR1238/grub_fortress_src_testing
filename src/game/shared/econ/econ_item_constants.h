@@ -726,7 +726,8 @@ enum kill_eater_event_t
 	kKillEaterEvent_PowerupBottlesUsed,
 	kKillEaterEvent_ContractPointsEarned, // = 110
 	kKillEaterEvent_ContractPointsContributedToFriends,
-
+	kKillEaterEvent_EngineerOffenseKill,			// (part)
+	kKillEaterEvent_RobotEngineerOffenseKill,
 	// NEW ENTRIES MUST BE ADDED AT THE BOTTOM
 };
 #else

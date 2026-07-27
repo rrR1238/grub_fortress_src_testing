@@ -12,7 +12,9 @@
 #include "Path/NextBotPathFollow.h"
 #include "bot_npc.h"
 #include "bot_npc_body.h"
-
+#include "bot/tf_bot_locomotion.h"
+#include "bot/tf_bot_body.h"
+#include "bot/tf_bot_vision.h"
 
 class CTFPlayer;
 
@@ -31,8 +33,12 @@ public:
 
 	// INextBot
 	DECLARE_INTENTION_INTERFACE( CBotNPCArcher );
-	virtual NextBotGroundLocomotion	*GetLocomotionInterface( void ) const	{ return m_locomotor; }
-	virtual CBotNPCBody *GetBodyInterface( void ) const						{ return m_body; }
+//	virtual NextBotGroundLocomotion	*GetLocomotionInterface( void ) const	{ return m_locomotor; }
+//	virtual CBotNPCBody *GetBodyInterface( void ) const						{ return m_body; }
+
+	virtual CTFBotLocomotion* GetLocomotionInterface(void) const { return m_locomotor; }
+	virtual CTFBotBody* GetBodyInterface(void) const { return m_body; }
+	virtual CTFBotVision* GetVisionInterface(void) const { return m_vision; }
 
 	virtual Vector EyePosition( void );
 
@@ -46,8 +52,11 @@ public:
 	const Vector &GetHomePosition( void ) const;
 
 private:
-	NextBotGroundLocomotion *m_locomotor;
-	CBotNPCBody *m_body;
+//	NextBotGroundLocomotion *m_locomotor;
+//	CBotNPCBody *m_body;
+	CTFBotLocomotion* m_locomotor;
+	CTFBotBody* m_body;
+	CTFBotVision* m_vision;
 
 	CBaseAnimating *m_bow;
 	Vector m_eyeOffset;

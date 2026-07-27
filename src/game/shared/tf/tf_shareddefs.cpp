@@ -47,6 +47,7 @@ const char *g_aPlayerClassNames[TF_CLASS_MENU_BUTTONS] =
 	"#TF_Class_Name_Pyro",
 	"#TF_Class_Name_Spy",
 	"#TF_Class_Name_Engineer",
+//	"#TF_Class_Name_Engineer_Offense",
 	"#TF_Class_Name_Civilian",
 	"",
 	"#TF_Random"
@@ -64,6 +65,7 @@ const char *g_aPlayerClassNames_NonLocalized[TF_CLASS_MENU_BUTTONS] =
 	"Pyro",
 	"Spy",
 	"Engineer",
+//	"Engineer_Offense"
 	"Civilian",
 	"",
 	"Random"
@@ -81,6 +83,7 @@ const char *g_aRawPlayerClassNamesShort[TF_CLASS_MENU_BUTTONS] =
 	"pyro",
 	"spy",
 	"engineer",
+//	"engineer_offense"
 	"civilian",
 	"",
 	"random"
@@ -98,6 +101,7 @@ const char *g_aRawPlayerClassNames[TF_CLASS_MENU_BUTTONS] =
 	"pyro",
 	"spy",
 	"engineer",
+//	"engineer_offense",
 	"civilian",
 	"",
 	"random"
@@ -115,6 +119,7 @@ const char *g_aRawPlayerClassNamesRandom[TF_CLASS_MENU_BUTTONS] =
 	"pyro",
 	"spy",
 	"engineer",
+//	"engineer_offense",
 	"civilian",
 	"",
 	"random"
@@ -133,6 +138,7 @@ const char g_szBotModels[][ MAX_PATH ] =
 	"models/bots/pyro/bot_pyro.mdl",
 	"models/bots/spy/bot_spy.mdl",
 	"models/bots/engineer/bot_engineer.mdl",
+//	"models/bots/engineer/bot_engineer.mdl",
 };
 
 const char g_szPlayerRobotModels[][MAX_PATH] =
@@ -148,6 +154,7 @@ const char g_szPlayerRobotModels[][MAX_PATH] =
 	"models/bots/pyro/bot_pyro_human_anim.mdl",
 	"models/bots/spy/bot_spy_human_anims.mdl",
 	"models/bots/engineer/bot_engineer_human_anim.mdl",
+//	"models/bots/engineer/bot_engineer_human_anim.mdl",
 };
 
 const char g_szBotBossModels[][ MAX_PATH ] = 
@@ -163,6 +170,7 @@ const char g_szBotBossModels[][ MAX_PATH ] =
 	"models/bots/pyro_boss/bot_pyro_boss.mdl",
 	"models/bots/spy/bot_spy.mdl",
 	"models/bots/engineer/bot_engineer.mdl",
+//	"models/bots/engineer/bot_engineer.mdl",
 };
 
 const char g_szBotViewmodels[][MAX_PATH] =
@@ -178,6 +186,7 @@ const char g_szBotViewmodels[][MAX_PATH] =
 	"models/mvm/weapons/c_models/c_pyro_bot_arms.mdl",
 	"models/mvm/weapons/c_models/c_spy_bot_arms.mdl",
 	"models/mvm/weapons/c_models/c_engineer_bot_arms.mdl",
+//	"models/mvm/weapons/c_models/c_engineer_bot_arms.mdl",
 };
 
 const char g_szBotBossViewmodels[][MAX_PATH] =
@@ -193,6 +202,7 @@ const char g_szBotBossViewmodels[][MAX_PATH] =
 	"models/mvm/weapons/c_models/c_pyro_bot_arms.mdl",
 	"models/mvm/weapons/c_models/c_spy_bot_arms.mdl",
 	"models/mvm/weapons/c_models/c_engineer_bot_arms.mdl",
+//	"models/mvm/weapons/c_models/c_engineer_bot_arms.mdl",
 };
 
 const char g_szBotBossSentryBusterModel[ MAX_PATH ] = "models/bots/demo/bot_sentry_buster.mdl";
@@ -211,6 +221,7 @@ const char g_szRomePromoItems_Hat[][ MAX_PATH ] =
 	"tw_pyrobot_helmet",
 	"tw_spybot_hood",
 	"tw_engineerbot_helmet",
+//	"tw_engineerbot_helmet",
 };
 
 const char g_szRomePromoItems_Misc[][ MAX_PATH ] = 
@@ -226,6 +237,7 @@ const char g_szRomePromoItems_Misc[][ MAX_PATH ] =
 	"tw_pyrobot_armor",
 	"tw_spybot_armor",
 	"tw_engineerbot_armor",
+//	"tw_engineerbot_armor",
 };
 
 const char *g_pszBreadModels[] = 
@@ -239,6 +251,7 @@ const char *g_pszBreadModels[] =
 	"models/weapons/c_models/c_bread/c_bread_pretzel.mdl",		// Medic
 	"models/weapons/c_models/c_bread/c_bread_ration.mdl",		// Soldier
 	"models/weapons/c_models/c_bread/c_bread_russianblack.mdl",	// Heavy?
+//	"models/weapons/c_models/c_bread/c_bread_cornbread.mdl",	// Engineer_offense
 };
 
 int GetClassIndexFromString( const char *pClassName, int nLastClassIndex/*=TF_LAST_NORMAL_CLASS*/ )
@@ -766,6 +779,10 @@ const char *g_aWeaponNames[] =
 	"TF_WEPON_FLAME_BALL",
 	"TF_WEAPON_BMMH",
 	"TF_WEAPON_SAPPER_TEST",
+	"TF_WEAPON_SAPPER",
+	"TF_WEAPON_SMG_PRIMARY",
+	"TF_WEAPON_HANDGUN_ENGINEER_SECONDARY"
+
 };
 COMPILE_TIME_ASSERT( ARRAYSIZE( g_aWeaponNames ) == TF_WEAPON_COUNT );
 
@@ -881,7 +898,10 @@ int g_aWeaponDamageTypes[] =
 	DMG_GENERIC, // TF_WEAPON_JAR_GAS
 	DMG_GENERIC, // TF_WEAPON_GRENADE_JAR_GAS
 	DMG_GENERIC | DMG_PREVENT_PHYSICS_FORCE, // TF_WEAPON_FLAME_BALL
-
+	DMG_BULLET | DMG_USEDISTANCEMOD,		// TF_WEAPON_SMG,
+	DMG_BULLET | DMG_USEDISTANCEMOD,		// TF_WEAPON_SMG,
+	DMG_BULLET | DMG_USEDISTANCEMOD,		// TF_WEAPON_SMG,
+	DMG_BUCKSHOT | DMG_BULLET | DMG_USEDISTANCEMOD,
 };
 
 const char *g_szSpecialDamageNames[] =
@@ -1711,7 +1731,7 @@ wpntranslation_class_weapons_t pszWpnEntTranslationList[] =
 			"tf_weapon_shotgun_hwg",	// TF_CLASS_HEAVYWEAPONS,
 			"tf_weapon_shotgun_pyro",	// TF_CLASS_PYRO,
 			"",							// TF_CLASS_SPY,
-			"tf_weapon_shotgun_primary",// TF_CLASS_ENGINEER,		
+			"tf_weapon_shotgun_primary",// TF_CLASS_ENGINEER,	
 		}
 	},
 
@@ -1727,7 +1747,7 @@ wpntranslation_class_weapons_t pszWpnEntTranslationList[] =
 			"",							// TF_CLASS_HEAVYWEAPONS,
 			"",							// TF_CLASS_PYRO,
 			"",							// TF_CLASS_SPY,
-			"tf_weapon_pistol",			// TF_CLASS_ENGINEER,		
+			"tf_weapon_pistol",			// TF_CLASS_ENGINEER,
 		}
 	},
 
@@ -1743,7 +1763,7 @@ wpntranslation_class_weapons_t pszWpnEntTranslationList[] =
 			"",							// TF_CLASS_HEAVYWEAPONS,
 			"",							// TF_CLASS_PYRO,
 			"",							// TF_CLASS_SPY,
-			"",							// TF_CLASS_ENGINEER,		
+			"",							// TF_CLASS_ENGINEER,	
 		}
 	},
 	{
@@ -1788,7 +1808,7 @@ wpntranslation_class_weapons_t pszWpnEntTranslationList[] =
 			"tf_weapon_throwable_secondary",			// TF_CLASS_HEAVYWEAPONS
 			"tf_weapon_throwable_secondary",			// TF_CLASS_PYRO,
 			"tf_weapon_throwable_secondary",			// TF_CLASS_SPY,
-			"tf_weapon_throwable_secondary",			// TF_CLASS_ENGINEER,		
+			"tf_weapon_throwable_secondary",			// TF_CLASS_ENGINEER,	
 		}
 	},
 	{
@@ -1803,7 +1823,8 @@ wpntranslation_class_weapons_t pszWpnEntTranslationList[] =
 			"",			// TF_CLASS_HEAVYWEAPONS
 			"",			// TF_CLASS_PYRO,
 			""			// TF_CLASS_SPY,
-			"",			// TF_CLASS_ENGINEER,		
+			"",			// TF_CLASS_ENGINEER,	
+			"",
 		}
 	},
 	{
@@ -1937,6 +1958,7 @@ const char *g_pszClassIcons[SCOREBOARD_CLASS_ICONS] =
 	"../hud/leaderboard_class_pyro",
 	"../hud/leaderboard_class_spy",
 	"../hud/leaderboard_class_engineer",
+	"../hud/leaderboard_class_engineer",
 	"../hud/leaderboard_class_scout_d",
 	"../hud/leaderboard_class_sniper_d",
 	"../hud/leaderboard_class_soldier_d",
@@ -1945,6 +1967,8 @@ const char *g_pszClassIcons[SCOREBOARD_CLASS_ICONS] =
 	"../hud/leaderboard_class_heavy_d",
 	"../hud/leaderboard_class_pyro_d",
 	"../hud/leaderboard_class_spy_d",
+	"../hud/leaderboard_class_engineer_d",
+// Offensive engineer
 	"../hud/leaderboard_class_engineer_d",
 };
 
@@ -1960,6 +1984,7 @@ const char *g_pszClassIconsAlt[SCOREBOARD_CLASS_ICONS] =
 	"class_icons/class_icon_orange_pyro",
 	"class_icons/class_icon_orange_spy",
 	"class_icons/class_icon_orange_engineer",
+	"class_icons/class_icon_orange_engineer",
 	"class_icons/class_icon_orange_scout_d",
 	"class_icons/class_icon_orange_sniper_d",
 	"class_icons/class_icon_orange_soldier_d",
@@ -1968,6 +1993,8 @@ const char *g_pszClassIconsAlt[SCOREBOARD_CLASS_ICONS] =
 	"class_icons/class_icon_orange_heavy_d",
 	"class_icons/class_icon_orange_pyro_d",
 	"class_icons/class_icon_orange_spy_d",
+	"class_icons/class_icon_orange_engineer_d",
+// Offensive engineer
 	"class_icons/class_icon_orange_engineer_d",
 };
 
@@ -1983,6 +2010,7 @@ const char *g_pszItemClassImagesRed[] =
 	"class_portraits/pyro",			// TF_CLASS_PYRO,
 	"class_portraits/spy",			// TF_CLASS_SPY,
 	"class_portraits/engineer",		// TF_CLASS_ENGINEER,
+	"class_portraits/engineer",		// TF_CLASS_ENGINEER_OFFENSIVE,
 	"class_portraits/scout_grey",		// TF_CLASS_SCOUT,			
 	"class_portraits/sniper_grey",		// TF_CLASS_SNIPER,
 	"class_portraits/soldier_grey",		// TF_CLASS_SOLDIER,
@@ -1992,6 +2020,7 @@ const char *g_pszItemClassImagesRed[] =
 	"class_portraits/pyro_grey",		// TF_CLASS_PYRO,
 	"class_portraits/spy_grey",			// TF_CLASS_SPY,
 	"class_portraits/engineer_grey",	// TF_CLASS_ENGINEER,
+	"class_portraits/engineer_grey",	// TF_CLASS_ENGINEER_OFFENSIVE,
 };
 
 const char *g_pszItemClassImagesBlue[] =
@@ -2006,6 +2035,7 @@ const char *g_pszItemClassImagesBlue[] =
 	"class_portraits/pyro_blue",		// TF_CLASS_PYRO,
 	"class_portraits/spy_blue",			// TF_CLASS_SPY,
 	"class_portraits/engineer_blue",	// TF_CLASS_ENGINEER,
+	"class_portraits/engineer_blue",	// TF_CLASS_ENGINEER_OFFENSIVE,
 	"class_portraits/scout_blue_grey",		// TF_CLASS_SCOUT,			
 	"class_portraits/sniper_blue_grey",		// TF_CLASS_SNIPER,
 	"class_portraits/soldier_blue_grey",	// TF_CLASS_SOLDIER,
@@ -2015,6 +2045,7 @@ const char *g_pszItemClassImagesBlue[] =
 	"class_portraits/pyro_blue_grey",		// TF_CLASS_PYRO,
 	"class_portraits/spy_blue_grey",		// TF_CLASS_SPY,
 	"class_portraits/engineer_blue_grey",	// TF_CLASS_ENGINEER,
+	"class_portraits/engineer_blue_grey",	// TF_CLASS_ENGINEER_OFFENSIVE,
 };
 
 const char *g_pszCompetitiveMedalImages[] =

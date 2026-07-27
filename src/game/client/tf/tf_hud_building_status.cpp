@@ -403,6 +403,11 @@ void CBuildingStatusItem::OnTick()
 			m_pSapperIcon->SetVisible( bAlertTrayFullyDeployed );
 			break;
 
+		case BUILDING_HUD_ALERT_UPGRADE_INSTALLED:
+			bShowAlertTray = true;
+			m_pSapperIcon->SetVisible(bAlertTrayFullyDeployed);
+			break;
+
 		default:
 			bShowAlertTray = false;
 			break;
@@ -556,6 +561,10 @@ void CBuildingStatusAlertTray::Paint( void )
 
 	case BUILDING_HUD_ALERT_SAPPER:
 		g = b = (int)( 127.0f + 127.0f * cos( gpGlobals->curtime * 2.0f * M_PI * 1.5 ) );
+		break;
+
+	case BUILDING_HUD_ALERT_UPGRADE_INSTALLED:
+		g = b = (int)(127.0f + 127.0f * cos(gpGlobals->curtime * 2.0f * M_PI * 1.5));
 		break;
 
 	case BUILDING_HUD_ALERT_LOW_AMMO:
@@ -1282,6 +1291,7 @@ BaseClass( "BuildingStatus_Engineer" )
 	AddBuildingPanel( OBJ_SENTRYGUN, MODE_SENTRYGUN_DISPOSABLE );
 	AddBuildingPanel( OBJ_SPEEDPAD );
 	AddBuildingPanel( OBJ_JUMPPAD );
+	AddBuildingPanel(OBJ_ATTACHMENT_SAPPER);
 
 	vgui::ivgui()->AddTickSignal( GetVPanel(), 500 );
 }
@@ -1337,6 +1347,9 @@ void CHudBuildingStatusContainer_Engineer::OnTick()
 		int nBuildsPads = 0;
 		CALL_ATTRIB_HOOK_INT_ON_OTHER( pLocalPlayer, nBuildsPads, pda_builds_pads );
 		bool bBuildsPads = ( nBuildsPads != 0 );
+		int nBuildsSappers = 0;
+		CALL_ATTRIB_HOOK_INT_ON_OTHER(pLocalPlayer, nBuildsSappers, pda_builds_sappers);
+		bool bBuildsSappers = (nBuildsSappers != 0);
 
 		for ( int i = 0 ; i < m_BuildingPanels.Count() ; i++ )
 		{
@@ -1370,6 +1383,22 @@ void CHudBuildingStatusContainer_Engineer::OnTick()
 					if ( pItem->IsVisible() != bBuildsPads )
 					{
 						pItem->SetVisible( bBuildsPads );
+					}
+				}
+				else if (iObjectType == OBJ_TELEPORTER)
+				{
+					// Hide teleporters when building pads
+					if (pItem->IsVisible() == bBuildsSappers)
+					{
+						pItem->SetVisible(!bBuildsSappers);
+					}
+				}
+				else if (iObjectType == OBJ_ATTACHMENT_SAPPER)
+				{
+					// Show pads only when building pads
+					if (pItem->IsVisible() != bBuildsSappers)
+					{
+						pItem->SetVisible(bBuildsSappers);
 					}
 				}
 			}
@@ -1705,12 +1734,12 @@ void CHudBuildingStatusContainer::OnTick( void )
 
 		if ( !pLocalPlayer )
 			return;
-
-		pLocalPlayer->EmitSound( "Hud.Warning" );
+		pLocalPlayer->EmitSound("Hud.Warning");
 
 		switch( m_AlertLevel )
 		{
 		case BUILDING_HUD_ALERT_VERY_LOW_AMMO:
+		case BUILDING_HUD_ALERT_UPGRADE_INSTALLED:
 		case BUILDING_HUD_ALERT_VERY_LOW_HEALTH:
 			m_flNextBeep = gpGlobals->curtime + 2.0f;
 			m_iNumBeepsToBeep--;

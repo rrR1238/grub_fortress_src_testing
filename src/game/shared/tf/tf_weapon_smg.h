@@ -13,6 +13,7 @@
 // Client specific.
 #ifdef CLIENT_DLL
 #define CTFSMG C_TFSMG
+#define CTFSMG_PRIMARY C_TFSMG_PRIMARY
 #define CTFChargedSMG C_TFChargedSMG
 #endif
 
@@ -46,6 +47,34 @@ public:
 private:
 
 	CTFSMG( const CTFSMG & ) {}
+};
+
+class CTFSMG_PRIMARY : public CTFWeaponBaseGun
+{
+public:
+
+	DECLARE_CLASS(CTFSMG_PRIMARY, CTFWeaponBaseGun);
+	DECLARE_NETWORKCLASS();
+	DECLARE_PREDICTABLE();
+
+	// Server specific.
+#ifdef GAME_DLL
+	DECLARE_DATADESC();
+#endif
+
+	CTFSMG_PRIMARY() {}
+	~CTFSMG_PRIMARY() {}
+
+	virtual int		GetWeaponID(void) const { return TF_WEAPON_SMG_PRIMARY; }
+
+	virtual int		GetDamageType(void) const;
+	virtual bool	CanFireCriticalShot(bool bIsHeadshot, CBaseEntity* pTarget = NULL) OVERRIDE;
+
+	bool			CanHeadshot(void) const { int iMode = 0; CALL_ATTRIB_HOOK_INT(iMode, set_weapon_mode); return (iMode == 1); };
+
+private:
+
+	CTFSMG_PRIMARY(const CTFSMG_PRIMARY&) {}
 };
 
 //=============================================================================

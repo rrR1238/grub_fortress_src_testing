@@ -147,7 +147,19 @@ void CItemEffectMeterManager::Update( C_TFPlayer* pPlayer )
 		{
 			m_Meters[i]->Update( pPlayer );
 		}
+		int xPos = 170;
+		int yPos = 950;
+		if (pPlayer->IsPlayerClass(TF_CLASS_ENGINEER)) {
+			if (m_Meters[2]) {
+				m_Meters[2]->SetPos(xPos, yPos - 150);
+			}
+		}
 	}
+}
+
+CHudItemEffectMeter* CItemEffectMeterManager::GetMeter(int iMeter)
+{
+	return m_Meters[iMeter];
 }
 
 //-----------------------------------------------------------------------------
@@ -328,8 +340,9 @@ void CHudItemEffectMeter::CreateHudElementsForClass( C_TFPlayer* pPlayer, CUtlVe
 		DECLARE_ITEM_EFFECT_METER( CTFShotgun_Revenge, TF_WEAPON_SENTRY_REVENGE, false, "resource/UI/HUDItemEffectMeter_Engineer.res" );
 		DECLARE_ITEM_EFFECT_METER( CTFDRGPomson, TF_WEAPON_DRG_POMSON, false, "resource/UI/HUDItemEffectMeter_Pomson.res" );
 		DECLARE_ITEM_EFFECT_METER( CTFRevolver, TF_WEAPON_REVOLVER, false, "resource/UI/HUDItemEffectMeter_Spy.res" );
-		DECLARE_ITEM_EFFECT_METER(CTFChargedSMG, TF_WEAPON_CHARGED_SMG, false, NULL);
-		DECLARE_ITEM_EFFECT_METER(CTFBuffItem, TF_WEAPON_BUFF_ITEM, true, NULL);
+		DECLARE_ITEM_EFFECT_METER(CTFChargedSMG, TF_WEAPON_CHARGED_SMG, false, "resource/UI/HUDItemEffectMeter_carbine.res");
+		DECLARE_ITEM_EFFECT_METER(CTFBuffItem, TF_WEAPON_BUFF_ITEM, true, "resource/UI/HUDItemEffectMeter_carbine.res");
+		DECLARE_ITEM_EFFECT_METER(C_TFWeaponSapper, TF_WEAPON_SAPPER, true, "resource/UI/HudItemEffectMeter_Sapper.res");
 		break;
 
 	case TF_CLASS_PYRO:
@@ -519,7 +532,9 @@ bool CHudItemEffectMeter::ShouldDraw( void )
 			// if we're going to be visible, redo our layout
 			InvalidateLayout( false, true );
 			if (pPlayer->IsPlayerClass(TF_CLASS_ENGINEER)) {
-				SetPos(170, 950);
+				if (g_ItemEffectMeterManager.GetNumEnabled() > 1) {
+					g_ItemEffectMeterManager.GetMeter(2)->SetPos(0, 0);
+				}
 			}
 		}
 	}
@@ -537,7 +552,7 @@ void CHudItemEffectMeter::Update( C_TFPlayer* pPlayer )
 
 	if ( !pPlayer )
 		return;
-
+	
 	// Progress counts override progress bars.
 	int iCount = GetCount();
 	if ( iCount >= 0 )
@@ -1331,7 +1346,52 @@ const char*	CHudItemEffectMeter_Weapon<CTFSniperRifle>::GetBeepSound( void )
 
 	return CHudItemEffectMeter::GetBeepSound();
 }
+template <>
+bool CHudItemEffectMeter_Weapon<C_TFWeaponSapper>::IsEnabled(void)
+{
+	if (!m_pPlayer)
+		return false;
+	C_TFWeaponSapper* pWeapon = GetWeapon();
+	if (m_pPlayer->IsPlayerClass(TF_CLASS_ENGINEER) && pWeapon && pWeapon->CanCharge())
+		return true;
 
+	return (TFGameRules() && TFGameRules()->IsMannVsMachineMode());
+}
+
+//-----------------------------------------------------------------------------
+// Purpose:
+//-----------------------------------------------------------------------------
+template <>
+bool CHudItemEffectMeter_Weapon<C_TFWeaponSapper>::ShouldBeep(void)
+{
+	if (!m_pPlayer)
+		return false;
+
+	int iRoboSapper = 0;
+	CALL_ATTRIB_HOOK_INT_ON_OTHER(m_pPlayer, iRoboSapper, robo_sapper);
+
+	return (iRoboSapper > 0);
+}
+
+//-----------------------------------------------------------------------------
+// Purpose:
+//-----------------------------------------------------------------------------
+template <>
+bool CHudItemEffectMeter_Weapon<C_TFWeaponSapper>::ShouldFlash(void)
+{
+	if (!m_pPlayer)
+		return false;
+
+	C_TFWeaponSapper* pWeapon = GetWeapon();
+	if (pWeapon)
+	{
+		return pWeapon->EffectMeterShouldFlash();
+	}
+	else
+	{
+		return false;
+	}
+}
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
@@ -1340,6 +1400,9 @@ bool CHudItemEffectMeter_Weapon<C_TFWeaponBuilder>::IsEnabled( void )
 {
 	if ( !m_pPlayer )
 		return false;
+
+//	if (m_pPlayer->IsPlayerClass(TF_CLASS_ENGINEER))
+//		return true;
 
 	return ( TFGameRules() && TFGameRules()->IsMannVsMachineMode() );
 }

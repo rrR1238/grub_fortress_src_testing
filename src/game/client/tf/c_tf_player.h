@@ -710,6 +710,8 @@ private:
 	float			m_flTauntYaw;
 	float			m_flPrevTauntYaw;
 	int				m_nActiveTauntSlot;
+//	int				m_iOverrideAmmoPrimary;
+//	int				m_iOverrideAmmoSecondary;
 	int				m_nPrevTauntSlot;
 	item_definition_index_t	m_iTauntItemDefIndex;
 	item_definition_index_t m_iPrevTauntItemDefIndex;

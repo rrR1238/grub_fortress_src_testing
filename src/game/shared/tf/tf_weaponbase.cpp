@@ -586,7 +586,6 @@ int	CTFWeaponBase::GetMaxClip1( void ) const
 		CALL_ATTRIB_HOOK_INT( flClip, mult_clipsize );
 	}
 
-
 	// Now handle in-game sources, otherwise we get weird numbers on things like the FAN
 	if ( flClip >= 0 )
 	{

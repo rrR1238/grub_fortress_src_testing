@@ -18,6 +18,7 @@
 #include "tf_halloween_souls_pickup.h"
 #include "tf_fx.h"
 #include "tf_weapon_pda.h"
+#include "tf_obj_sapper.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -694,7 +695,17 @@ void CObjectDispenser::DispenseThink( void )
 		ResetHealingTargets();
 		return;
 	}
-	
+
+	CObjectSapper* pSapper = dynamic_cast<CObjectSapper*>(GetFirstFriendlyObjectOnMe());
+	if (pSapper && pSapper->GetObjectMode() == MODE_SAPPER_ENGINEER) {
+		ResetHealingTargets();
+		bWaitingToCheck = true;
+	}
+	if (!pSapper && bWaitingToCheck) {
+		ResetHealingTargets();
+		bWaitingToCheck = false;
+	}
+
 	if ( GetOwner() )
 	{
 		float flRadius = GetDispenserRadius();
@@ -913,6 +924,10 @@ void CObjectDispenser::StartHealing( CBaseEntity *pOther )
 	{
 		float flHealRate = GetHealRate();
 		float flOverhealBonus = 1.f;
+		CObjectSapper* pSapper = dynamic_cast<CObjectSapper*>(GetFirstFriendlyObjectOnMe());
+		if (pSapper && pSapper->GetObjectMode() == MODE_SAPPER_ENGINEER) {
+			flOverhealBonus = 1.5f;
+		}
 		pPlayer->m_Shared.Heal( this, flHealRate, flOverhealBonus, 1.f, true, GetBuilder() );
 	}
 }

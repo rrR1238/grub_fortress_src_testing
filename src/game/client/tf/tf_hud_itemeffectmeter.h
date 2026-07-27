@@ -41,6 +41,7 @@ public:
 	void			Update( C_TFPlayer* pPlayer );
 	virtual void	FireGameEvent( IGameEvent *event );
 	int				GetNumEnabled( void );
+	CHudItemEffectMeter* GetMeter( int iMeter);
 
 private:
 	CUtlVector< vgui::DHANDLE< CHudItemEffectMeter > >	m_Meters;

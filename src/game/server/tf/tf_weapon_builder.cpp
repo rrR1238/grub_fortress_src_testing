@@ -37,6 +37,7 @@ END_NETWORK_TABLE()
 
 IMPLEMENT_SERVERCLASS_ST(CTFWeaponBuilder, DT_TFWeaponBuilder)
 	SendPropInt( SENDINFO( m_iBuildState ), 4, SPROP_UNSIGNED ),
+	SendPropFloat(SENDINFO(m_iRechargeTime), 4, SPROP_UNSIGNED),
 	SendPropDataTable( "BuilderLocalData", 0, &REFERENCE_SEND_TABLE( DT_BuilderLocalData ), SendProxy_SendLocalWeaponDataTable ),
 	SendPropInt( SENDINFO( m_iObjectMode ) , 4, SPROP_UNSIGNED ),
 	SendPropFloat( SENDINFO( m_flWheatleyTalkingUntil) ),
@@ -49,6 +50,8 @@ PRECACHE_WEAPON_REGISTER( tf_weapon_builder );
 
 IMPLEMENT_SERVERCLASS_ST( CTFWeaponSapper, DT_TFWeaponSapper )
 	SendPropFloat( SENDINFO( m_flChargeBeginTime ) ),
+	SendPropBool( SENDINFO(m_bIsASapper ) ),
+	SendPropBool(SENDINFO(m_bBuiltASapper)),
 END_SEND_TABLE()
 
 LINK_ENTITY_TO_CLASS( tf_weapon_sapper, CTFWeaponSapper );
@@ -60,6 +63,7 @@ PRECACHE_WEAPON_REGISTER( tf_weapon_sapper );
 //-----------------------------------------------------------------------------
 CTFWeaponBuilder::CTFWeaponBuilder()
 {
+	m_iRechargeTime = 15;
 	m_iObjectType.Set( BUILDER_INVALID_OBJECT );
 	m_iObjectMode = 0;
 	m_bAttack3Down = false;
@@ -1022,12 +1026,18 @@ void CTFWeaponBuilder::StartPlacement( void )
 		// but we need to set the starting construction health after we've called spawn
 		if ( !bIsCarried )
 		{
-			m_hObjectBeingBuilt->SetObjectMode( m_iObjectMode );
+			if (m_iObjectModeSapper) {
+				m_hObjectBeingBuilt->SetObjectMode(m_iObjectModeSapper);
+			}
+			else {
+				m_hObjectBeingBuilt->SetObjectMode(m_iObjectMode);
+			}
+			if (m_iSapperType > 0) {
+				m_hObjectBeingBuilt->SetSapperType(m_iSapperType);
+			}
 		}
-
 		m_hObjectBeingBuilt->Spawn();
 		m_hObjectBeingBuilt->StartPlacement( pTFPlayer );
-
 		if ( !bIsCarried )
 		{
 			m_hObjectBeingBuilt->m_iHealth = OBJECT_CONSTRUCTION_STARTINGHEALTH;
@@ -1113,7 +1123,11 @@ void CTFWeaponBuilder::StartBuilding( void )
 	{
 		pOwner->RemoveInvisibility();
 		pOwner->m_Shared.SetCarriedObject( NULL );
-
+		if (pObj->ObjectType() == OBJ_ATTACHMENT_SAPPER && GetTFPlayerOwner()->IsPlayerClass(TF_CLASS_ENGINEER)) {
+			pOwner->RemoveAmmo(1, TF_AMMO_GRENADES2);
+			StartEffectBarRegen();
+//			m_bBuiltASapper = true;
+		}
 		if ( TFGameRules() && TFGameRules()->GameModeUsesUpgrades() )
 		{
 			if ( pObj->ObjectType() == OBJ_ATTACHMENT_SAPPER )
@@ -1153,7 +1167,15 @@ bool CTFWeaponBuilder::HasAmmo( void )
 //-----------------------------------------------------------------------------
 int CTFWeaponBuilder::GetSlot( void ) const
 {
-	return GetObjectInfo( m_iObjectType )->m_SelectionSlot;
+	if (GetTFPlayerOwner()->GetPlayerClass()->GetClassIndex() == TF_CLASS_ENGINEER) {
+		return 5;
+	}
+	else if (GetTFPlayerOwner()->GetPlayerClass()->GetClassIndex() == TF_CLASS_SPY) {
+		return 1;
+	}
+	else {
+		return GetObjectInfo(m_iObjectType)->m_SelectionSlot;
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -1162,6 +1184,7 @@ int CTFWeaponBuilder::GetSlot( void ) const
 int CTFWeaponBuilder::GetPosition( void ) const
 {
 	return GetObjectInfo( m_iObjectType )->m_SelectionPosition;
+	return 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -1257,6 +1280,7 @@ CTFWeaponSapper::CTFWeaponSapper()
 	m_flChargeBeginTime = 0;
 	m_bAttackDown = false;
 }
+
 //-----------------------------------------------------------------------------
 void CTFWeaponSapper::ItemPostFrame( void )
 {

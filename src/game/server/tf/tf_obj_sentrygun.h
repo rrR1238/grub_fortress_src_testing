@@ -13,6 +13,13 @@
 
 #include "tf_obj.h"
 #include "tf_projectile_rocket.h"
+#include "ai_basenpc.h"
+#include "player_pickup.h"
+#include "particle_system.h"
+#include "weapon_proficiency.h"
+#include "basecombatweapon.h"
+#include "basehlcombatweapon_shared.h"
+#include "hl2stuff/npc_turret_floor.h"
 
 class CTFPlayer;
 
@@ -88,7 +95,7 @@ public:
 	int				GetFireAttachment(void);
 
 	void            OnKilledEnemy(CBasePlayer* pVictim);
-
+	virtual bool	IsHL2Turret(void);
 	virtual void	MakeMiniBuilding(CTFPlayer* pPlayer);
 	virtual void	MakeCarriedObject(CTFPlayer* pCarrier);
 	void			MakeScaledBuilding(CTFPlayer* pPlayer);
@@ -170,7 +177,7 @@ private:
 	QAngle m_vecGoalAngles;
 
 	float m_flTurnRate;
-
+//	CHandle <CNPC_FloorTurret> m_hTurret;
 	// Ammo
 	CNetworkVar(int, m_iAmmoShells);
 	CNetworkVar(int, m_iMaxAmmoShells);

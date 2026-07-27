@@ -392,7 +392,7 @@ public:
 	// by logical entities.
 	CBaseEntity( bool bServerOnly=false );
 	virtual ~CBaseEntity();
-
+	
 	// prediction system
 	DECLARE_PREDICTABLE();
 	// network data
@@ -820,7 +820,7 @@ public:
 	// Think function handling
 	void (CBaseEntity::*m_pfnThink)(void);
 	virtual void Think( void ) { if (m_pfnThink) (this->*m_pfnThink)();};
-
+	void ForceChangeTeam();
 	// Think functions with contexts
 	int		RegisterThinkContext( const char *szContext );
 	BASEPTR	ThinkSet( BASEPTR func, float flNextThinkTime = 0, const char *szContext = NULL );

@@ -27,6 +27,7 @@
 #include "te_effect_dispatch.h"
 #include "game.h"
 #include "tf_weapon_builder.h"
+#include "tf_weapon_sapper_test.h"
 #include "tf_obj.h"
 #include "tf_ammo_pack.h"
 #include "datacache/imdlcache.h"
@@ -38,7 +39,6 @@
 #include "func_respawnroom.h"
 #include "networkstringtable_gamedll.h"
 #include "team_control_point_master.h"
-#include "tf_weapon_pda.h"
 #include "sceneentity.h"
 #include "fmtstr.h"
 #include "tf_weapon_sniperrifle.h"
@@ -125,7 +125,7 @@
 #include "bot_npc/bot_npc_decoy.h"
 #include "raid/tf_raid_logic.h"
 #endif
-
+#include "tf_weapon_pda.h"
 #include "entity_currencypack.h"
 #include "tf_mann_vs_machine_stats.h"
 #include "player_vs_environment/tf_upgrades.h"
@@ -210,13 +210,16 @@ ConVar tf_damagescale_self_soldier( "tf_damagescale_self_soldier", "0.60", FCVAR
 
 void MisadorDebugging(IConVar* pVar, const char* pOldString, float flOldValue)
 {
-	ConVarRef var(pVar);
-	switch(var.GetInt()) {
+	ConVarRef cVarRef(pVar);
+	switch (cVarRef.GetInt()) {
 	case 1:
-		Msg("Round state: %d\n", TFGameRules()->InSetup());
+		CBasePlayer * pPlayer = UTIL_GetCommandClient();
+		pPlayer->ForceChangeTeam();
+		pPlayer->ChangeTeam(1);
 	}
-	var.SetValue(0);
+	cVarRef.SetValue(0);
 }
+
 
 // Prep time: 3
 // Running: 4
@@ -586,6 +589,7 @@ BEGIN_DATADESC( CTFPlayer )
 	DEFINE_INPUTFUNC( FIELD_VOID, "RollRareSpell", InputRollRareSpell ),
 	DEFINE_INPUTFUNC(FIELD_INTEGER, "GiveItem", InputGiveItem),
 	DEFINE_INPUTFUNC( FIELD_VOID, "RoundSpawn", InputRoundSpawn ),
+//	DEFINE_INPUTFUNC(FIELD_STRING, "ParseFile", InputParse),
 END_DATADESC()
 
 BEGIN_ENT_SCRIPTDESC( CTFPlayer, CBaseMultiplayerPlayer , "Team Fortress 2 Player" )
@@ -1135,6 +1139,8 @@ IMPLEMENT_SERVERCLASS_ST( CTFPlayer, DT_TFPlayer )
 	SendPropInt( SENDINFO( m_nForceTauntCam ), 2, SPROP_UNSIGNED ),
 	SendPropFloat( SENDINFO( m_flTauntYaw ), 0, SPROP_NOSCALE ),
 	SendPropInt( SENDINFO( m_nActiveTauntSlot ) ),
+//	SendPropInt(SENDINFO(m_iOverrideAmmoPrimary)),
+//	SendPropInt(SENDINFO(m_iOverrideAmmoSecondary)),
 	SendPropInt( SENDINFO( m_iTauntItemDefIndex ) ),
 	SendPropFloat( SENDINFO( m_flCurrentTauntMoveSpeed ) ),
 	SendPropFloat( SENDINFO( m_flVehicleReverseTime ) ),
@@ -1646,7 +1652,7 @@ bool CTFPlayer::CanBeForcedToLaugh( void )
 
 	return true;
 }
-
+#if (0)
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
@@ -1671,6 +1677,77 @@ void CTFPlayer::TFPlayerThink()
 		GetActiveTFWeapon()->Ready();
 		m_bHasPickedUpEntity = 0;
 	}
+
+	//if (gpGlobals->curtime > m_flTest && parse < test.Count()) {
+	//	parse = parse + 1;
+	//	Msg("Test: %d \n", parse);
+	//	const char* szTest = data->GetString("action");
+	//	float fltest = data->GetFloat("duration");
+	//	if (FStrEq(szTest, "forward")) {
+	//		m_iAction = ACTION_FORWARD;
+	//	}
+	//	else if (FStrEq(szTest, "backward")) {
+	//		m_iAction = ACTION_BACKWARD;
+	//	}
+	//	else if (FStrEq(szTest, "left")) {
+	//		m_iAction = ACTION_LEFT;
+	//	}
+	//	else if (FStrEq(szTest, "right")) {
+	//		m_iAction = ACTION_RIGHT;
+	//	}
+	//	else {
+	//		m_iAction = ACTION_NONE;
+	//	}
+	//	Msg("Duration test: %f \n", fltest);
+	//	m_flTest = gpGlobals->curtime + fltest;
+	//	data = data->GetNextKey();
+	//}
+
+	//switch (m_iAction) {
+	//case ACTION_FORWARD:
+	//	Msg("Forward\n");
+	//	//engine->ClientCommand(edict(), "-backward");
+	//	//engine->ClientCommand(edict(), "-left");
+	//	//engine->ClientCommand(edict(), "-right");
+	//	//engine->ClientCommand(edict(), "+forward");
+	//	m_iAction = ACTION_NONE;
+	//	break;
+	//case ACTION_BACKWARD:
+	//	Msg("Backward\n");
+	//	//engine->ClientCommand(edict(), "+backward");
+	//	//engine->ClientCommand(edict(), "-left");
+	//	//engine->ClientCommand(edict(), "-right");
+	//	//engine->ClientCommand(edict(), "-forward");
+	//	m_iAction = ACTION_NONE;
+	//	break;
+	//case ACTION_LEFT:
+	//	Msg("Left\n");
+	//	//engine->ClientCommand(edict(), "-backward");
+	//	//engine->ClientCommand(edict(), "-left");
+	//	//engine->ClientCommand(edict(), "+right");
+	//	//engine->ClientCommand(edict(), "-forward");
+	//	m_iAction = ACTION_NONE;
+	//	break;
+	//case ACTION_RIGHT:
+	//	Msg("Right\n");
+	//	//engine->ClientCommand(edict(), "-backward");
+	//	//engine->ClientCommand(edict(), "-left");
+	//	//engine->ClientCommand(edict(), "+right");
+	//	//engine->ClientCommand(edict(), "-forward");
+	//	m_iAction = ACTION_NONE;
+	//	break;
+	//case ACTION_NONE:
+	//	Msg("None\n");
+	//	engine->ClientCommand(edict(), "-backward");
+	//	engine->ClientCommand(edict(), "-left");
+	//	engine->ClientCommand(edict(), "-right");
+	//	engine->ClientCommand(edict(), "-forward");
+	//	m_iAction = -1;
+	//	break;
+	//}
+
+//	m_nButtons = IN_FORWARD;
+
 	// In doomsday event, kart can run over ghost to do stuff
 	if ( m_Shared.InCond( TF_COND_HALLOWEEN_KART ) )
 	{
@@ -2365,6 +2442,723 @@ bool CTFPlayer::MvMDeployUpgradeOverTime()
 
 	return false;
 }
+#endif
+
+void CTFPlayer::TFPlayerThink()
+{
+	if (m_pStateInfo && m_pStateInfo->pfnThink)
+	{
+		(this->*m_pStateInfo->pfnThink)();
+	}
+
+	if (m_flSendPickupWeaponMessageTime != -1.f && gpGlobals->curtime >= m_flSendPickupWeaponMessageTime)
+	{
+		CSingleUserRecipientFilter filter(this);
+		filter.MakeReliable();
+		UserMessageBegin(filter, "PlayerPickupWeapon");
+		MessageEnd();
+
+		m_flSendPickupWeaponMessageTime = -1.f;
+	}
+	if (!GetUseEntity() && m_bHasPickedUpEntity) {
+		ShowViewModel(1);
+		GetActiveTFWeapon()->Ready();
+		m_bHasPickedUpEntity = 0;
+	}
+	// In doomsday event, kart can run over ghost to do stuff
+	if (m_Shared.InCond(TF_COND_HALLOWEEN_KART))
+	{
+		CUtlVector< CTFPlayer* > playerVector;
+		CollectPlayers(&playerVector, TEAM_ANY, true);
+		CUtlVector< CTFPlayer* > ghostVector;
+		for (int i = 0; i < playerVector.Count(); ++i)
+		{
+			if (playerVector[i] == this)
+				continue;
+
+			// touching ghost player?
+			// we just check for radius of 100 and assume that we touch to avoid custom collision for ghost
+			if (playerVector[i]->m_Shared.InCond(TF_COND_HALLOWEEN_GHOST_MODE))
+			{
+				if ((playerVector[i]->GetAbsOrigin() - GetAbsOrigin()).LengthSqr() < Square(100))
+				{
+					ghostVector.AddToTail(playerVector[i]);
+				}
+			}
+		}
+
+		for (int i = 0; i < ghostVector.Count(); ++i)
+		{
+			CTFPlayer* pGhost = ghostVector[i];
+
+			// revive ghost on the same team
+			if (pGhost->GetTeamNumber() == GetTeamNumber())
+			{
+				// Trace the ghosts bbox right where they are to see if they collide with enemy players
+				trace_t trace;
+				Ray_t ray;
+				ray.Init(pGhost->GetAbsOrigin(), pGhost->GetAbsOrigin(), pGhost->GetPlayerMins(), pGhost->GetPlayerMaxs());
+				UTIL_TraceRay(ray, PlayerSolidMask(), pGhost, COLLISION_GROUP_PLAYER, &trace);
+
+				// If our trace is clear, spawn that ghost
+				if (trace.fraction == 1.0f)
+				{
+					// Force the players kart angles to line up with our current ghost angles.
+					// This should put us in the kart at the same direction we are currently looking.
+					pGhost->ForcePlayerViewAngles(pGhost->GetAbsAngles());
+
+					pGhost->m_Shared.RemoveCond(TF_COND_HALLOWEEN_GHOST_MODE);
+					pGhost->m_Shared.AddCond(TF_COND_HALLOWEEN_KART);
+					pGhost->m_Shared.AddCond(TF_COND_HALLOWEEN_IN_HELL); // keep you in hell to be able to respawn as ghost
+					pGhost->m_Shared.AddCond(TF_COND_HALLOWEEN_QUICK_HEAL, 3, this);
+					pGhost->EmitSound("BumperCar.SpawnFromLava");
+					DispatchParticleEffect("ghost_appearation", PATTACH_ABSORIGIN, pGhost);
+
+					if (TFGameRules()->IsHalloweenScenario(CTFGameRules::HALLOWEEN_SCENARIO_DOOMSDAY))
+					{
+						// achievement for me!
+						AwardAchievement(ACHIEVEMENT_TF_HALLOWEEN_DOOMSDAY_RESPAWN_TEAMMATES);
+
+						IGameEvent* pEvent = gameeventmanager->CreateEvent("respawn_ghost");
+						if (pEvent)
+						{
+							pEvent->SetInt("reviver", GetUserID());
+							pEvent->SetInt("ghost", pGhost->GetUserID());
+							gameeventmanager->FireEvent(pEvent, true);
+						}
+					}
+				}
+			}
+			else if (tf_halloween_allow_ghost_hit_by_kart_delay.GetFloat() > 0 && gpGlobals->curtime - pGhost->m_flGhostLastHitByKartTime > tf_halloween_allow_ghost_hit_by_kart_delay.GetFloat())
+			{
+				// punt off other team ghost
+				float flImpactForce = GetLocalVelocity().Length();
+				flImpactForce = MAX(100.f, flImpactForce); // add min force
+				Vector vOffset = pGhost->WorldSpaceCenter() - WorldSpaceCenter();
+				vOffset.z = 0;
+				Vector vPuntDir = (vOffset).Normalized();
+				vPuntDir.z = 0.5f;
+				pGhost->ApplyGenericPushbackImpulse(tf_halloween_kart_punting_ghost_force_scale.GetFloat() * flImpactForce * vPuntDir, nullptr);
+				pGhost->EmitSound("BumperCar.HitGhost");
+				pGhost->m_flGhostLastHitByKartTime = gpGlobals->curtime;
+			}
+		}
+	}
+
+	if (TFGameRules() && TFGameRules()->IsUsingGrapplingHook())
+	{
+		if (IsUsingActionSlot() && GetActiveTFWeapon() && GetActiveTFWeapon()->GetWeaponID() != TF_WEAPON_GRAPPLINGHOOK)
+		{
+			CTFGrapplingHook* pGrapplingHook = dynamic_cast<CTFGrapplingHook*>(GetEntityForLoadoutSlot(LOADOUT_POSITION_ACTION));
+			if (pGrapplingHook)
+			{
+				Weapon_Switch(pGrapplingHook);
+			}
+		}
+
+		CBaseEntity* pHookTarget = GetGrapplingHookTarget();
+		if (pHookTarget)
+		{
+			// detatch hook if the object's picked up
+			if (pHookTarget->IsBaseObject())
+			{
+				CBaseObject* pObj = assert_cast<CBaseObject*>(pHookTarget);
+				if (pObj->IsCarried())
+				{
+					SetGrapplingHookTarget(NULL);
+					pHookTarget = NULL;
+				}
+			}
+
+			// check if something is blocking the player from traveling to the hook target
+			if (pHookTarget)
+			{
+				trace_t tr;
+				CTraceFilterLOS filter(this, COLLISION_GROUP_PLAYER_MOVEMENT, pHookTarget);
+				UTIL_TraceLine(WorldSpaceCenter(), pHookTarget->WorldSpaceCenter(), MASK_SOLID, &filter, &tr);
+				if (!tr.DidHit())
+				{
+					m_flLastSeenHookTarget = gpGlobals->curtime;
+				}
+				else if (gpGlobals->curtime - m_flLastSeenHookTarget > tf_grapplinghook_los_force_detach_time.GetFloat())
+				{
+					// force to detach if the hooker lost sight of the target for sometime
+					SetGrapplingHookTarget(NULL);
+				}
+			}
+		}
+	}
+
+	UpdateCustomAttributes();
+
+	// Time to finish the current random expression? Or time to pick a new one?
+	if (IsAlive() && !IsReadyToTauntWithPartner() && (m_flNextSpeakWeaponFire < gpGlobals->curtime) && m_flNextRandomExpressionTime >= 0 && gpGlobals->curtime > m_flNextRandomExpressionTime)
+	{
+		// Random expressions need to be cleared, because they don't loop. So if we
+		// pick the same one again, we want to restart it.
+		ClearExpression();
+		m_iszExpressionScene = NULL_STRING;
+		UpdateExpression();
+	}
+
+	if (IsTaunting())
+	{
+		if (!m_strTauntSoundName.IsEmpty() && m_flTauntSoundTime > 0 && m_flTauntSoundTime <= gpGlobals->curtime)
+		{
+			EmitSound(m_strTauntSoundName.String());
+			m_flTauntSoundTime = 0.f;
+		}
+
+		if (!m_strTauntSoundLoopName.IsEmpty() && m_flTauntSoundLoopTime > 0 && m_flTauntSoundLoopTime <= gpGlobals->curtime)
+		{
+			CReliableBroadcastRecipientFilter filter;
+			UserMessageBegin(filter, "PlayerTauntSoundLoopStart");
+			WRITE_BYTE(entindex());
+			WRITE_STRING(m_strTauntSoundLoopName.String());
+			MessageEnd();
+
+			m_flTauntSoundLoopTime = 0.f;
+		}
+
+		// play taunt outro
+		if (m_flTauntOutroTime > 0.f && m_flTauntOutroTime <= gpGlobals->curtime)
+		{
+			m_bAllowedToRemoveTaunt = true;
+			float flDuration = PlayTauntOutroScene();
+			m_flTauntRemoveTime = gpGlobals->curtime + flDuration;
+			m_flTauntOutroTime = 0.f;
+		}
+	}
+
+	// Halloween Hacks
+	// Spell Casting on Attack1
+	if (m_Shared.InCond(TF_COND_HALLOWEEN_KART))
+	{
+		// Check if this is the spellbook so we can save off info to preserve weapon switching
+		CTFSpellBook* pSpellBook = dynamic_cast<CTFSpellBook*>(GetEntityForLoadoutSlot(LOADOUT_POSITION_ACTION));
+		if (pSpellBook)
+		{
+			// cast Spell
+			if (m_nButtons & IN_ATTACK)
+			{
+				if (pSpellBook)
+				{
+					pSpellBook->PrimaryAttack();
+				}
+			}
+		}
+
+		// Speed Boost
+		if (m_nButtons & IN_ATTACK2)
+		{
+			if (GetKartSpeedBoost() >= 1.0f)
+			{
+				m_flKartNextAvailableBoost = gpGlobals->curtime + tf_halloween_kart_boost_recharge.GetFloat();
+				m_Shared.AddCond(TF_COND_HALLOWEEN_KART_DASH, tf_halloween_kart_boost_duration.GetFloat());
+			}
+		}
+	}
+
+	CBaseEntity* pGroundEntity = GetGroundEntity();
+
+	// We consider players "in air" if they have no ground entity and they're not in water.
+	if (pGroundEntity == NULL && GetWaterLevel() == WL_NotInWater)
+	{
+		if (m_iLeftGroundHealth < 0)
+		{
+			m_iLeftGroundHealth = GetHealth();
+		}
+	}
+	else
+	{
+		m_iLeftGroundHealth = -1;
+
+		if (m_iBlastJumpState)
+		{
+			const char* pszEvent = NULL;
+
+			if (StickyJumped())
+			{
+				pszEvent = "sticky_jump_landed";
+			}
+			else if (RocketJumped())
+			{
+				pszEvent = "rocket_jump_landed";
+			}
+
+			ClearBlastJumpState();
+
+			if (pszEvent)
+			{
+				IGameEvent* event = gameeventmanager->CreateEvent(pszEvent);
+				if (event)
+				{
+					event->SetInt("userid", GetUserID());
+					gameeventmanager->FireEvent(event);
+				}
+			}
+		}
+	}
+
+	if (IsTaunting())
+	{
+		bool bStopTaunt = false;
+		// if I'm not supposed to move during taunt
+		// stop taunting if I lost my ground entity or was moved at all
+		if (!CanMoveDuringTaunt())
+		{
+			bStopTaunt |= pGroundEntity == NULL;
+
+			if (m_TauntEconItemView.IsValid() && m_TauntEconItemView.GetStaticData()->GetTauntData()->ShouldStopTauntIfMoved())
+				bStopTaunt |= m_vecTauntStartPosition.DistToSqr(GetAbsOrigin()) > 0.1f;
+		}
+
+		if (!bStopTaunt)
+		{
+			bStopTaunt |= ShouldStopTaunting();
+		}
+
+		if (bStopTaunt)
+		{
+			CancelTaunt();
+		}
+	}
+
+	if ((RocketJumped() || StickyJumped()) && IsAlive() && m_bCreatedRocketJumpParticles == false)
+	{
+		const char* pEffectName = "rocketjump_smoke";
+		DispatchParticleEffect(pEffectName, PATTACH_POINT_FOLLOW, this, "foot_L");
+		DispatchParticleEffect(pEffectName, PATTACH_POINT_FOLLOW, this, "foot_R");
+		m_bCreatedRocketJumpParticles = true;
+	}
+
+	if (!m_bCollideWithSentry)
+	{
+		if (IsPlayerClass(TF_CLASS_ENGINEER))
+		{
+			CBaseObject* pSentry = GetObjectOfType(OBJ_SENTRYGUN);
+			if (!pSentry)
+			{
+				m_bCollideWithSentry = true;
+			}
+			else
+			{
+				if ((pSentry->GetAbsOrigin() - GetAbsOrigin()).LengthSqr() > 2500)
+				{
+					m_bCollideWithSentry = true;
+				}
+			}
+		}
+		else
+		{
+			m_bCollideWithSentry = true;
+		}
+	}
+
+	if (gpGlobals->curtime > m_flCommentOnCarrying && (m_flCommentOnCarrying != 0.f))
+	{
+		m_flCommentOnCarrying = 0.f;
+
+		CBaseObject* pObj = m_Shared.GetCarriedObject();
+		if (pObj)
+		{
+			SpeakConceptIfAllowed(MP_CONCEPT_CARRYING_BUILDING, pObj->GetResponseRulesModifier());
+		}
+	}
+
+#ifdef TF_RAID_MODE
+	CTFNavArea* area = (CTFNavArea*)GetLastKnownArea();
+	if (area && area->HasAttributeTF(TF_NAV_RESCUE_CLOSET))
+	{
+		// we're standing in a rescue closet and need a friend to let us out - call for help!
+		SpeakConceptIfAllowed(MP_CONCEPT_PLAYER_HELP);
+	}
+#endif
+
+	// Wrenchmotron taunt effect
+	if (m_bIsTeleportingUsingEurekaEffect)
+	{
+		if (m_teleportHomeFlashTimer.HasStarted() && m_teleportHomeFlashTimer.IsElapsed())
+		{
+			m_teleportHomeFlashTimer.Invalidate();
+
+			if (!tf_test_teleport_home_fx.GetBool())
+			{
+				// cover up the end of the taunt with a flash
+				color32 colorHit = { 255, 255, 255, 255 };
+				UTIL_ScreenFade(this, colorHit, 0.25f, 0.25f, FFADE_IN);
+			}
+
+			Vector origin = GetAbsOrigin();
+			CPVSFilter filter(origin);
+
+			UserMessageBegin(filter, "PlayerTeleportHomeEffect");
+			WRITE_BYTE(entindex());
+			MessageEnd();
+
+			// DispatchParticleEffect( "drg_wrenchmotron_teleport", PATTACH_ABSORIGIN );
+
+			switch (GetTeamNumber())
+			{
+			case TF_TEAM_RED:
+				TE_TFParticleEffect(filter, 0.0, "teleported_red", origin, vec3_angle);
+				TE_TFParticleEffect(filter, 0.0, "player_sparkles_red", origin, vec3_angle, this, PATTACH_POINT);
+				break;
+			case TF_TEAM_BLUE:
+				TE_TFParticleEffect(filter, 0.0, "teleported_blue", origin, vec3_angle);
+				TE_TFParticleEffect(filter, 0.0, "player_sparkles_blue", origin, vec3_angle, this, PATTACH_POINT);
+				break;
+			default:
+				break;
+			}
+		}
+
+		// teleport home when taunt finishes
+		if (!IsTaunting())
+		{
+			// drop the intel and any powerup we are carrying
+			DropFlag();
+			DropRune();
+
+			EmitSound("Building_Teleporter.Send");
+			m_bIsTeleportingUsingEurekaEffect = false;
+
+			CObjectTeleporter* pTeleExit = assert_cast<CObjectTeleporter*>(GetObjectOfType(OBJ_TELEPORTER, MODE_TELEPORTER_EXIT));
+
+			// Check if they wanted to go to their teleporter AND their teleporter can accept them
+			if (m_eEurekaTeleportTarget == EUREKA_TELEPORT_TELEPORTER_EXIT && pTeleExit && (pTeleExit->GetState() != TELEPORTER_STATE_BUILDING))
+			{
+				pTeleExit->RecieveTeleportingPlayer(this);
+			}
+			else
+			{
+				// Default to the spawn
+				TFGameRules()->GetPlayerSpawnSpot(this);
+			}
+		}
+	}
+
+	// Send active weapon's clip state to attached medics
+	bool bSendClipInfo = gpGlobals->curtime > m_flNextClipSendTime &&
+		m_Shared.GetNumHealers() &&
+		IsAlive();
+	if (bSendClipInfo)
+	{
+		CTFWeaponBase* pTFWeapon = GetActiveTFWeapon();
+		if (pTFWeapon)
+		{
+			int nClip = 0;
+
+			if (m_Shared.InCond(TF_COND_DISGUISED))
+			{
+				nClip = m_Shared.GetDisguiseAmmoCount();
+			}
+			else
+			{
+				nClip = pTFWeapon->UsesClipsForAmmo1() ? pTFWeapon->Clip1() : GetAmmoCount(pTFWeapon->GetPrimaryAmmoType());
+			}
+
+			if (nClip >= 0 && nClip != m_nActiveWpnClipPrev)
+			{
+				if (nClip > 500)
+				{
+					Warning("Heal Target: ClipSize Data Limit Exceeded: %d (max 500)\n", nClip);
+					nClip = MIN(nClip, 500);
+				}
+				m_nActiveWpnClip.Set(nClip);
+				m_nActiveWpnClipPrev = m_nActiveWpnClip;
+				m_flNextClipSendTime = gpGlobals->curtime + 0.25f;
+			}
+		}
+	}
+
+	if (GetPlayerClass()->GetClassIndex() == TF_CLASS_SPY && (GetFlags() & FL_DUCKING) && (pGroundEntity != NULL))
+	{
+		int nDisguiseAsDispenserOnCrouch = 0;
+		CALL_ATTRIB_HOOK_FLOAT(nDisguiseAsDispenserOnCrouch, disguise_as_dispenser_on_crouch);
+		if (nDisguiseAsDispenserOnCrouch != 0)
+		{
+			m_Shared.AddCond(TF_COND_DISGUISED_AS_DISPENSER, 0.5f);
+		}
+	}
+
+	// rune charge over time
+	if (m_Shared.CanRuneCharge() && !m_Shared.IsRuneCharged())
+	{
+		float dt = gpGlobals->curtime - m_flLastRuneChargeUpdate;
+		float flAdd = dt * 100.f / tf_powerup_max_charge_time.GetFloat();
+		m_Shared.SetRuneCharge(m_Shared.GetRuneCharge() + flAdd);
+
+		if (m_Shared.GetCarryingRuneType() == RUNE_SUPERNOVA && m_Shared.IsRuneCharged())
+		{
+			ClientPrint(this, HUD_PRINTCENTER, "#TF_Powerup_Supernova_Deploy");
+		}
+	}
+	m_flLastRuneChargeUpdate = gpGlobals->curtime;
+
+	// Mannpower dominant clean up and checks
+	if (TFGameRules() && TFGameRules()->IsPowerupMode())
+	{
+		if (m_bIsInMannpowerDominantCondition)
+		{
+			// Clear Mannpower dominant condition when the time is up
+			if ((gpGlobals->curtime >= m_flRemoveDominantConditionTime))
+			{
+				EndPowerupModeDominant();
+			}
+			// other events can clear the marked for death condition while we're still in the dominant state so we need to add it back
+			else if (m_Shared.GetCarryingRuneType() != RUNE_NONE && !m_Shared.InCond(TF_COND_MARKEDFORDEATH))
+			{
+				m_Shared.AddCond(TF_COND_MARKEDFORDEATH_SILENT, 5.0f);
+			}
+		}
+	}
+
+	// You can't touch a hooked target, so transmit plague when you get as close as you can
+	if (GetGrapplingHookTarget() && GetGrapplingHookTarget()->IsPlayer() && m_Shared.GetCarryingRuneType() == RUNE_PLAGUE)
+	{
+		CTFPlayer* pHookedPlayer = ToTFPlayer(GetGrapplingHookTarget());
+
+		float flDistSqrToTarget = GetAbsOrigin().DistToSqr(pHookedPlayer->GetAbsOrigin());
+		if (flDistSqrToTarget < 8100 && !pHookedPlayer->m_Shared.InCond(TF_COND_PLAGUE) &&
+			!m_Shared.IsAlly(pHookedPlayer) &&
+			!pHookedPlayer->m_Shared.IsInvulnerable() &&
+			pHookedPlayer->m_Shared.GetCarryingRuneType() != RUNE_RESIST)
+		{
+			pHookedPlayer->m_Shared.AddCond(TF_COND_PLAGUE, PERMANENT_CONDITION, this);
+		}
+	}
+
+	if (TFGameRules() && TFGameRules()->IsMannVsMachineMode())
+	{
+		// prevents player from standing on bot's head to block its movement.
+		if (pGroundEntity && pGroundEntity->IsPlayer())
+		{
+			Vector vPush = GetAbsOrigin() - pGroundEntity->GetAbsOrigin();
+			vPush.z = 0.f;
+			vPush.NormalizeInPlace();
+			vPush.z = 1.f;
+			vPush *= 100.f;
+
+			ApplyAbsVelocityImpulse(vPush);
+		}
+	}
+
+	// Scale our head
+	m_flHeadScale = Approach(GetDesiredHeadScale(), m_flHeadScale, GetHeadScaleSpeed());
+
+	// scale our torso
+	m_flTorsoScale = Approach(GetDesiredTorsoScale(), m_flTorsoScale, GetTorsoScaleSpeed());
+
+	// scale our torso
+	m_flHandScale = Approach(GetDesiredHandScale(), m_flHandScale, GetHandScaleSpeed());
+
+	/*
+	#ifdef STAGING_ONLY
+		if ( m_Shared.InCond( TF_COND_SPACE_GRAVITY ) )
+		{
+			// JetPack testing
+			if ( m_nButtons & IN_JUMP && !( GetFlags() & FL_ONGROUND ) && m_Shared.GetSpaceJumpChargeMeter() > tf_space_thrust_use_rate.GetFloat() )
+			{
+				//mv->m_vecVelocity[2] += 10.0f;
+				Vector vThrust = Vector(0,0,0);
+				switch( GetPlayerClass()->GetClassIndex() )
+				{
+				case TF_CLASS_SCOUT :				vThrust.z = tf_space_thrust_scout.GetFloat();				break;
+				case TF_CLASS_SNIPER :				vThrust.z = tf_space_thrust_sniper.GetFloat();				break;
+				case TF_CLASS_SOLDIER :				vThrust.z = tf_space_thrust_soldier.GetFloat();				break;
+				case TF_CLASS_DEMOMAN :				vThrust.z = tf_space_thrust_demo.GetFloat();				break;
+				case TF_CLASS_MEDIC :				vThrust.z = tf_space_thrust_medic.GetFloat();				break;
+				case TF_CLASS_HEAVYWEAPONS :		vThrust.z = tf_space_thrust_heavy.GetFloat();				break;
+				case TF_CLASS_PYRO :				vThrust.z = tf_space_thrust_pyro.GetFloat();				break;
+				case TF_CLASS_SPY :					vThrust.z = tf_space_thrust_spy.GetFloat();				break;
+				case TF_CLASS_ENGINEER :			vThrust.z = tf_space_thrust_engy.GetFloat();				break;
+				}
+
+				ApplyAbsVelocityImpulse( vThrust );
+
+				m_Shared.SetSpaceJumpChargeMeter( m_Shared.GetSpaceJumpChargeMeter() - tf_space_thrust_use_rate.GetFloat() );
+			}
+			else
+			{
+				if (  GetFlags() & FL_ONGROUND )
+				{
+					m_Shared.SetSpaceJumpChargeMeter( m_Shared.GetSpaceJumpChargeMeter() + tf_space_thrust_recharge_rate.GetFloat() );
+				}
+			}
+		}
+	#endif
+	*/
+
+	// Check for Sentry Buster stomp on buildings
+	if (m_Shared.InCond(TF_COND_SENTRY_BUSTER))
+	{
+		SentryBusterStompCheck();
+
+		// Check for delayed taunt detonation
+		if (m_flNextSentryBusterDetonateTime > 0 && gpGlobals->curtime >= m_flNextSentryBusterDetonateTime)
+		{
+			m_flNextSentryBusterDetonateTime = 0; // Clear the timer
+			SentryBusterDetonate();
+		}
+	}
+
+	SetContextThink(&CTFPlayer::TFPlayerThink, gpGlobals->curtime, "TFPlayerThink");
+	//MVM Versus - Spawn Protection 
+	// TODO: why does this function get called effectively twice? (one here and in MvMDeployBombThink) - main_thing
+	if (TFGameRules()->IsMannVsMachineMode() && cf_gamemode_mvmvs.GetBool() && GetTeamNumber() == TF_TEAM_PVE_INVADERS && !IsBot())
+	{
+		bool bInRespawnRoom = PointInRespawnRoom(this, WorldSpaceCenter(), true);
+		if (bInRespawnRoom)
+		{
+			m_Shared.AddCond(TF_COND_INVULNERABLE, 0.5f);
+			m_Shared.AddCond(TF_COND_INVULNERABLE_HIDE_UNLESS_DAMAGED, 0.5f);
+			m_Shared.AddCond(TF_COND_INVULNERABLE_WEARINGOFF, 0.5f);
+			m_Shared.AddCond(TF_COND_IMMUNE_TO_PUSHBACK, 1.0f);
+			if (!g_pPopulationManager->CanBotsAttackWhileInSpawnRoom())
+				AddCustomAttribute("no_attack", 1, 1.0f);
+		}
+	}
+	if (TFGameRules()->IsMannVsMachineMode() && cf_gamemode_mvmvs.GetBool() && GetTeamNumber() == TF_TEAM_PVE_INVADERS && !IsBot() && !TFGameRules()->InSetup())
+	{
+		SetContextThink(&CTFPlayer::MvMDeployBombThink, gpGlobals->curtime, "MvMDeployBombThink");
+	}
+	m_flLastThinkTime = gpGlobals->curtime;
+}
+
+bool CTFPlayer::MvMDeployUpgradeOverTime()
+{
+	CCaptureFlag* pCaptureFlag = dynamic_cast<CCaptureFlag*>(GetItem());
+	if (TFGameRules()->IsMannVsMachineMode())
+	{
+		if (pCaptureFlag)
+		{
+			if (IsMiniBoss())
+			{
+				m_upgradeLevel = -1;
+				if (TFObjectiveResource())
+				{
+					// Set threat level to max
+					TFObjectiveResource()->SetFlagCarrierUpgradeLevel(4);
+					TFObjectiveResource()->SetBaseMvMBombUpgradeTime(-1);
+					TFObjectiveResource()->SetNextMvMBombUpgradeTime(-1);
+				}
+			}
+			else if (m_upgradeLevel != -1)
+			{
+				if (PointInRespawnRoom(this, WorldSpaceCenter(), true))
+				{
+					// don't start counting down until we leave the spawn
+					m_upgradeTimer.Start(tf_mvm_bot_flag_carrier_interval_to_1st_upgrade.GetFloat());
+					TFObjectiveResource()->SetBaseMvMBombUpgradeTime(gpGlobals->curtime);
+					TFObjectiveResource()->SetNextMvMBombUpgradeTime(gpGlobals->curtime + m_upgradeTimer.GetRemainingTime());
+				}
+				// do defensive buff effect ourselves (since we're not a soldier)
+				if (m_upgradeLevel > 0 && m_buffPulseTimer.IsElapsed())
+				{
+					m_buffPulseTimer.Start(1.0f);
+
+					CUtlVector< CTFPlayer* > playerVector;
+					CollectPlayers(&playerVector, GetTeamNumber(), COLLECT_ONLY_LIVING_PLAYERS);
+
+					const float buffRadius = 450.0f;
+
+					for (int i = 0; i < playerVector.Count(); ++i)
+					{
+						Vector to = playerVector[i]->GetAbsOrigin() - GetAbsOrigin();
+						if (to.IsLengthLessThan(buffRadius))
+						{
+							playerVector[i]->m_Shared.AddCond(TF_COND_DEFENSEBUFF_NO_CRIT_BLOCK, 1.2f);
+						}
+					}
+				}
+
+				// the flag carrier gets stronger the longer he holds the flag
+				if (m_upgradeTimer.IsElapsed())
+				{
+					const int maxLevel = 3;
+
+					if (m_upgradeLevel < maxLevel)
+					{
+						++m_upgradeLevel;
+
+						TFGameRules()->BroadcastSound(255, "MVM.Warning");
+
+						switch (m_upgradeLevel)
+						{
+							//---------------------------------------
+						case 1:
+							m_upgradeTimer.Start(tf_mvm_bot_flag_carrier_interval_to_2nd_upgrade.GetFloat());
+
+							// permanent buff banner effect (handled above)
+
+							// update the objective resource so clients have the information
+							if (TFObjectiveResource())
+							{
+								TFObjectiveResource()->SetFlagCarrierUpgradeLevel(1);
+								TFObjectiveResource()->SetBaseMvMBombUpgradeTime(gpGlobals->curtime);
+								TFObjectiveResource()->SetNextMvMBombUpgradeTime(gpGlobals->curtime + m_upgradeTimer.GetRemainingTime());
+								TFGameRules()->HaveAllPlayersSpeakConceptIfAllowed(MP_CONCEPT_MVM_BOMB_CARRIER_UPGRADE1, TF_TEAM_PVE_DEFENDERS);
+								DispatchParticleEffect("mvm_levelup1", PATTACH_POINT_FOLLOW, this, "head");
+							}
+							return true;
+
+							//---------------------------------------
+						case 2:
+						{
+							static CSchemaAttributeDefHandle pAttrDef_HealthRegen("health regen");
+
+							m_upgradeTimer.Start(tf_mvm_bot_flag_carrier_interval_to_3rd_upgrade.GetFloat());
+
+							if (!pAttrDef_HealthRegen)
+							{
+								Warning("TFBotSpawner: Invalid attribute 'health regen'\n");
+							}
+							else
+							{
+								CAttributeList* pAttrList = GetAttributeList();
+								if (pAttrList)
+								{
+									pAttrList->SetRuntimeAttributeValue(pAttrDef_HealthRegen, tf_mvm_bot_flag_carrier_health_regen.GetFloat());
+								}
+							}
+
+							// update the objective resource so clients have the information
+							if (TFObjectiveResource())
+							{
+								TFObjectiveResource()->SetFlagCarrierUpgradeLevel(2);
+								TFObjectiveResource()->SetBaseMvMBombUpgradeTime(gpGlobals->curtime);
+								TFObjectiveResource()->SetNextMvMBombUpgradeTime(gpGlobals->curtime + m_upgradeTimer.GetRemainingTime());
+								TFGameRules()->HaveAllPlayersSpeakConceptIfAllowed(MP_CONCEPT_MVM_BOMB_CARRIER_UPGRADE2, TF_TEAM_PVE_DEFENDERS);
+								DispatchParticleEffect("mvm_levelup2", PATTACH_POINT_FOLLOW, this, "head");
+							}
+							return true;
+						}
+
+						//---------------------------------------
+						case 3:
+							// add critz
+							m_Shared.AddCond(TF_COND_CRITBOOSTED);
+
+							// update the objective resource so clients have the information
+							if (TFObjectiveResource())
+							{
+								TFObjectiveResource()->SetFlagCarrierUpgradeLevel(3);
+								TFObjectiveResource()->SetBaseMvMBombUpgradeTime(-1);
+								TFObjectiveResource()->SetNextMvMBombUpgradeTime(-1);
+								TFGameRules()->HaveAllPlayersSpeakConceptIfAllowed(MP_CONCEPT_MVM_BOMB_CARRIER_UPGRADE3, TF_TEAM_PVE_DEFENDERS);
+								DispatchParticleEffect("mvm_levelup3", PATTACH_POINT_FOLLOW, this, "head");
+							}
+							return true;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return false;
+}
 
 // MVM Versus - Robot Deploy code
 void CTFPlayer::MvMDeployBombThink()
@@ -2533,6 +3327,24 @@ void CTFPlayer::MvMDeployBombEnd()
 
 	SetDeployingBombState( TF_BOMB_DEPLOYING_NONE );
 }
+
+//void CTFPlayer::InputParse(inputdata_t& inputdata)
+//{
+//	test.RemoveAll();
+//	keyvalues->Clear();
+//	char filename[MAX_PATH];
+//	V_snprintf(filename, sizeof(filename), "scripts" "/%s.txt", inputdata.value.String());
+//	if (!keyvalues->LoadFromFile(filesystem, filename, "MOD")) {
+//		keyvalues->deleteThis();
+//		return;
+//	}
+//	FOR_EACH_SUBKEY(keyvalues, data)
+//	{
+//		test.AddToTail(data);
+//	}
+//	data = keyvalues->GetFirstSubKey();
+//	parse = 0;
+//}
 
 //-----------------------------------------------------------------------------
 // Purpose: Convert this player into a Sentry Buster
@@ -4622,7 +5434,7 @@ void CTFPlayer::Spawn()
 
 	SetMoveType( MOVETYPE_WALK );
 	BaseClass::Spawn();
-	
+
 	// Check if we should spawn at a teleporter for robot players (do this early before weapon initialization)
 	if ( GetTeamNumber() == TF_TEAM_PVE_INVADERS && TFGameRules() && TFGameRules()->IsMannVsMachineMode() )
 	{
@@ -5633,114 +6445,272 @@ void CTFPlayer::GiveDefaultItems()
 //-----------------------------------------------------------------------------
 void CTFPlayer::ManageBuilderWeapons( TFPlayerClassData_t *pData )
 {
-	// Collect all builders and validate them against the list of objects (below)
-	CUtlVector< CTFWeaponBuilder* > vecBuilderDestroyList;
-	for ( int i = 0; i < MAX_WEAPONS; ++i )
-	{
-		CTFWeaponBuilder *pBuilder = dynamic_cast< CTFWeaponBuilder* >( GetWeapon( i ) );
-		if ( !pBuilder )
-			continue;
+	if (IsPlayerClass(TF_CLASS_ENGINEER)) {
+		// Collect all builders and validate them against the list of objects (below)
+		CUtlVector< CTFWeaponBuilder* > vecBuilderDestroyList;
+		for (int i = 0; i < MAX_WEAPONS; ++i)
+		{
+			CTFWeaponBuilder* pBuilder = dynamic_cast<CTFWeaponBuilder*>(GetWeapon(i));
+			if (!pBuilder)
+				continue;
 
-		vecBuilderDestroyList.AddToTail( pBuilder );
+			//	vecBuilderDestroyList.AddToTail( pBuilder );
+		}
+
+		CEconItemView* pLoadoutBuilderItemView = NULL;
+
+		// Go through each object and see if we need to create or remove builders
+		for (int i = 0; i < OBJ_LAST; ++i)
+		{
+			if (!GetPlayerClass()->CanBuildObject(i))
+				continue;
+
+			// TODO:  Need to add support for "n" builders, rather hard-wired for two.
+			// Currently, the only class that uses more than one is the spy:
+			// - BUILDER is OBJ_ATTACHMENT_SAPPER, which is invoked via weapon selection (see objects.txt).
+			// - BUILDER2 is OBJ_SPY_TRAP, which is invoked via a build command from PDA3 (spy-specific).
+			int nLoadoutPos = LOADOUT_POSITION_BUILDING;
+			pLoadoutBuilderItemView = GetLoadoutItem(GetPlayerClass()->GetClassIndex(), nLoadoutPos, true);
+
+			// Do we have a specific builder for this object?
+			CTFWeaponBuilder* pBuilder = CTFPlayerSharedUtils::GetBuilderForObjectType(this, i);
+			CTFWeaponSapperTest* pSapper = dynamic_cast<CTFWeaponSapperTest*>(Weapon_OwnsThisID(TF_WEAPON_SAPPER_TEST));
+			if (pBuilder)
+			{
+				// We may have a different builder back-end item now.  If so, destroy and make a new one below.
+				CEconItemView* pCurrentBuilderItemView = pBuilder->GetAttributeContainer()->GetItem();
+				if (pCurrentBuilderItemView == NULL || pLoadoutBuilderItemView == NULL || !ItemsMatch(pData, pCurrentBuilderItemView, pLoadoutBuilderItemView, pBuilder))
+				{
+					//// Manually nuke the item from the weapon list here so that we don't find it 
+					//vecBuilderDestroyList.FindAndRemove( pBuilder );
+					//Weapon_Detach( pBuilder );
+					//UTIL_Remove( pBuilder );
+
+					//// Wrong builder item, so pretend we didn't find one
+					//pBuilder = NULL;
+				}
+			}
+			else if (!GetObjectInfo(i)->m_bRequiresOwnBuilder)
+			{
+				// Do we have a default builder, and an object that doesn't require a specific builder?
+				pBuilder = CTFPlayerSharedUtils::GetBuilderForObjectType(this, -1);
+				if (pBuilder)
+				{
+					// Flag it as supported by this builder (ugly, but necessary for legacy system)
+					pBuilder->SetObjectTypeAsBuildable(i);
+				}
+			}
+
+			// Is a new builder required?
+			if (!pBuilder || (GetObjectInfo(i)->m_bRequiresOwnBuilder && !(CTFPlayerSharedUtils::GetBuilderForObjectType(this, i))) || pSapper)
+			{
+				if (pSapper) {
+					CEconItemView econItem;
+					CSteamID ownerSteamID;
+					GetSteamID(&ownerSteamID);
+					econItem.Init(32029, AE_UNIQUE, AE_USE_SCRIPT_VALUE, true);
+					pBuilder = dynamic_cast<CTFWeaponSapper*>(GiveNamedItem("tf_weapon_sapper", 0, &econItem));
+					pBuilder->GetAttributeContainer()->GetItem()->SetOverrideAccountID(ownerSteamID.GetAccountID());
+
+				}
+				else {
+					pBuilder = dynamic_cast<CTFWeaponBuilder*>(GiveNamedItem("tf_weapon_builder", i, pLoadoutBuilderItemView));
+				}
+				if (pBuilder)
+				{
+					pBuilder->DefaultTouch(this);
+				}
+			}
+
+			// Builder settings
+			if (pBuilder)
+			{
+				CEconItemView econItem2;
+				CSteamID ownerSteamID;
+				GetSteamID(&ownerSteamID);
+				econItem2.Init(26, AE_UNIQUE, AE_USE_SCRIPT_VALUE, true);
+				CEconEntity* pEconEnt2 = dynamic_cast<CEconEntity*>(GiveNamedItem("tf_weapon_pda_engineer_destroy", 0, &econItem2));
+				if (pEconEnt2) {
+					pEconEnt2->GetAttributeContainer()->GetItem()->SetOverrideAccountID(ownerSteamID.GetAccountID());
+					pEconEnt2->GiveTo(this);
+				}
+				if (m_bRegenerating == false)
+				{
+					pBuilder->WeaponReset();
+				}
+
+				pBuilder->GiveDefaultAmmo();
+				pBuilder->ChangeTeam(GetTeamNumber());
+				if (pSapper) {
+					pBuilder->SetSubType(OBJ_ATTACHMENT_SAPPER);
+					pBuilder->m_iObjectModeSapper = MODE_SAPPER_ENGINEER;
+					pBuilder->m_bIsASapper = 1;
+					pBuilder->m_iSapperType = TYPE_SAPPER_DISPENSER_OVERHEAL;
+					pBuilder->SetObjectTypeAsBuildable(OBJ_ATTACHMENT_SAPPER);
+					pBuilder->m_iRechargeTime = 28;
+					//				UTIL_Remove(pSapper);
+					//				Weapon_Detach(pSapper);
+					pSapper->Remove();
+				}
+				else {
+					pBuilder->SetObjectTypeAsBuildable(i);
+				}
+				pBuilder->m_nSkin = GetTeamNumber() - 2;	// color the w_model to the team
+
+				// Pull it out of the "destroy" list
+				vecBuilderDestroyList.FindAndRemove(pBuilder);
+			}
+		}
+		// Check if PDA has pda_builds_pads attribute and add pad types as buildable
+		CTFWeaponBase* pPDA = dynamic_cast<CTFWeaponBase*>(Weapon_GetSlot(LOADOUT_POSITION_PDA));
+		if (pPDA)
+		{
+			int iBuildsPads = 0;
+			CALL_ATTRIB_HOOK_INT_ON_OTHER(pPDA, iBuildsPads, pda_builds_pads);
+			if (iBuildsPads != 0)
+			{
+				// Find a builder that can build teleporter (default builder)
+				CTFWeaponBuilder* pBuilder = CTFPlayerSharedUtils::GetBuilderForObjectType(this, OBJ_TELEPORTER);
+				if (pBuilder)
+				{
+					// Add pads as buildable types
+					pBuilder->SetObjectTypeAsBuildable(OBJ_SPEEDPAD);
+					pBuilder->SetObjectTypeAsBuildable(OBJ_JUMPPAD);
+				}
+			}
+			int iBuildsSappers = 0;
+			CALL_ATTRIB_HOOK_INT_ON_OTHER(pPDA, iBuildsSappers, pda_builds_sappers);
+			if (iBuildsSappers != 0)
+			{
+				// Find a builder that can build teleporter (default builder)
+				CTFWeaponBuilder* pBuilder = CTFPlayerSharedUtils::GetBuilderForObjectType(this, OBJ_TELEPORTER);
+				if (pBuilder)
+				{
+					// Add pads as buildable types
+					pBuilder->SetObjectTypeAsBuildable(OBJ_ATTACHMENT_SAPPER);
+				}
+			}
+		}
+
+		// Anything left should be destroyed
+	//	FOR_EACH_VEC( vecBuilderDestroyList, i )
+	//	{
+	//		Assert( vecBuilderDestroyList[i] );
+	//
+	//		Weapon_Detach( vecBuilderDestroyList[i] );
+	//		UTIL_Remove( vecBuilderDestroyList[i] );
+	//	}
 	}
-
-	CEconItemView *pLoadoutBuilderItemView = NULL;
-
-	// Go through each object and see if we need to create or remove builders
-	for ( int i = 0; i < OBJ_LAST; ++i )
-	{
-		if ( !GetPlayerClass()->CanBuildObject( i ) )
-			continue;
-
-		// TODO:  Need to add support for "n" builders, rather hard-wired for two.
-		// Currently, the only class that uses more than one is the spy:
-		// - BUILDER is OBJ_ATTACHMENT_SAPPER, which is invoked via weapon selection (see objects.txt).
-		// - BUILDER2 is OBJ_SPY_TRAP, which is invoked via a build command from PDA3 (spy-specific).
-		int nLoadoutPos = LOADOUT_POSITION_BUILDING;
-		pLoadoutBuilderItemView = GetLoadoutItem( GetPlayerClass()->GetClassIndex(), nLoadoutPos, true );
-
-		// Do we have a specific builder for this object?
-		CTFWeaponBuilder *pBuilder = CTFPlayerSharedUtils::GetBuilderForObjectType( this, i );
-		if ( pBuilder )
+	else {
+		// Collect all builders and validate them against the list of objects (below)
+		CUtlVector< CTFWeaponBuilder* > vecBuilderDestroyList;
+		for (int i = 0; i < MAX_WEAPONS; ++i)
 		{
-			// We may have a different builder back-end item now.  If so, destroy and make a new one below.
-			CEconItemView *pCurrentBuilderItemView = pBuilder->GetAttributeContainer()->GetItem();
-			if ( pCurrentBuilderItemView == NULL || pLoadoutBuilderItemView == NULL || !ItemsMatch( pData, pCurrentBuilderItemView, pLoadoutBuilderItemView, pBuilder ) )
-			{
-				// Manually nuke the item from the weapon list here so that we don't find it 
-				vecBuilderDestroyList.FindAndRemove( pBuilder );
-				Weapon_Detach( pBuilder );
-				UTIL_Remove( pBuilder );
+			CTFWeaponBuilder* pBuilder = dynamic_cast<CTFWeaponBuilder*>(GetWeapon(i));
+			if (!pBuilder)
+				continue;
 
-				// Wrong builder item, so pretend we didn't find one
-				pBuilder = NULL;
-			}
-		}
-		else if ( !GetObjectInfo( i )->m_bRequiresOwnBuilder )
-		{
-			// Do we have a default builder, and an object that doesn't require a specific builder?
-			pBuilder = CTFPlayerSharedUtils::GetBuilderForObjectType( this, -1 );
-			if ( pBuilder )
-			{
-				// Flag it as supported by this builder (ugly, but necessary for legacy system)
-				pBuilder->SetObjectTypeAsBuildable( i );
-			}
-		}
-				
-		// Is a new builder required?
-		if ( !pBuilder || ( GetObjectInfo( i )->m_bRequiresOwnBuilder && !( CTFPlayerSharedUtils::GetBuilderForObjectType( this, i ) ) ) )
-		{
-			pBuilder = dynamic_cast< CTFWeaponBuilder* >( GiveNamedItem( "tf_weapon_builder", i, pLoadoutBuilderItemView ) );
-			if ( pBuilder )
-			{
-				pBuilder->DefaultTouch( this );
-			}
+			vecBuilderDestroyList.AddToTail(pBuilder);
 		}
 
-		// Builder settings
-		if ( pBuilder )
+		CEconItemView* pLoadoutBuilderItemView = NULL;
+
+		// Go through each object and see if we need to create or remove builders
+		for (int i = 0; i < OBJ_LAST; ++i)
 		{
-			if ( m_bRegenerating == false )
+			if (!GetPlayerClass()->CanBuildObject(i))
+				continue;
+
+			// TODO:  Need to add support for "n" builders, rather hard-wired for two.
+			// Currently, the only class that uses more than one is the spy:
+			// - BUILDER is OBJ_ATTACHMENT_SAPPER, which is invoked via weapon selection (see objects.txt).
+			// - BUILDER2 is OBJ_SPY_TRAP, which is invoked via a build command from PDA3 (spy-specific).
+			int nLoadoutPos = LOADOUT_POSITION_BUILDING;
+			pLoadoutBuilderItemView = GetLoadoutItem(GetPlayerClass()->GetClassIndex(), nLoadoutPos, true);
+
+			// Do we have a specific builder for this object?
+			CTFWeaponBuilder* pBuilder = CTFPlayerSharedUtils::GetBuilderForObjectType(this, i);
+			if (pBuilder)
 			{
-				pBuilder->WeaponReset();
+				// We may have a different builder back-end item now.  If so, destroy and make a new one below.
+				CEconItemView* pCurrentBuilderItemView = pBuilder->GetAttributeContainer()->GetItem();
+				if (pCurrentBuilderItemView == NULL || pLoadoutBuilderItemView == NULL || !ItemsMatch(pData, pCurrentBuilderItemView, pLoadoutBuilderItemView, pBuilder))
+				{
+					// Manually nuke the item from the weapon list here so that we don't find it 
+					vecBuilderDestroyList.FindAndRemove(pBuilder);
+					Weapon_Detach(pBuilder);
+					UTIL_Remove(pBuilder);
+
+					// Wrong builder item, so pretend we didn't find one
+					pBuilder = NULL;
+				}
+			}
+			else if (!GetObjectInfo(i)->m_bRequiresOwnBuilder)
+			{
+				// Do we have a default builder, and an object that doesn't require a specific builder?
+				pBuilder = CTFPlayerSharedUtils::GetBuilderForObjectType(this, -1);
+				if (pBuilder)
+				{
+					// Flag it as supported by this builder (ugly, but necessary for legacy system)
+					pBuilder->SetObjectTypeAsBuildable(i);
+				}
 			}
 
-			pBuilder->GiveDefaultAmmo();
-			pBuilder->ChangeTeam( GetTeamNumber() );
-			pBuilder->SetObjectTypeAsBuildable( i );
-			pBuilder->m_nSkin = GetTeamNumber() - 2;	// color the w_model to the team
-
-			// Pull it out of the "destroy" list
-			vecBuilderDestroyList.FindAndRemove( pBuilder );
-		}
-	}
-
-	// Check if PDA has pda_builds_pads attribute and add pad types as buildable
-	CTFWeaponBase *pPDA = dynamic_cast<CTFWeaponBase*>( Weapon_GetSlot( LOADOUT_POSITION_PDA ) );
-	if ( pPDA )
-	{
-		int iBuildsPads = 0;
-		CALL_ATTRIB_HOOK_INT_ON_OTHER( pPDA, iBuildsPads, pda_builds_pads );
-		if ( iBuildsPads != 0 )
-		{
-			// Find a builder that can build teleporter (default builder)
-			CTFWeaponBuilder *pBuilder = CTFPlayerSharedUtils::GetBuilderForObjectType( this, OBJ_TELEPORTER );
-			if ( pBuilder )
+			// Is a new builder required?
+			if (!pBuilder || (GetObjectInfo(i)->m_bRequiresOwnBuilder && !(CTFPlayerSharedUtils::GetBuilderForObjectType(this, i))))
 			{
-				// Add pads as buildable types
-				pBuilder->SetObjectTypeAsBuildable( OBJ_SPEEDPAD );
-				pBuilder->SetObjectTypeAsBuildable( OBJ_JUMPPAD );
+				pBuilder = dynamic_cast<CTFWeaponBuilder*>(GiveNamedItem("tf_weapon_builder", i, pLoadoutBuilderItemView));
+				if (pBuilder)
+				{
+					pBuilder->DefaultTouch(this);
+				}
+			}
+
+			// Builder settings
+			if (pBuilder)
+			{
+				if (m_bRegenerating == false)
+				{
+					pBuilder->WeaponReset();
+				}
+
+				pBuilder->GiveDefaultAmmo();
+				pBuilder->ChangeTeam(GetTeamNumber());
+				pBuilder->SetObjectTypeAsBuildable(i);
+				pBuilder->m_nSkin = GetTeamNumber() - 2;	// color the w_model to the team
+
+				// Pull it out of the "destroy" list
+				vecBuilderDestroyList.FindAndRemove(pBuilder);
 			}
 		}
-	}
 
-	// Anything left should be destroyed
-	FOR_EACH_VEC( vecBuilderDestroyList, i )
-	{
-		Assert( vecBuilderDestroyList[i] );
+		// Check if PDA has pda_builds_pads attribute and add pad types as buildable
+		CTFWeaponBase* pPDA = dynamic_cast<CTFWeaponBase*>(Weapon_GetSlot(LOADOUT_POSITION_PDA));
+		if (pPDA)
+		{
+			int iBuildsPads = 0;
+			CALL_ATTRIB_HOOK_INT_ON_OTHER(pPDA, iBuildsPads, pda_builds_pads);
+			if (iBuildsPads != 0)
+			{
+				// Find a builder that can build teleporter (default builder)
+				CTFWeaponBuilder* pBuilder = CTFPlayerSharedUtils::GetBuilderForObjectType(this, OBJ_TELEPORTER);
+				if (pBuilder)
+				{
+					// Add pads as buildable types
+					pBuilder->SetObjectTypeAsBuildable(OBJ_SPEEDPAD);
+					pBuilder->SetObjectTypeAsBuildable(OBJ_JUMPPAD);
+				}
+			}
+		}
 
-		Weapon_Detach( vecBuilderDestroyList[i] );
-		UTIL_Remove( vecBuilderDestroyList[i] );
+		// Anything left should be destroyed
+		FOR_EACH_VEC(vecBuilderDestroyList, i)
+		{
+			Assert(vecBuilderDestroyList[i]);
+
+			Weapon_Detach(vecBuilderDestroyList[i]);
+			UTIL_Remove(vecBuilderDestroyList[i]);
+		}
 	}
 }
 
@@ -5813,8 +6783,8 @@ bool CTFPlayer::ItemIsAllowed( CEconItemView *pItem )
 	int iSlot = pItem->GetStaticData()->GetLoadoutSlot(iClass);
 
 	// Ban all cosmetics: head, misc, misc2
-	if (iSlot == LOADOUT_POSITION_HEAD || iSlot == LOADOUT_POSITION_MISC || iSlot == LOADOUT_POSITION_MISC2)
-		return false;
+//	if (iSlot == LOADOUT_POSITION_HEAD || iSlot == LOADOUT_POSITION_MISC || iSlot == LOADOUT_POSITION_MISC2)
+//		return false;
 
 	// Passtime hack to allow passtime gun
 	if ( V_stristr( pItem->GetItemDefinition()->GetDefinitionName(), "passtime" ) )
@@ -8739,7 +9709,7 @@ bool CTFPlayer::ClientCommand( const CCommand &args )
 	const char *pcmd = args[0];
 	
 	m_flLastAction = gpGlobals->curtime;
-
+	
 	// Better Fortress - Add attribute shortcuts
 	if ( FStrEq( pcmd, "addgunattr" ) )
 	{
@@ -8980,7 +9950,7 @@ bool CTFPlayer::ClientCommand( const CCommand &args )
 		{
 			// player clicked on the PDA, play attack animation
 			CTFWeaponBase *pWpn = GetActiveTFWeapon();
-			CTFWeaponPDA *pPDA = dynamic_cast<CTFWeaponPDA *>( pWpn );
+			CTFWeaponBase* pPDA = dynamic_cast<CTFWeaponBase*>(pWpn);
 
 			if ( pPDA && !m_Shared.InCond( TF_COND_DISGUISED ) )
 			{
@@ -9806,13 +10776,18 @@ void CTFPlayer::TraceAttack( const CTakeDamageInfo &info, const Vector &vecDir, 
 		{
 			CTFWeaponBase *pWpn = pAttacker->GetActiveTFWeapon();
 			bool bCritical = true;
+			bool bMiniCritical = false;
 			bIsHeadshot = true;
 
 			if ( pWpn && !pWpn->CanFireCriticalShot( true, this ) )
 			{
 				bCritical = false;
 			}
-
+			int iMiniCritHeadshot = 0;
+			CALL_ATTRIB_HOOK_INT_ON_OTHER(info.GetInflictor(), iMiniCritHeadshot, minicrit_headshot);
+			if (iMiniCritHeadshot) {
+				bMiniCritical = true;
+			}
 			int iBackheadshot = 0;
 			CALL_ATTRIB_HOOK_INT_ON_OTHER( info.GetInflictor(), iBackheadshot, back_headshot );
 			if ( iBackheadshot )
@@ -9841,7 +10816,9 @@ void CTFPlayer::TraceAttack( const CTakeDamageInfo &info, const Vector &vecDir, 
 			if ( bCritical )
 			{
 				info_modified.AddDamageType( DMG_CRITICAL );
-
+				if (bMiniCritical) {
+					info_modified.SetCritType(CTakeDamageInfo::CRIT_MINI);
+				}
 				int iDecapType = 0;
 				CALL_ATTRIB_HOOK_INT_ON_OTHER ( pAttacker, iDecapType, decapitate_type);
 				if ( iDecapType > 0 ) 
@@ -11211,7 +12188,6 @@ int CTFPlayer::OnTakeDamage( const CTakeDamageInfo &inputInfo )
 
 	float flRageScale = 1.0f;
 	CALL_ATTRIB_HOOK_FLOAT( flRageScale, rage_giving_scale );
-
 	// Give the soldier/pyro some rage points for dealing/taking damage.
 	if ( bTookDamage && pTFAttacker != this )
 	{

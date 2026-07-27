@@ -190,7 +190,7 @@ protected:
 	CUtlVector< EHANDLE >	m_hTouchingEntities;
 
 	float m_flNextAmmoDispense;
-
+	bool bWaitingToCheck;
 	bool m_bThrown;
 
 	string_t m_iszCustomTouchTrigger;

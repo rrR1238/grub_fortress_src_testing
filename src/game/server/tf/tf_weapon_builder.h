@@ -82,17 +82,21 @@ public:
 
 	virtual void	WeaponReset( void );
 
-	virtual float	InternalGetEffectBarRechargeTime( void ) { return 15.0; }
+	virtual float	InternalGetEffectBarRechargeTime( void ) { return m_iRechargeTime; }
 	virtual int		GetEffectBarAmmo( void ) { return TF_AMMO_GRENADES2; }
 
 public:
 	CNetworkVar( int, m_iBuildState );
+	CNetworkVar(float, m_iRechargeTime);
 	CNetworkVar( unsigned int, m_iObjectType );
 	CNetworkVar( unsigned int, m_iObjectMode );
 	CNetworkVar( bool, m_bRoboSapper );
+	CNetworkVar(bool, m_bIsASapper);
+	CNetworkVar(bool, m_bBuiltASapper);
 	CNetworkVar( float, m_flWheatleyTalkingUntil );
 	CNetworkArray( bool, m_aBuildableObjectTypes, OBJ_LAST );
-
+	int m_iObjectModeSapper;
+	int m_iSapperType;
 	CNetworkHandle( CBaseObject, m_hObjectBeingBuilt );
 
 	int m_iValidBuildPoseParam;
@@ -103,7 +107,7 @@ public:
 	float		m_flNextVoicePakIdleStartTime;
 	KeyValues	*m_pkvWavList;
 	int			m_iSapState;
-	
+
 	float		m_flWheatleyLastDamage;
 	float		m_flWheatleyLastDeploy;
 	float		m_flWheatleyLastHolster;
@@ -146,9 +150,11 @@ public:
 	virtual void		ItemPostFrame( void );
 
 	// ITFChargeUpWeapon
-	virtual bool CanCharge( void )				{ return GetChargeMaxTime() > 0; }
-	virtual float GetChargeBeginTime( void )	{ return m_flChargeBeginTime; }
-	virtual float GetChargeMaxTime( void )		{ float flChargeTime = 0; CALL_ATTRIB_HOOK_FLOAT( flChargeTime, sapper_deploy_time ); return flChargeTime; };
+	virtual bool CanCharge(void) { return true; }// GetChargeMaxTime() > 0
+	virtual float GetChargeBeginTime( void )	{ return 1; } // m_flChargeBeginTime
+	virtual float GetChargeMaxTime( void )		{ float flChargeTime = 0; CALL_ATTRIB_HOOK_FLOAT( flChargeTime, sapper_deploy_time ); return 15; };
+	virtual int		GetWeaponID(void) const { return TF_WEAPON_SAPPER; }
+
 
 	virtual const char *GetViewModel( int iViewModel ) const;
 	virtual const char *GetWorldModel( void ) const;

@@ -127,8 +127,8 @@ objects
 		MaxUpgradeLevel		0
 		BuilderWeaponName	"Object Sapper"
 		BuilderPlacementString	"Place on object"
-		SelectionSlot		1
-		SelectionPosition	0
+		SelectionSlot		5
+		SelectionPosition	3
 		SapperAttachTime	0.0
 		IconActive			obj_attachment_sapper
 		IconInactive		obj_attachment_sapper

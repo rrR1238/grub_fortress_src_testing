@@ -66,9 +66,12 @@ END_NETWORK_TABLE()
 
 BEGIN_NETWORK_TABLE( C_TFWeaponBuilder, DT_TFWeaponBuilder )
 	RecvPropInt( RECVINFO(m_iBuildState) ),
+	RecvPropFloat(RECVINFO(m_iRechargeTime)),
 	RecvPropDataTable( "BuilderLocalData", 0, 0, &REFERENCE_RECV_TABLE( DT_BuilderLocalData ) ),
 	RecvPropInt( RECVINFO(m_iObjectMode) ),
 	RecvPropFloat( RECVINFO( m_flWheatleyTalkingUntil) ),
+	RecvPropBool(RECVINFO(m_bIsASapper)),
+	RecvPropBool(RECVINFO(m_bBuiltASapper)),
 END_RECV_TABLE()
 
 
@@ -78,6 +81,8 @@ END_RECV_TABLE()
 IMPLEMENT_NETWORKCLASS_ALIASED( TFWeaponSapper, DT_TFWeaponSapper )
 BEGIN_NETWORK_TABLE( C_TFWeaponSapper, DT_TFWeaponSapper )
 	RecvPropFloat( RECVINFO( m_flChargeBeginTime ) ),
+	RecvPropBool(RECVINFO(m_bIsASapper)),
+	RecvPropBool(RECVINFO(m_bBuiltASapper)),
 END_NETWORK_TABLE()
 
 
@@ -87,6 +92,7 @@ END_NETWORK_TABLE()
 C_TFWeaponBuilder::C_TFWeaponBuilder()
 {
 	m_iBuildState = 0;
+	m_iRechargeTime = 15;
 	m_iObjectType = BUILDER_INVALID_OBJECT;
 	m_pSelectionTextureActive = NULL;
 	m_pSelectionTextureInactive = NULL;
@@ -244,7 +250,15 @@ bool C_TFWeaponBuilder::IsPlacingObject( void )
 //-----------------------------------------------------------------------------
 int C_TFWeaponBuilder::GetSlot( void ) const
 {
-	return GetObjectInfo( m_iObjectType )->m_SelectionSlot;
+	if (GetTFPlayerOwner()->GetPlayerClass()->GetClassIndex() == TF_CLASS_ENGINEER) {
+		return 5;
+	}
+	else if (GetTFPlayerOwner()->GetPlayerClass()->GetClassIndex() == TF_CLASS_SPY) {
+		return 1;
+	}
+	else {
+		return GetObjectInfo(m_iObjectType)->m_SelectionSlot;
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -252,7 +266,7 @@ int C_TFWeaponBuilder::GetSlot( void ) const
 //-----------------------------------------------------------------------------
 int C_TFWeaponBuilder::GetPosition( void ) const
 {
-	return GetObjectInfo( m_iObjectType )->m_SelectionPosition;
+	return 0;
 }
 
 //-----------------------------------------------------------------------------

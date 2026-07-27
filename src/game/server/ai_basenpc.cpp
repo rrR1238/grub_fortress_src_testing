@@ -9558,7 +9558,7 @@ void CAI_BaseNPC::CollectShotStats( const Vector &vecShootOrigin, const Vector &
 #endif
 }
 
-#ifdef HL2_DLL
+
 //-----------------------------------------------------------------------------
 // Purpose: Return the actual position the NPC wants to fire at when it's trying
 //			to hit it's current enemy.
@@ -9752,14 +9752,14 @@ Vector CAI_BaseNPC::GetActualShootTrajectory( const Vector &shootOrigin )
 
 	// Apply appropriate accuracy.
 	bool bUsePerfectAccuracy = false;
-	if ( GetEnemy() && GetEnemy()->Classify() == CLASS_BULLSEYE )
-	{
-		CNPC_Bullseye *pBullseye = dynamic_cast<CNPC_Bullseye*>(GetEnemy()); 
-		if ( pBullseye && pBullseye->UsePerfectAccuracy() )
-		{
-			bUsePerfectAccuracy = true;
-		}
-	}
+	//if ( GetEnemy() && GetEnemy()->Classify() == CLASS_BULLSEYE )
+	//{
+	//	CNPC_Bullseye *pBullseye = dynamic_cast<CNPC_Bullseye*>(GetEnemy()); 
+	//	if ( pBullseye && pBullseye->UsePerfectAccuracy() )
+	//	{
+	//		bUsePerfectAccuracy = true;
+	//	}
+	//}
 
 	if ( !bUsePerfectAccuracy )
 	{
@@ -9797,7 +9797,7 @@ Vector CAI_BaseNPC::GetActualShootTrajectory( const Vector &shootOrigin )
 
 	return shotDir;
 }
-#endif // HL2_DLL
+
 
 //-----------------------------------------------------------------------------
 

@@ -22,10 +22,17 @@ static const float DAMAGE_TO_FILL_MINICRIT_METER = 100.0f;
 // ---------- Regular SMG -------------
 
 CREATE_SIMPLE_WEAPON_TABLE( TFSMG, tf_weapon_smg )
+CREATE_SIMPLE_WEAPON_TABLE(TFSMG_PRIMARY, tf_weapon_smg_primary)
 
 // Server specific.
 #ifndef CLIENT_DLL
 BEGIN_DATADESC( CTFSMG )
+END_DATADESC()
+#endif
+
+// Server specific.
+#ifndef CLIENT_DLL
+BEGIN_DATADESC(CTFSMG_PRIMARY)
 END_DATADESC()
 #endif
 
@@ -90,6 +97,38 @@ bool CTFSMG::CanFireCriticalShot( bool bIsHeadshot, CBaseEntity *pTarget /*= NUL
 		return true;
 
 	if ( !bIsHeadshot )
+		return !CanHeadshot();
+
+	return true;
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
+int	CTFSMG_PRIMARY::GetDamageType(void) const
+{
+	if (CanHeadshot())
+	{
+		int iDamageType = BaseClass::GetDamageType() | DMG_USE_HITLOCATIONS;
+		return iDamageType;
+	}
+
+	return BaseClass::GetDamageType();
+}
+
+//-----------------------------------------------------------------------------
+// Purpose:
+//-----------------------------------------------------------------------------
+bool CTFSMG_PRIMARY::CanFireCriticalShot(bool bIsHeadshot, CBaseEntity* pTarget /*= NULL*/)
+{
+	if (!BaseClass::CanFireCriticalShot(bIsHeadshot, pTarget))
+		return false;
+
+	CTFPlayer* pPlayer = GetTFPlayerOwner();
+	if (pPlayer && pPlayer->m_Shared.IsCritBoosted())
+		return true;
+
+	if (!bIsHeadshot)
 		return !CanHeadshot();
 
 	return true;

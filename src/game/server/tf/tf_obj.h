@@ -198,9 +198,13 @@ public:
 
 	// Sappers
 	CObjectSapper*	GetSapper( void );
+	int				GetSapperMode(void);
 	bool			HasSapper( void );
+	bool			HasFriendlySapper(void);
+	int				GetSapperType(void);
+	void			SetSapperType(int iSapperType);
 	bool			IsPlasmaDisabled( void );
-	void			OnAddSapper( void );
+	void			OnAddSapper( int iSapperType = 1 );
 	void			OnRemoveSapper( void );
 
 	// Returns the object flags
@@ -474,6 +478,8 @@ private:
 
 	// Sapper on me
 	CNetworkVar( bool, m_bHasSapper );
+	CNetworkVar(bool, m_bHasFriendlySapper);
+	CNetworkVar(int, m_iSapperType);
 
 	// Build points
 	CUtlVector<BuildPoint_t>	m_BuildPoints;

@@ -16,6 +16,7 @@
 #include "tf_obj_teleporter.h"
 #include "tf_weapon_builder.h"
 #include "tf_fx.h"
+#include "tf_weapon_sapper_test.h"
 
 #include "bot/tf_bot.h"
 
@@ -80,11 +81,37 @@ void CObjectSapper::UpdateOnRemove()
 	BaseClass::UpdateOnRemove();
 }
 
+bool CObjectSapper::IsAnUpgrade()
+{
+	if (GetBuilder()->IsPlayerClass(TF_CLASS_SPY)) {
+		return false;
+	}
+	else if (GetBuilder()->IsPlayerClass(TF_CLASS_ENGINEER)) {
+		return true;
+	}
+
+	return false;
+}
+
+bool CObjectSapper::IsHostileUpgrade() {
+	if (GetBuilder()->IsPlayerClass(TF_CLASS_SPY)) {
+		return true;
+	}
+	else if (GetBuilder()->IsPlayerClass(TF_CLASS_ENGINEER)) {
+		return false;
+	}
+
+	return true;
+}
+
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
 void CObjectSapper::Spawn()
 {
+	if (GetBuilder() && GetBuilder()->IsPlayerClass(TF_CLASS_ENGINEER)) {
+		SetModel(g_sapperPlacementModel);
+	}
 	SetModel( GetSapperModelName( SAPPER_MODEL_PLACEMENT ) );
 
 	m_takedamage = DAMAGE_YES;
@@ -188,7 +215,12 @@ void CObjectSapper::FinishedBuilding( void )
 	{
 		if ( GetParentObject() )
 		{
-			GetParentObject()->OnAddSapper();
+			if (GetBuilder()->IsPlayerClass(TF_CLASS_ENGINEER)) {
+				GetParentObject()->OnAddSapper(MODE_SAPPER_ENGINEER);
+			}
+			else {
+				GetParentObject()->OnAddSapper();
+			}
 
 			CBaseObject *pObject = dynamic_cast<CBaseObject *>( m_hBuiltOnEntity.Get() );
 			if ( pObject )
@@ -217,7 +249,13 @@ void CObjectSapper::FinishedBuilding( void )
 	}
 
 	EmitSound( "Weapon_Sapper.Plant" );
-	EmitSound( GetSapperSoundName() );	// start looping "Weapon_Sapper.Timer", killed when we die
+
+	if (GetBuilder() && GetBuilder()->IsPlayerClass(TF_CLASS_ENGINEER)) {
+		EmitSound("Weapon_Sapper.Timer");
+	}
+	else {
+		EmitSound(GetSapperSoundName());	// start looping "Weapon_Sapper.Timer", killed when we die
+	}
 
 	m_flSapperDamageAccumulator = 0;
 	m_flLastThinkTime = gpGlobals->curtime;
@@ -239,7 +277,12 @@ void CObjectSapper::SetupAttachedVersion( void )
 		CBaseEntity *pEntity = m_hBuiltOnEntity.Get();
 		if ( pEntity )
 		{
-			SetModel( GetSapperModelName( SAPPER_MODEL_PLACEMENT ) );
+			if (GetBuilder() && GetBuilder()->IsPlayerClass(TF_CLASS_ENGINEER)) {
+				SetModel(g_sapperPlacementModel);
+			}
+			else {
+				SetModel(GetSapperModelName(SAPPER_MODEL_PLACEMENT));
+			}
 		}
 	}
 
@@ -256,19 +299,26 @@ void CObjectSapper::OnGoActive( void )
 
 	// set new model
 	CBaseEntity *pEntity = m_hBuiltOnEntity.Get();
-
+	CTFWeaponSapper* pBuilderWep = dynamic_cast<CTFWeaponSapper*>(GetBuilder()->Weapon_OwnsThisID(TF_WEAPON_SAPPER));
+	if (pBuilderWep) {
+		pBuilderWep->m_bBuiltASapper = true;
+	}
 	m_flSelfDestructTime = 0;
-	CTFPlayer *pBuilder = ToTFPlayer( GetBuilder() );
-
+	CTFPlayer *pBuilder = ToTFPlayer( GetBuilder() );	
 	if ( pEntity )
 	{
-		SetModel( GetSapperModelName( SAPPER_MODEL_PLACED ) );
-		
+		if(GetBuilder() && GetBuilder()->IsPlayerClass(TF_CLASS_ENGINEER)) {
+			SetModel( g_sapperModel );
+			m_flSelfDestructTime = gpGlobals->curtime + 8;
+		}
+		else {
+			SetModel(GetSapperModelName(SAPPER_MODEL_PLACED));
+		}
 		if ( pEntity->IsPlayer() )	// Sapped bot in MvM mode, or player in bountymode
 		{
 			float flTime = 4.f;
 
-			if ( pBuilder )
+			if ( pBuilder && !pBuilder->IsPlayerClass(TF_CLASS_ENGINEER) )
 			{
 				int iRoboSapper = 0;
 				CALL_ATTRIB_HOOK_INT_ON_OTHER( pBuilder, iRoboSapper, robo_sapper );
@@ -425,6 +475,7 @@ const char* CObjectSapper::GetSapperSoundName( void )
 			return "Weapon_Sapper.Timer";
 		}
 
+
 		char szModelName[ _MAX_PATH ];
 		V_FileBase( pchModelName, szModelName, sizeof( szModelName ) );
 
@@ -443,12 +494,30 @@ void CObjectSapper::SapperThink( void )
 {
 	if ( !GetTeam() )
 		return;
-
+	CTFPlayer* pBuilder = GetBuilder();
 	bool bThink = true;
-
 	CBaseEntity *pEntity = m_hBuiltOnEntity.Get();
 	if ( pEntity )
 	{
+		if (GetBuilder()->IsPlayerClass(TF_CLASS_ENGINEER)) {
+			bool bDestroy = false;
+			if (gpGlobals->curtime >= m_flSelfDestructTime)
+			{
+				bDestroy = true;
+				Explode();
+			}
+
+			if (bDestroy)
+			{
+				CTFWeaponSapper* pBuilder = dynamic_cast<CTFWeaponSapper*>(GetBuilder()->Weapon_OwnsThisID(TF_WEAPON_SAPPER));
+				if (pBuilder) {
+					pBuilder->m_bBuiltASapper = false;
+				}
+				DestroyObject();
+				bThink = false;
+				return;
+			}
+		}
 		if ( pEntity->IsPlayer() )	// sapping bots in MvM mode
 		{
 			bool bDestroy = false;
@@ -487,64 +556,66 @@ void CObjectSapper::SapperThink( void )
 			if ( !pObject->IsAlive() || pObject->IsDying() )
 				return;
 
-			CTFPlayer *pBuilder = GetBuilder();
-
-			// how much damage to give this think?
-			float flTimeSinceLastThink = gpGlobals->curtime - m_flLastThinkTime;
-			float flDamageToGive = ( flTimeSinceLastThink ) * obj_sapper_amount.GetFloat();
-			CALL_ATTRIB_HOOK_FLOAT_ON_OTHER( pBuilder, flDamageToGive, mult_sapper_damage );
-
-			// add to accumulator
-			m_flSapperDamageAccumulator += flDamageToGive;
-
-			int iDamage = (int)m_flSapperDamageAccumulator;
-
-			m_flSapperDamageAccumulator -= iDamage;
-
-			// sapper building damage added to health of Vampire Powerup carrier
-			if ( TFGameRules() && TFGameRules()->IsPowerupMode() )
-			{
-				CTFPlayer *pTFOwner = ToTFPlayer( GetOwner() ); 
-			
-				if ( pTFOwner && pTFOwner->m_Shared.GetCarryingRuneType() == RUNE_VAMPIRE )
-				{
-					pTFOwner->TakeHealth( flDamageToGive, DMG_GENERIC );
-				}
+			if (pBuilder->IsPlayerClass(TF_CLASS_ENGINEER)) {
+				
 			}
+			else {
+				// how much damage to give this think?
+				float flTimeSinceLastThink = gpGlobals->curtime - m_flLastThinkTime;
+				float flDamageToGive = (flTimeSinceLastThink)*obj_sapper_amount.GetFloat();
+				CALL_ATTRIB_HOOK_FLOAT_ON_OTHER(pBuilder, flDamageToGive, mult_sapper_damage);
 
-			int iCustomDamage = 0;
-			if ( GetReversesBuildingConstructionSpeed() != 0.0f )
-			{
-				iCustomDamage = TF_DMG_CUSTOM_SAPPER_RECORDER_DEATH;
-			}
+				// add to accumulator
+				m_flSapperDamageAccumulator += flDamageToGive;
 
-			CTakeDamageInfo info;
-			info.SetDamage( iDamage );
-			info.SetAttacker( this );
-			info.SetInflictor( this );
-			info.SetDamageType( DMG_CRUSH );
-			info.SetDamageCustom( iCustomDamage );
+				int iDamage = (int)m_flSapperDamageAccumulator;
 
-			pObject->TakeDamage( info );
+				m_flSapperDamageAccumulator -= iDamage;
 
-			if ( gpGlobals->curtime - m_flLastHealthLeachTime > 1.0f )
-			{
-				m_flLastHealthLeachTime = gpGlobals->curtime;
-
-				float flHealOwnerPerSecond = 0.0f;
-				CALL_ATTRIB_HOOK_INT_ON_OTHER( pBuilder, flHealOwnerPerSecond, sapper_damage_leaches_health );
-
-				if ( flHealOwnerPerSecond )
+				// sapper building damage added to health of Vampire Powerup carrier
+				if (TFGameRules() && TFGameRules()->IsPowerupMode())
 				{
-					CTFPlayer *pSpyOwner = GetOwner();
-					if ( pSpyOwner && pSpyOwner->IsAlive() )
+					CTFPlayer* pTFOwner = ToTFPlayer(GetOwner());
+
+					if (pTFOwner && pTFOwner->m_Shared.GetCarryingRuneType() == RUNE_VAMPIRE)
 					{
-						pSpyOwner->TakeHealth( flHealOwnerPerSecond, DMG_IGNORE_MAXHEALTH );
-						pSpyOwner->m_Shared.HealthKitPickupEffects( flHealOwnerPerSecond );
+						pTFOwner->TakeHealth(flDamageToGive, DMG_GENERIC);
+					}
+				}
+
+				int iCustomDamage = 0;
+				if (GetReversesBuildingConstructionSpeed() != 0.0f)
+				{
+					iCustomDamage = TF_DMG_CUSTOM_SAPPER_RECORDER_DEATH;
+				}
+
+				CTakeDamageInfo info;
+				info.SetDamage(iDamage);
+				info.SetAttacker(this);
+				info.SetInflictor(this);
+				info.SetDamageType(DMG_CRUSH);
+				info.SetDamageCustom(iCustomDamage);
+
+				pObject->TakeDamage(info);
+
+				if (gpGlobals->curtime - m_flLastHealthLeachTime > 1.0f)
+				{
+					m_flLastHealthLeachTime = gpGlobals->curtime;
+
+					float flHealOwnerPerSecond = 0.0f;
+					CALL_ATTRIB_HOOK_INT_ON_OTHER(pBuilder, flHealOwnerPerSecond, sapper_damage_leaches_health);
+
+					if (flHealOwnerPerSecond)
+					{
+						CTFPlayer* pSpyOwner = GetOwner();
+						if (pSpyOwner && pSpyOwner->IsAlive())
+						{
+							pSpyOwner->TakeHealth(flHealOwnerPerSecond, DMG_IGNORE_MAXHEALTH);
+							pSpyOwner->m_Shared.HealthKitPickupEffects(flHealOwnerPerSecond);
+						}
 					}
 				}
 			}
-
 		}
 	}
 

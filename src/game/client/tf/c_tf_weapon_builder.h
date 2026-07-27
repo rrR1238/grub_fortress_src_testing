@@ -74,7 +74,7 @@ public:
 
 	virtual CStudioHdr *OnNewModel( void );
 
-	virtual float		InternalGetEffectBarRechargeTime( void ) { return 15.0; }
+	virtual float		InternalGetEffectBarRechargeTime( void ) { return m_iRechargeTime; }
 	virtual int			GetEffectBarAmmo( void ) { return TF_AMMO_GRENADES2; }
 	float				GetProgress( void ) { return GetEffectBarProgress(); }
 	const char*			GetEffectLabelText( void ) { return "#TF_Sapper"; }
@@ -83,10 +83,13 @@ public:
 public:
 	// Builder Data
 	int			m_iBuildState;
+	float m_iRechargeTime;
 	unsigned int m_iObjectType;
 	unsigned int m_iObjectMode;
 	float		m_flStartTime;
 	float		m_flTotalTime;
+	bool		m_bIsASapper;
+	bool		m_bBuiltASapper;
 
 	CHudTexture *m_pSelectionTextureActive;
 	CHudTexture *m_pSelectionTextureInactive;
@@ -116,9 +119,13 @@ public:
 	//DECLARE_PREDICTABLE();
 
 	// ITFChargeUpWeapon
-	virtual bool CanCharge( void )				{ return GetChargeMaxTime() > 0; }
-	virtual float GetChargeBeginTime( void )	{ return m_flChargeBeginTime; }
-	virtual float GetChargeMaxTime( void )		{ float flChargeTime = 0; CALL_ATTRIB_HOOK_FLOAT( flChargeTime, sapper_deploy_time ); return flChargeTime; };
+	//virtual bool CanCharge( void )				{ return GetChargeMaxTime() > 0; }
+	//virtual float GetChargeBeginTime( void )	{ return m_flChargeBeginTime; }
+	//virtual float GetChargeMaxTime( void )		{ float flChargeTime = 0; CALL_ATTRIB_HOOK_FLOAT( flChargeTime, sapper_deploy_time ); return flChargeTime; };
+	virtual bool CanCharge(void) { return true; } // GetChargeMaxTime() > 0
+	virtual float GetChargeBeginTime(void) { return 1; } // m_flChargeBeginTime
+	virtual float GetChargeMaxTime(void) { float flChargeTime = 0; CALL_ATTRIB_HOOK_FLOAT(flChargeTime, sapper_deploy_time); return 15; };
+	virtual int		GetWeaponID(void) const { return TF_WEAPON_SAPPER; }
 
 	virtual const char *GetViewModel( int iViewModel ) const;
 	virtual const char *GetWorldModel( void ) const;

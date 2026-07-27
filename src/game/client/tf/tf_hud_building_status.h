@@ -394,6 +394,8 @@ private:
 	BuildingHudAlert_t m_AlertLevel;
 	float m_flNextBeep;
 	int m_iNumBeepsToBeep;
+	bool m_bUpgradeSound;
+	bool m_bLooping;
 };
 
 //-----------------------------------------------------------------------------

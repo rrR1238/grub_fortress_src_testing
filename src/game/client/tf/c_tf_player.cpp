@@ -351,6 +351,7 @@ const char *g_pszHeadGibs[] =
 	"models/player\\gibs\\pyrogib008.mdl",
 	"models/player\\gibs\\spygib007.mdl",
 	"models/player\\gibs\\engineergib006.mdl",
+	"models/player\\gibs\\engineergib006.mdl",
 };
 
 const char *g_pszBotHeadGibs[] =
@@ -364,6 +365,7 @@ const char *g_pszBotHeadGibs[] =
 	"models/bots\\gibs\\heavybot_gib_head.mdl",
 	"models/bots\\gibs\\pyrobot_gib_head.mdl",
 	"models/bots\\gibs\\spybot_gib_head.mdl",
+	"models/bots\\gibs\\engineerbot_gib_head.mdl",
 	"models/bots\\gibs\\engineerbot_gib_head.mdl",
 };
 
@@ -3863,6 +3865,8 @@ IMPLEMENT_CLIENTCLASS_DT( C_TFPlayer, DT_TFPlayer, CTFPlayer )
 	RecvPropInt( RECVINFO( m_nForceTauntCam ) ),
 	RecvPropFloat( RECVINFO( m_flTauntYaw ) ),
 	RecvPropInt( RECVINFO( m_nActiveTauntSlot ) ),
+//	RecvPropInt(RECVINFO(m_iOverrideAmmoPrimary)),
+//	RecvPropInt(RECVINFO(m_iOverrideAmmoSecondary)),
 	RecvPropInt( RECVINFO( m_iTauntItemDefIndex ) ),
 	RecvPropFloat( RECVINFO( m_flCurrentTauntMoveSpeed ) ),
 	RecvPropFloat( RECVINFO( m_flVehicleReverseTime ) ),

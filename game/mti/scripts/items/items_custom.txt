@@ -45,6 +45,11 @@ not sure if it should be used as a weapon"
 //					"attribute_class"	"mod_use_metal_ammo_type"
 //					"value"				"mod_use_metal_ammo_type" // 200 max ammo																Old Value used for primary ammo is 3.47222222223
 //				}
+				"damage bonus"
+				{
+					"attribute_class"	"mult_dmg"
+					"value"				"1.35"
+				}
 			}
 			"visuals"
 			{	
@@ -471,6 +476,78 @@ not sure if it should be used as a weapon"
 			"effect_type"	"positive"
 			"stored_as_integer"	"0"
 		}
+		"5028"
+		{
+			"name"	"pda builds pads"
+			"attribute_class"	"pda_builds_pads"
+			"description_string"	"#Attrib_Double_Fire"
+			"description_format"	"value_is_additive"
+			"hidden"	"0"
+			"effect_type"	"positive"
+			"stored_as_integer"	"0"
+		}
+		"5029"
+		{
+			"name"	"pda builds sappers"
+			"attribute_class"	"pda_builds_sappers"
+			"description_string"	"#Attrib_Double_Fire"
+			"description_format"	"value_is_additive"
+			"hidden"	"0"
+			"effect_type"	"positive"
+			"stored_as_integer"	"0"
+		}
+		"5030"
+		{
+			"name"	"engineer sapper buff health"
+			"attribute_class"	"engineer_sapper_buff_health"
+			"description_string"	"#Attrib_Sapper_Buff_Health"
+			"description_format"	"value_is_additive"
+			"hidden"	"0"
+			"effect_type"	"positive"
+			"stored_as_integer"	"0"
+		}
+		"5031"
+		{
+			"name"	"max ammo override"
+			"attribute_class"	"max_ammo"
+			"description_string"	""
+			"description_format"	"value_is_additive"
+			"hidden"	"0"
+			"effect_type"	"positive"
+			"stored_as_integer"	"0"
+		}
+		"5032"
+		{
+			"name"	"mini crit headshot"
+			"attribute_class"	"minicrit_headshot"
+			"description_string"	"#Attrib_Double_Fire"
+			"description_format"	"value_is_additive"
+			"hidden"	"0"
+			"effect_type"	"positive"
+			"stored_as_integer"	"0"
+		}
+        "5033"
+        {
+            "name"    "maxammo primary override"
+            "attribute_class"    "maxammo_primary_override"
+            "description_string"    "unused"
+            "hidden"    "0"
+            "description_format"    "value_is_from_lookup_table"
+            "effect_type"    "neutral"
+            "armory_desc"    "on_wearer"
+            "stored_as_integer"    "0"
+        }
+        "5034"
+        {
+            "name"    "maxammo secondary override"
+            "attribute_class"    "maxammo_secondary_override"
+            "description_string"    "unused"
+            "hidden"    "0"
+            "description_format"    "value_is_from_lookup_table"
+            "effect_type"    "neutral"
+            "armory_desc"    "on_wearer"
+            "stored_as_integer"    "0"
+        }
 	}
 	"items"
 	{
@@ -652,12 +729,14 @@ not sure if it should be used as a weapon"
 			"item_description"	"You have to deal 150 damage with this weapon to charge it."
 			"item_slot"	"secondary"
 			"item_quality"		"rarity1"
+			"anim_slot"	"null"
 			"min_ilevel"	"1"
 			"max_ilevel"	"1"
 			"image_inventory"	"backpack/workshop/weapons/c_models/c_pro_smg/c_pro_smg"
 			"image_inventory_size_w"		"128"
 			"image_inventory_size_h"		"82"
 			"model_player"	"models/workshop/weapons/c_models/c_pro_smg/c_pro_smg.mdl"
+//			"model_player"	"models/weapons/c_models/c_revolver/c_revolver.mdl"
 			"attach_to_hands"	"1"
 			"attributes"
 			{
@@ -692,6 +771,16 @@ not sure if it should be used as a weapon"
 			}
 			"visuals"
 			{
+				"animation_replacement"
+				{
+					"ACT_VM_DRAW" 							"ACT_VM_DEPLOY_3"
+					"ACT_VM_IDLE" 							"ACT_VM_IDLE_3"
+					"ACT_VM_PRIMARYATTACK" 					"ACT_VM_PRIMARYATTACK_3"
+					"ACT_VM_RELOAD"						"ACT_VM_RELOAD_3"
+					"ACT_SECONDARY_VM_INSPECT_START"					"ACT_SECONDARY_VM_INSPECT_START_SMG"
+					"ACT_SECONDARY_VM_INSPECT_IDLE"					"ACT_SECONDARY_VM_INSPECT_START_SMG"
+					"ACT_SECONDARY_VM_INSPECT_END"					"ACT_SECONDARY_VM_INSPECT_START_SMG"
+				}
 				"sound_single_shot"	"Weapon_UrbanProfessional.Single"
 				"sound_burst"		"Weapon_UrbanProfessional.SingleCrit"
 				"attached_models_festive"
@@ -790,7 +879,7 @@ not sure if it should be used as a weapon"
 			"item_description"	"The banner can be charged by doing damage (600 dmg to charge) using your weapons or your sentry. Upon activation gives you and your sentry Mini-Crits."
 			"item_slot"	"secondary"
 			"equip_region"	"back"
-			"anim_slot"	"melee"
+//			"anim_slot"	"melee"
 			"item_quality"	"vintage"
 			"propername"	"1"
 			"min_ilevel"	"5"
@@ -832,11 +921,14 @@ not sure if it should be used as a weapon"
 			{
 				"animation_replacement"
 				{
-					"ACT_MP_ATTACK_STAND_MELEE_SECONDARY"	"ACT_MP_ATTACK_STAND_ITEM1_SECONDARY"
-					"ACT_MP_ATTACK_CROUCH_MELEE_SECONDARY"	"ACT_MP_ATTACK_STAND_ITEM1_SECONDARY"
-					"ACT_SECONDARY_VM_INSPECT_START"	"ACT_ITEM1_VM_INSPECT_START"
-					"ACT_SECONDARY_VM_INSPECT_IDLE"		"ACT_ITEM1_VM_INSPECT_IDLE"
-					"ACT_SECONDARY_VM_INSPECT_END"		"ACT_ITEM1_VM_INSPECT_END"
+//					"ACT_VM_DRAW" 							"ACT_VM_DEPLOY_2"
+//					"ACT_VM_IDLE" 							"ACT_VM_IDLE_2"
+//					"ACT_VM_PRIMARYATTACK" 					"ACT_VM_PRIMARYATTACK_2"
+//					"ACT_MP_ATTACK_STAND_MELEE_SECONDARY"	"ACT_MP_ATTACK_STAND_ITEM1_SECONDARY"
+//					"ACT_MP_ATTACK_CROUCH_MELEE_SECONDARY"	"ACT_MP_ATTACK_STAND_ITEM1_SECONDARY"
+//					"ACT_SECONDARY_VM_INSPECT_START"	"ACT_ITEM1_VM_INSPECT_START"
+//					"ACT_SECONDARY_VM_INSPECT_IDLE"		"ACT_ITEM1_VM_INSPECT_IDLE"
+//					"ACT_SECONDARY_VM_INSPECT_END"		"ACT_ITEM1_VM_INSPECT_END"
 				}
 			}
 			"mouse_pressed_sound"	"ui/item_pack_pickup.wav"
@@ -1298,12 +1390,324 @@ not sure if it should be used as a weapon"
 				//	"attribute_class"	"mult_player_movespeed"
 				//	"value"	"0.93"
 				//}
-				"hidden primary max ammo bonus" 
+				"maxammo primary override"
 				{
-					"attribute_class"	"mult_maxammo_primary"
-					"value"				"0.215"
+					"attribute_class"	"maxammo_primary_override"
+					"value"	"32"
 				}
 			}
+		}
+		"32026"
+		{
+			"enabled"	"1"
+			"capabilities"
+			{
+				"nameable"		"1"
+			}
+			"name"	"engi_test"
+			"item_class"	"tf_weapon_sapper_test"
+			"craft_class"	"weapon"
+			"craft_material_type"	"weapon"
+			"moditem"	"1"
+			"item_name"	"#TF_Weapon_Spy_Sapper"
+			"item_description"	"#MTI_Weapon_Sapper"
+			"item_type_name"	"#TF_Weapon_Spy_Sapper"
+			"item_slot"	"pda2"
+			"item_quality"	"selfmade"
+			"min_ilevel"	"1"
+			"max_ilevel"	"1"
+			"image_inventory"	"backpack/weapons/w_models/w_sapper"
+			"image_inventory_size_w"		"128"
+			"image_inventory_size_h"		"82"
+			"inspect_panel_dist" 			"25"
+			"attach_to_hands"	"0"
+//			"model_player"	"models/weapons/v_models/v_sapper_spy.mdl"
+			"model_world"				"models/weapons/w_models/w_sapper.mdl"
+			"model_player"				"models/weapons/v_models/v_sapper_spy.mdl"
+			"used_by_classes"
+			{
+				"engineer"	"1"
+			}
+			"static_attrs"
+			{
+				"min_viewmodel_offset"					"5 -2 -4"
+			}
+			"attributes"
+			{
+				"engineer sapper buff health"
+				{
+					"attribute_class"	"engineer_sapper_buff_health"
+					"value"				"1"								
+				}
+			}
+			"xifier_class_remap"	"sapper"
+			"mouse_pressed_sound"	"ui/item_metal_weapon_pickup.wav"
+			"drop_sound"		"ui/item_metal_weapon_drop.wav"
+		}
+		"32029"
+		{
+			"enabled"	"1"
+			"capabilities"
+			{
+				"nameable"		"1"
+			}
+			"name"		"Sapper"
+			"base_item_name"	"TF_WEAPON_BUILDER_SPY"
+			"item_class"	"tf_weapon_sapper"
+			"craft_class"	"weapon"
+			"moditem"	"1"
+			"craft_material_type"	"weapon"
+			"item_name"	"#TF_Weapon_Spy_Sapper"
+			"item_description"	"#MTI_Weapon_Sapper"
+			"item_type_name"	"#TF_Weapon_Spy_Sapper"
+			"item_slot"	"building"
+			"item_quality"	"unique"
+			"min_ilevel"	"1"
+			"max_ilevel"	"1"
+			"image_inventory"	"backpack/weapons/w_models/w_sapper"
+			"image_inventory_size_w"		"128"
+			"image_inventory_size_h"		"82"
+			"inspect_panel_dist" 			"25"
+			"attach_to_hands"	"1"
+			"model_player"	"models/weapons/c_models/c_sapper/c_sapper.mdl"
+			"used_by_classes"
+			{
+				"engineer"	"1"
+			}
+			"static_attrs"
+			{
+				"min_viewmodel_offset"					"5 -2 -4"
+			}
+			"xifier_class_remap"	"sapper"
+			"mouse_pressed_sound"	"ui/item_metal_weapon_pickup.wav"
+			"drop_sound"		"ui/item_metal_weapon_drop.wav"
+		}
+		"32030"
+		{
+			"enabled"	"0"
+			"item_class"	"tf_weapon_revolver"
+			"craft_material_type"	"weapon"
+			"name"	"engi_revolver"
+			"capabilities"
+			{
+				"nameable"		"1"
+			}
+			"tags"
+			{
+				"can_deal_damage"			"1"
+				"can_deal_critical_damage"	"1"
+				"can_deal_mvm_penetration_damage"	"1"
+				"can_deal_long_distance_damage"	"1"
+			}
+			"base_item_name"	"TF_WEAPON_REVOLVER"
+			"show_in_armory"	"0"
+			"item_type_name"	"#TF_Weapon_Revolver"
+			"item_name"	"#TF_Weapon_Revolver"
+			"moditem"	"0"
+			"item_slot"	"secondary"
+			"item_quality"	"unique"
+			"min_ilevel"	"1"
+			"max_ilevel"	"99"
+			"image_inventory"	"backpack/weapons/w_models/w_revolver"
+			"model_player"	"models/weapons/c_models/c_revolver/c_revolver.mdl"
+			"attach_to_hands"	"1"
+			"inspect_panel_dist" "31"
+			"used_by_classes"
+			{
+				"engineer"	"1"
+			}
+			"attributes"
+			{
+				"mini crit headshot"
+				{
+					"attribute_class"	"minicrit_headshot"
+					"value" 	"1" 
+				}
+			}
+			"static_attrs"
+			{
+				"weapon_stattrak_module_scale"			"0.497"
+				"min_viewmodel_offset"					"10 0 -6"
+			}
+			"visuals"
+			{
+				"animation_replacement"
+				{
+					"ACT_VM_DRAW" 							"ACT_VM_DEPLOY_1"
+					"ACT_VM_IDLE" 							"ACT_VM_IDLE_1" // ACT_SECONDARY_VM_IDLE_REVOLVER
+					"ACT_VM_PRIMARYATTACK" 					"ACT_VM_PRIMARYATTACK_1"
+					"ACT_VM_RELOAD"						"ACT_VM_RELOAD_1"
+				}
+			}
+		}
+		"32031"
+		{
+			"name"						"Fortunate Son Engi"
+			"show_in_armory"			"1"
+			"item_class"				"tf_weapon_smg_primary"
+			"item_slot"					"primary"
+			"item_quality"				"rarity2"
+			"image_inventory_size_w"	"128"
+			"image_inventory_size_h"	"82"
+			"moditem"			"1"
+			"item_logname"				"m4_soldier"
+			"item_iconname"				"m4_soldier"
+			"item_type_name"			"#FC_Weapon_Rifle"
+			"item_name"					"#FC_Weapon_America"
+			"item_description"			"#FC_Weapon_America_desc"
+			"propername"				"1"
+			"anim_slot"					"primary"
+			"image_inventory"			"backpack/weapons/w_models/w_assaultrifle"
+			"model_player"				"models/weapons/c_models/c_ar.mdl"
+			"model_world"				"models/weapons/w_models/w_assault_rifle.mdl"
+			"attach_to_hands"			"2"
+			"used_by_classes"
+			{
+				"engineer"				"1"
+			}
+			"static_attrs"
+			{
+				"override projectile type" 				"1"
+				"class select override vcd"				"taunt02_v1"
+				"min_viewmodel_offset"					"5 0 -10"
+			}
+           		"attributes"
+            		{
+				"clip size bonus"
+				{
+					"attribute_class"	"mult_clipsize"
+					"value"	"1.20"
+				}
+				"damage bonus hidden"
+				{
+					"attribute_class"	"mult_dmg"
+					"value"	"2.30"
+				}
+				"fire rate bonus"
+				{
+					"attribute_class"	"mult_postfiredelay"
+					"value"	"0.80"
+				}
+				"maxammo primary override"
+				{
+					"attribute_class"	"maxammo_primary_override"
+					"value"	"60"
+				}
+			}
+			"visuals"
+			{
+				"animation_replacement"
+				{
+					"ACT_VM_DRAW" 							"ACT_VM_DEPLOY_4"
+					"ACT_VM_IDLE" 							"ACT_VM_IDLE_4" // ACT_SECONDARY_VM_IDLE_REVOLVER
+					"ACT_VM_PRIMARYATTACK" 					"ACT_VM_PRIMARYATTACK_4"
+					"ACT_VM_RELOAD"						"ACT_VM_RELOAD_4"
+					"ACT_PRIMARY_VM_INSPECT_START"		"ACT_PRIMARY_VM_INSPECT_START_2"
+					"ACT_PRIMARY_VM_INSPECT_IDLE"		"ACT_PRIMARY_VM_INSPECT_IDLE_2"
+					"ACT_PRIMARY_VM_INSPECT_END"		"ACT_PRIMARY_VM_INSPECT_END_2"
+
+				}
+				"sound_single_shot"		"Weapon_AR.Single"
+				"sound_burst"			"Weapon_AR.SingleCrit"
+				"sound_reload"			"Weapon_AR.WorldReload"
+				"muzzle_flash"			"muzzle_scattergun"
+				"tracer_effect"			"bullet_scattergun_tracer01"
+			}
+			"mouse_pressed_sound"	"ui/item_heavy_gun_pickup.wav"
+			"drop_sound"			"ui/item_heavy_gun_drop.wav"
+		}
+		"32032"
+		{
+			"enabled"	"1"
+			"item_class"	"tf_weapon_handgun_engineer_secondary"
+			"craft_class"	"weapon"
+			"craft_material_type"	"weapon"
+			"name"		"ShortStop Engineer"
+			"capabilities"
+			{
+				"nameable"		"1"
+			}
+			"static_attrs"
+			{
+				"min_viewmodel_offset"					"10 0 -11"
+				"weapon_stattrak_module_scale"				"0.66"
+
+			}
+			"tags"
+			{
+				"can_deal_damage"			"1"
+				"can_deal_critical_damage"	"1"
+				"can_deal_mvm_penetration_damage"	"1"
+				"can_deal_long_distance_damage"	"1"
+			}
+			"show_in_armory"	"1"
+			"moditem"		"1"
+			"item_type_name"	"#TF_Weapon_Peppergun"
+			"item_description"	"#TF_TheShortstop_Desc"
+			"item_name"	"#TF_TheShortstop"
+			"item_slot"	"secondary"
+			"anim_slot"	"secondary"
+			"item_quality"	"unique"
+			"item_logname"	"shortstop"
+			"item_iconname"	"shortstop"
+			"propername"	"1"
+			"min_ilevel"	"1"
+			"max_ilevel"	"1"
+			"image_inventory"	"backpack/workshop/weapons/c_models/c_shortstop/c_shortstop"
+			"image_inventory_size_w"		"128"
+			"image_inventory_size_h"		"82"
+			"model_player"	"models/workshop/weapons/c_models/c_shortstop/c_shortstop.mdl"
+			"attach_to_hands" "1"
+			"inspect_panel_dist" "27"
+			"used_by_classes"
+			{
+				"engineer"	"1"
+			}
+			"attributes"
+			{
+ 				"maxammo secondary override"
+ 				{
+ 					"attribute_class"	"maxammo_secondary_override"
+ 					"value"				"32"
+ 				}
+				"reload time increased hidden"
+				{
+					"attribute_class"	"mult_reload_time_hidden"
+					"value"	"1.5"
+				}
+				"disable fancy class select anim"
+				{
+					"attribute_class"	"disable_fancy_class_select_anim"
+					"value"	"1"
+				}
+			}
+			"visuals"
+			{
+				"sound_single_shot"	"Weapon_Short_Stop.Single"
+				"sound_burst"	"Weapon_Short_Stop.SingleCrit"
+				"sound_reload"		"Weapon_Short_Stop.Reload"
+				"muzzle_flash"	"muzzle_bignasty"
+				"tracer_effect"	"bullet_bignasty_tracer01"
+				"animation_replacement"
+				{
+					"ACT_VM_IDLE"	"ACT_SECONDARY_VM_IDLE_2"
+					"ACT_VM_DRAW"	"ACT_SECONDARY_VM_DRAW_2"
+					"ACT_VM_PRIMARYATTACK"	"ACT_SECONDARY_VM_PRIMARYATTACK_2"
+//					"ACT_MP_ATTACK_STAND_SECONDARYFIRE" "ACT_MP_PUSH_STAND_SECONDARY"
+//					"ACT_MP_ATTACK_CROUCH_SECONDARYFIRE""ACT_MP_PUSH_CROUCH_SECONDARY"
+//					"ACT_MP_ATTACK_SWIM_SECONDARYFIRE"	"ACT_MP_PUSH_SWIM_SECONDARY"
+					"ACT_VM_RELOAD"	"ACT_SECONDARY_VM_RELOAD_2"
+//					"ACT_MP_RELOAD_STAND"	"ACT_MP_RELOAD_STAND_SECONDARY_2"
+//					"ACT_MP_RELOAD_CROUCH"	"ACT_MP_RELOAD_CROUCH_SECONDARY_2"
+//					"ACT_MP_RELOAD_SWIM"	"ACT_MP_RELOAD_SWIM_SECONDARY_2"
+//					"ACT_MP_RELOAD_AIRWALK"	"ACT_MP_RELOAD_AIRWALK_SECONDARY_2"
+					"ACT_SECONDARY_VM_INSPECT_START"		"ACT_PRIMARY_ALT1_VM_INSPECT_START"
+					"ACT_SECONDARY_VM_INSPECT_IDLE"		"ACT_PRIMARY_ALT1_VM_INSPECT_IDLE"
+					"ACT_SECONDARY_VM_INSPECT_END"		"ACT_PRIMARY_ALT1_VM_INSPECT_END"
+				}
+			}
+			"mouse_pressed_sound"	"ui/item_light_gun_pickup.wav"
+			"drop_sound"		"ui/item_light_gun_drop.wav"
 		}
 		// Leadpipe 
 		"32003"

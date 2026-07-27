@@ -112,6 +112,12 @@ int	CTFRevolver::GetDamageType( void ) const
 		int iDamageType = BaseClass::GetDamageType() | DMG_USE_HITLOCATIONS;
 		return iDamageType;
 	}
+	int iMiniCritHeadshot = 0;
+	CALL_ATTRIB_HOOK_INT(iMiniCritHeadshot, minicrit_headshot);
+	if (iMiniCritHeadshot)
+	{
+		return BaseClass::GetDamageType() | DMG_USE_HITLOCATIONS;
+	}
 
 	return BaseClass::GetDamageType();
 }

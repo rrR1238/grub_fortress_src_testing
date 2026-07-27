@@ -11491,7 +11491,15 @@ int CTFPlayer::CanBuild( int iObjectType, int iObjectMode )
 	{
 		bHasSubType = true;
 	}
+	if (IsPlayerClass(TF_CLASS_ENGINEER)) {
+		if (iObjectType == OBJ_ATTACHMENT_SAPPER) {
+			// Only allow one Sapper of any kind in MvM
+			if (GetNumObjects(iObjectType, BUILDING_MODE_ANY))
+				return CB_LIMIT_REACHED;
 
+			return ((GetAmmoCount(TF_AMMO_GRENADES2) > 0) ? CB_CAN_BUILD : CB_CANNOT_BUILD);
+		}
+	}
 	if ( TFGameRules() )
 	{
 		if ( TFGameRules()->IsTruceActive() && ( iObjectType == OBJ_ATTACHMENT_SAPPER ) )
@@ -11518,7 +11526,9 @@ int CTFPlayer::CanBuild( int iObjectType, int iObjectMode )
 	{
 		// Check if this is a pad type and we have the pda_builds_pads attribute
 		bool bCanBuildPad = false;
-		if ( iObjectType == OBJ_SPEEDPAD || iObjectType == OBJ_JUMPPAD )
+		bool bCanbuildSapper = false;
+//		if ( iObjectType == OBJ_SPEEDPAD || iObjectType == OBJ_JUMPPAD || iObjectType == OBJ_ATTACHMENT_SAPPER )
+		if(iObjectType == OBJ_ATTACHMENT_SAPPER)
 		{
 			// Find the PDA weapon in the player's inventory
 			for ( int i = 0; i < MAX_WEAPONS; i++ )
@@ -11526,12 +11536,15 @@ int CTFPlayer::CanBuild( int iObjectType, int iObjectMode )
 				CTFWeaponBase *pWeapon = dynamic_cast<CTFWeaponBase*>( GetWeapon( i ) );
 				if ( pWeapon && pWeapon->GetWeaponID() == TF_WEAPON_PDA_ENGINEER_BUILD )
 				{
+#if 0
 					int iBuildsPads = 0;
 					int iBuildsSpeedPads = 0;
 					int iBuildsJumpPads = 0;
+					int iBuildsSappers = 0;
 					CALL_ATTRIB_HOOK_INT_ON_OTHER( pWeapon, iBuildsPads, pda_builds_pads );
 					CALL_ATTRIB_HOOK_INT_ON_OTHER( pWeapon, iBuildsSpeedPads, pda_builds_speedpads );
 					CALL_ATTRIB_HOOK_INT_ON_OTHER( pWeapon, iBuildsJumpPads, pda_builds_jumppads );
+					CALL_ATTRIB_HOOK_INT_ON_OTHER(pWeapon, iBuildsSappers, pda_builds_sappers);
 					if ( iBuildsPads != 0 )
 					{
 						bCanBuildPad = true;
@@ -11544,12 +11557,23 @@ int CTFPlayer::CanBuild( int iObjectType, int iObjectMode )
 					{
 						bCanBuildPad = true;
 					}
+#endif
+					int iBuildsSappers = 0;
+					CALL_ATTRIB_HOOK_INT_ON_OTHER(pWeapon, iBuildsSappers, pda_builds_sappers);
+					if (iBuildsSappers != 0)
+					{
+						bCanbuildSapper = true;
+					}
 					break;
 				}
 			}
 		}
 		
-		if ( !bCanBuildPad )
+//		if ( !bCanBuildPad )
+//		{
+//			return CB_CANNOT_BUILD;
+//		}
+		if(!bCanbuildSapper)
 		{
 			return CB_CANNOT_BUILD;
 		}
@@ -13220,47 +13244,54 @@ bool CTFPlayer::CanDisguise_OnKill( void )
 	return true;
 }
 
+
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-int	CTFPlayer::GetMaxAmmo( int iAmmoIndex, int iClassIndex /*= -1*/ )
+int    CTFPlayer::GetMaxAmmo(int iAmmoIndex, int iClassIndex /*= -1*/)
 {
-	int iMax = ( iClassIndex == -1 ) ? m_PlayerClass.GetData()->m_aAmmoMax[iAmmoIndex] : GetPlayerClassData( iClassIndex )->m_aAmmoMax[iAmmoIndex];
-	if ( iAmmoIndex == TF_AMMO_PRIMARY )
+	int iMax = (iClassIndex == -1) ? m_PlayerClass.GetData()->m_aAmmoMax[iAmmoIndex] : GetPlayerClassData(iClassIndex)->m_aAmmoMax[iAmmoIndex];
+	if (iAmmoIndex == TF_AMMO_PRIMARY)
 	{
-		//int test;
-		//CALL_ATTRIB_HOOK_INT(test, max_ammo);
-		//Msg("Ammo: %d\n", test);
-		//if (test > 0) {
-		//	return test;
-		//}
-		CALL_ATTRIB_HOOK_INT( iMax, mult_maxammo_primary );
+		CALL_ATTRIB_HOOK_INT(iMax, mult_maxammo_primary);
+		CALL_ATTRIB_HOOK_INT(iMax, maxammo_primary_override);
 	}
-	else if ( iAmmoIndex == TF_AMMO_SECONDARY )
+	else if (iAmmoIndex == TF_AMMO_SECONDARY)
 	{
-		CALL_ATTRIB_HOOK_INT( iMax, mult_maxammo_secondary );
+		CALL_ATTRIB_HOOK_INT(iMax, mult_maxammo_secondary);
+		CALL_ATTRIB_HOOK_INT(iMax, maxammo_secondary_override);
 	}
-	else if ( iAmmoIndex == TF_AMMO_METAL )
+	else if (iAmmoIndex == TF_AMMO_METAL)
 	{
-		CALL_ATTRIB_HOOK_INT( iMax, mult_maxammo_metal );
+		CALL_ATTRIB_HOOK_INT(iMax, mult_maxammo_metal);
+		CALL_ATTRIB_HOOK_INT(iMax, maxammo_metal_override);
 	}
-	else if ( iAmmoIndex == TF_AMMO_GRENADES1 )
+	else if (iAmmoIndex == TF_AMMO_GRENADES1)
 	{
-		CALL_ATTRIB_HOOK_INT( iMax, mult_maxammo_grenades1 );
+		CALL_ATTRIB_HOOK_INT(iMax, mult_maxammo_grenades1);
+		CALL_ATTRIB_HOOK_INT(iMax, maxammo_grenades1_override);
 	}
-	else if ( iAmmoIndex == TF_AMMO_GRENADES3 )
+	else if (iAmmoIndex == TF_AMMO_GRENADES2)
 	{
-		// All classes by default can carry a max of 1 "Grenade3" which is being used as ACTIONSLOT Throwables
-		iMax = 1;
+		CALL_ATTRIB_HOOK_INT(iMax, mult_maxammo_grenades2);
+		CALL_ATTRIB_HOOK_INT(iMax, maxammo_grenades2_override);
+	}
+	else if (iAmmoIndex == TF_AMMO_GRENADES3)
+	{
+		CALL_ATTRIB_HOOK_INT(iMax, mult_maxammo_grenades3);
+		CALL_ATTRIB_HOOK_INT(iMax, maxammo_grenades3_override);
 	}
 
 	// Haste Powerup Rune adds multiplier to Max Ammo
-	if ( m_Shared.GetCarryingRuneType() == RUNE_HASTE )
+	if (m_Shared.GetCarryingRuneType() == RUNE_HASTE)
 	{
 		iMax *= 2.0f;
 	}
+
 	return iMax;
 }
+
+
 
 bool CTFPlayer::IsMiniBoss( void ) const
 {
@@ -13467,9 +13498,11 @@ void CTFPlayer::SetTauntYaw( float flTauntYaw )
 void CTFPlayer::StartBuildingObjectOfType( int iType, int iMode )
 {
 	// Check if we should replace teleporters with pads
+
 	int iBuildsPads = 0;
 	int iBuildsSpeedPads = 0;
 	int iBuildsJumpPads = 0;
+	int iBuildsSappers = 0;
 	
 	// Find the PDA weapon in the player's inventory
 	for ( int i = 0; i < MAX_WEAPONS; i++ )
@@ -13477,13 +13510,14 @@ void CTFPlayer::StartBuildingObjectOfType( int iType, int iMode )
 		CTFWeaponBase *pWeapon = dynamic_cast<CTFWeaponBase*>( GetWeapon( i ) );
 		if ( pWeapon && pWeapon->GetWeaponID() == TF_WEAPON_PDA_ENGINEER_BUILD )
 		{
+
 			CALL_ATTRIB_HOOK_INT_ON_OTHER( pWeapon, iBuildsPads, pda_builds_pads );
 			CALL_ATTRIB_HOOK_INT_ON_OTHER( pWeapon, iBuildsSpeedPads, pda_builds_speedpads );
 			CALL_ATTRIB_HOOK_INT_ON_OTHER( pWeapon, iBuildsJumpPads, pda_builds_jumppads );
+			CALL_ATTRIB_HOOK_INT_ON_OTHER(pWeapon, iBuildsSappers, pda_builds_sappers);
 			break;
 		}
 	}
-	
 	// If we have the pads attribute, replace teleporter types with pad types
 	if ( iBuildsPads != 0 && iType == OBJ_TELEPORTER )
 	{
@@ -13524,6 +13558,14 @@ void CTFPlayer::StartBuildingObjectOfType( int iType, int iMode )
 			iMode = MODE_JUMPPAD_2;
 		}
 	}
+//	else if (iBuildsSappers != 0 && iType == OBJ_TELEPORTER)
+//	{
+//		if (iMode == MODE_TELEPORTER_EXIT)
+//		{
+//			iType = OBJ_ATTACHMENT_SAPPER;
+//			iMode = 0;
+//		}
+//	}
 
 	// early out if we can't build this type of object
 	if ( CanBuild( iType, iMode ) != CB_CAN_BUILD )
@@ -15052,6 +15094,7 @@ CTFWeaponBuilder *CTFPlayerSharedUtils::GetBuilderForObjectType( CTFPlayer *pTFP
 				CALL_ATTRIB_HOOK_INT_ON_OTHER( pWeapon, iBuildsPads, pda_builds_pads );
 				CALL_ATTRIB_HOOK_INT_ON_OTHER( pWeapon, iBuildsPads, pda_builds_speedpads );
 				CALL_ATTRIB_HOOK_INT_ON_OTHER( pWeapon, iBuildsPads, pda_builds_jumppads );
+//				CALL_ATTRIB_HOOK_INT_ON_OTHER(pWeapon, iBuildsPads, pda_builds_sappers);
 				if ( iBuildsPads != 0 )
 				{
 					bLookingForPadWithAttribute = true;
@@ -15060,6 +15103,7 @@ CTFWeaponBuilder *CTFPlayerSharedUtils::GetBuilderForObjectType( CTFPlayer *pTFP
 			}
 		}
 	}
+
 
 	for ( int i = 0; i < MAX_WEAPONS; i++ )
 	{

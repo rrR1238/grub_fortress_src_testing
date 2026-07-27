@@ -17,6 +17,7 @@
 #include <vgui_controls/EditablePanel.h>
 #include <vgui_controls/ProgressBar.h>
 #include "tf_weaponbase.h"
+#include "c_tf_weapon_builder.h"
 //#include "c_tf_projectile_arrow.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
@@ -78,7 +79,7 @@ bool CHudSapperChargeMeter::ShouldDraw( void )
 {
 	C_TFPlayer *pPlayer = C_TFPlayer::GetLocalTFPlayer();
 
-	if ( !pPlayer || !pPlayer->IsPlayerClass( TF_CLASS_SPY ) || !pPlayer->IsAlive() )
+	if ( !pPlayer || !pPlayer->IsPlayerClass( TF_CLASS_SPY ) || !pPlayer->IsPlayerClass( TF_CLASS_ENGINEER ) || !pPlayer->IsAlive())
 		return false;
 
 	CTFWeaponBase *pWpn = pPlayer->GetActiveTFWeapon();
@@ -86,7 +87,7 @@ bool CHudSapperChargeMeter::ShouldDraw( void )
 		return false;
 
 	int iWeaponID = pWpn->GetWeaponID();
-	if ( iWeaponID != TF_WEAPON_BUILDER )
+	if ( iWeaponID != TF_WEAPON_SAPPER )
 		return false;
 
 	int iCustomHUD = 0;
@@ -115,7 +116,7 @@ void CHudSapperChargeMeter::OnTick( void )
 	if ( !pPlayer )
 		return;
 
-	CTFWeaponBase *pWpn = pPlayer->GetActiveTFWeapon();
+	CTFWeaponBase* pWpn = pPlayer->GetActiveTFWeapon();
 	ITFChargeUpWeapon *pChargeupWeapon = dynamic_cast< ITFChargeUpWeapon *>( pWpn );
 
 	if ( !pWpn || !pChargeupWeapon )

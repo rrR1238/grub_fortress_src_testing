@@ -47,6 +47,7 @@ LINK_ENTITY_TO_CLASS(tf_weapon_sapper_test, CTFWeaponSapperTest)
 // Server specific.
 #if !defined( CLIENT_DLL ) 
 BEGIN_DATADESC( CTFWeaponSapperTest )
+	
 END_DATADESC()
 #endif
 
@@ -55,11 +56,12 @@ CTFWeaponSapperTest::CTFWeaponSapperTest()
 {
 }
 
-
 void CTFWeaponSapperTest::Spawn()
 {
 	PrecacheModel("models/mvm/weapons/v_models/v_pda_spy_bot.mdl");
-
+	PrecacheModel("models/buildables/toolbox_placement.mdl");
+	PrecacheModel("models/buildables/toolbox_placed.mdl");
+	PrecacheModel("models/weapons/v_models/v_sapper_spy.mdl");
 	BaseClass::Spawn();
 }
 
@@ -91,21 +93,21 @@ void CTFWeaponSapperTest::OnDataChanged( DataUpdateType_t type )
 		// Was active, now not
 		if ( m_iOldState == WEAPON_IS_ACTIVE && m_iState != m_iOldState )
 		{
-			CHudBaseBuildMenu *pBuildMenu = GetBuildMenu();
-			Assert( pBuildMenu );
-			if ( pBuildMenu )
-			{
-				pBuildMenu->SetBuilderEquipped( false );
-			}
+			//CHudBaseBuildMenu *pBuildMenu = GetBuildMenu();
+			//Assert( pBuildMenu );
+			//if ( pBuildMenu )
+			//{
+			//	pBuildMenu->SetBuilderEquipped( false );
+			//}
 		}
 		else if ( m_iState == WEAPON_IS_ACTIVE && m_iOldState == WEAPON_IS_CARRIED_BY_PLAYER ) // Was inactive, now is
 		{
-			CHudBaseBuildMenu *pBuildMenu = GetBuildMenu();
-			Assert( pBuildMenu );
-			if ( pBuildMenu )
-			{
-				pBuildMenu->SetBuilderEquipped( true );
-			}
+//			CHudBaseBuildMenu *pBuildMenu = GetBuildMenu();
+//			Assert( pBuildMenu );
+//			if ( pBuildMenu )
+//			{
+//				pBuildMenu->SetBuilderEquipped( true );
+//			}
 		}
 	}
 
@@ -115,12 +117,12 @@ void CTFWeaponSapperTest::OnDataChanged( DataUpdateType_t type )
 
 void CTFWeaponSapperTest::UpdateOnRemove()
 {
-	CHudBaseBuildMenu *pBuildMenu = GetBuildMenu();
-	Assert( pBuildMenu );
-	if ( pBuildMenu )
-	{
-		pBuildMenu->SetBuilderEquipped( false );
-	}
+	//CHudBaseBuildMenu *pBuildMenu = GetBuildMenu();
+	//Assert( pBuildMenu );
+	//if ( pBuildMenu )
+	//{
+	//	pBuildMenu->SetBuilderEquipped( false );
+	//}
 	return BaseClass::UpdateOnRemove();
 }
 
@@ -133,8 +135,13 @@ void CTFWeaponSapperTest::UpdateOnRemove()
 //-----------------------------------------------------------------------------
 void CTFWeaponSapperTest::Equip(CBaseCombatCharacter* pOwner)
 {
+	SetThink(&CTFWeaponSapperTest::Think);
+	SetNextThink(0.1f);
+//	Remove();
+//	Detach(); 
 	BaseClass::Equip( pOwner );
 }
+
 //-----------------------------------------------------------------------------
 // Purpose: Kill all buildings when pda is changed.
 //-----------------------------------------------------------------------------

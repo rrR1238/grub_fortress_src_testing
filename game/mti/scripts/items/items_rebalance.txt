@@ -1034,14 +1034,6 @@
 				"scout"					"secondary"
 				"engineer"				"secondary"
 			}
-			"attributes"
-			{
-				"damage penalty"
-				{
-					"attribute_class"	"mult_dmg"
-					"value"				"0.80"
-				}
-			}
 			"visuals_red"
 			{
 				"skin"	"0"
@@ -1102,6 +1094,13 @@
 					"value"				"delete"
 				}
 			}
+		}
+		"26" // The Back Scatter
+		{
+			"enabled"		"0"
+			"baseitem"		"0"
+			"show_in_armory"	"0"
+			"moditem"		"0"
 		}
 	}
 }

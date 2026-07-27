@@ -50,6 +50,8 @@ IMPLEMENT_CLIENTCLASS_DT(C_BaseObject, DT_BaseObject, CBaseObject)
 	RecvPropInt(RECVINFO(m_iHealth)),
 	RecvPropInt(RECVINFO(m_iMaxHealth)),
 	RecvPropInt(RECVINFO(m_bHasSapper)),
+	RecvPropInt(RECVINFO(m_bHasFriendlySapper)),
+	RecvPropInt(RECVINFO(m_iSapperType)),
 	RecvPropInt(RECVINFO(m_iObjectType)),
 	RecvPropBool(RECVINFO(m_bBuilding)),
 	RecvPropBool(RECVINFO(m_bPlacing)),
@@ -867,6 +869,16 @@ bool C_BaseObject::HasSapper( void )
 	return m_bHasSapper;
 }
 
+bool C_BaseObject::HasFriendlySapper(void)
+{
+	return m_bHasFriendlySapper;
+}
+
+int C_BaseObject::GetSapperType(void)
+{
+	return m_iSapperType;
+}
+
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
@@ -1053,8 +1065,10 @@ BuildingHudAlert_t C_BaseObject::GetBuildingAlertLevel( void )
 	float flHealthPercent = GetHealth() / GetMaxHealth();
 
 	BuildingHudAlert_t alertLevel = BUILDING_HUD_ALERT_NONE;
-
-	if ( HasSapper() )
+	if (HasFriendlySapper()) {
+		alertLevel = BUILDING_HUD_ALERT_UPGRADE_INSTALLED;
+	}
+	else if ( HasSapper() && GetSapperType() != MODE_SAPPER_ENGINEER )
 	{
 		alertLevel = BUILDING_HUD_ALERT_SAPPER;
 	}

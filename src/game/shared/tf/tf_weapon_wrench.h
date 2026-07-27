@@ -12,6 +12,9 @@
 
 #include "tf_weaponbase_melee.h"
 #include "tf_item_wearable.h"
+#ifdef GAME_DLL
+#include "hl2stuff/npc_turret_floor.h"
+#endif
 
 #ifdef CLIENT_DLL
 #define CTFWrench C_TFWrench
@@ -49,6 +52,7 @@ public:
 	void				ApplyBuildingHealthUpgrade( void );
 
 	void				OnFriendlyBuildingHit( CBaseObject *pObject, CTFPlayer *pPlayer, Vector hitLoc );
+	void				OnFriendlyTurretNPCHit(CNPC_FloorTurret* pObject, CTFPlayer* pPlayer, Vector hitLoc);
 #else
 	virtual void		ItemPostFrame();
 #endif

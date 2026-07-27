@@ -163,7 +163,7 @@ const LoadoutPanelPositioningInstance g_LoadoutPanelPositioning_Engineer =
 		0,	// LOADOUT_POSITION_UTILITY,  // STAGING ONLY
 		0,	// LOADOUT_POSITION_BUILDING,
 		4,	// LOADOUT_POSITION_PDA,
-		0,	// LOADOUT_POSITION_PDA2,
+		4,	// LOADOUT_POSITION_PDA2,
 		5,	// LOADOUT_POSITION_HEAD,
 		6,	// LOADOUT_POSITION_MISC,
 		8,	// LOADOUT_POSITION_ACTION,
@@ -191,6 +191,7 @@ const LoadoutPanelPositioningInstance *g_VisibleLoadoutSlotsPerClass[] =
 	&g_DefaultLoadoutPanelPositioning,			// TF_CLASS_PYRO
 	&g_LoadoutPanelPositioning_Spy,				// TF_CLASS_SPY
 	&g_LoadoutPanelPositioning_Engineer,		// TF_CLASS_ENGINEER
+//	&g_DefaultLoadoutPanelPositioning,			// TF_CLASS_ENGINEER_OFFENSE
 };
 
 COMPILE_TIME_ASSERT( ARRAYSIZE( g_VisibleLoadoutSlotsPerClass ) == TF_LAST_NORMAL_CLASS );
@@ -543,7 +544,37 @@ void CClassLoadoutPanel::ApplySettings( KeyValues *inResourceData )
 void CClassLoadoutPanel::PerformLayout( void ) 
 {
 	BaseClass::PerformLayout();
+	// Apply custom sizing immediately after base class layout to override default sizes
+	for (int i = 0; i < m_pItemModelPanels.Count(); i++)
+	{
+		if (m_iCurrentClassIndex == TF_CLASS_ENGINEER) {
+			// Make the cosmetic slots (HEAD, MISC, MISC2) wider
+			if (i == LOADOUT_POSITION_PRIMARY || i == LOADOUT_POSITION_SECONDARY || i == LOADOUT_POSITION_MELEE)
+			{
+				// Use fixed original dimensions
+				const int ORIGINAL_ITEM_PANEL_WIDTH = 140;
+				const int ORIGINAL_ITEM_PANEL_HEIGHT = 124;
 
+				// Make cosmetic slots a bit wider
+				int cosmeticWidth = ORIGINAL_ITEM_PANEL_WIDTH + 210;
+				int cosmeticHeight = ORIGINAL_ITEM_PANEL_HEIGHT + 30;
+				m_pItemModelPanels[i]->SetSize(cosmeticWidth, cosmeticHeight);
+				m_pItemModelPanels[i]->InvalidateLayout(true);
+			}
+		}
+		else {
+			if (i == LOADOUT_POSITION_PRIMARY || i == LOADOUT_POSITION_SECONDARY || i == LOADOUT_POSITION_MELEE)
+			{
+				// Use fixed original dimensions
+				const int ORIGINAL_ITEM_PANEL_WIDTH = 140;
+				const int ORIGINAL_ITEM_PANEL_HEIGHT = 124;
+
+				// Make cosmetic slots a bit wider
+				m_pItemModelPanels[i]->SetSize(ORIGINAL_ITEM_PANEL_WIDTH, ORIGINAL_ITEM_PANEL_HEIGHT);
+				m_pItemModelPanels[i]->InvalidateLayout(true);
+			}
+		}
+	}
 	// This is disabled by default in res file. IF we turn it on again, uncomment this.
 	/*if ( m_pPassiveAttribsLabel )
 	{
@@ -641,6 +672,199 @@ void CClassLoadoutPanel::PerformLayout( void )
 			int	iXPos = iCenter + iOffset;
 			int	iYPos = m_iItemYPos + (m_iItemYDelta * iYButtonPos);
 			m_pItemModelPanels[i]->SetPos( iXPos, iYPos );
+			if (m_iCurrentClassIndex == TF_CLASS_ENGINEER) {
+				if (i == LOADOUT_POSITION_PDA || i == LOADOUT_POSITION_PDA2)
+				{
+					// Both slots are at position 8, so they'll have the same base coordinates
+					// Place Action slot on the left, Skin slot on the right (but smaller)
+					int actionSkinBaseX = iXPos;
+					int actionSkinBaseY = iYPos;
+
+					if (i == LOADOUT_POSITION_PDA)
+					{
+						// Action slot: normal position
+						m_pItemModelPanels[i]->SetPos(actionSkinBaseX, actionSkinBaseY);
+					}
+					else // LOADOUT_POSITION_PDA2
+					{
+						// Skin slot: positioned to the right of action slot, with more spacing
+						int actionSlotWidth = (int)(140 * 1.15f); // Use the actual scaled width
+						int skinSlotSpacing = 35;  // Increased gap between slots (was 10)
+						int skinSlotX = actionSkinBaseX + actionSlotWidth + skinSlotSpacing;
+						m_pItemModelPanels[i]->SetPos(skinSlotX, actionSkinBaseY);
+					}
+				}
+				else
+				{
+					// Normal positioning for all other slots
+					m_pItemModelPanels[i]->SetPos(iXPos, iYPos);
+				}
+
+				// Make the pda2 slot slightly smaller than other panels
+				if (i == LOADOUT_POSITION_PRIMARY || i == LOADOUT_POSITION_SECONDARY || i == LOADOUT_POSITION_MELEE)
+				{
+					// Apply custom positioning settings to pan icons and text to the left
+					KeyValues* pKVs = new KeyValues("CosmeticSlotSettings");
+					pKVs->SetInt("text_center", 0);     // Disable text centering
+					pKVs->SetInt("text_xpos", 20);      // Position text towards left
+					m_pItemModelPanels[i]->ApplySettings(pKVs);
+					pKVs->deleteThis();
+
+					// Force layout recalculation to let the panel auto-scale its contents
+					m_pItemModelPanels[i]->InvalidateLayout(true);
+				}
+
+				// Make the pda2 slot slightly smaller than other panels
+				if (i == LOADOUT_POSITION_PDA2)
+				{
+					// Use fixed original dimensions to prevent progressive shrinking
+					// Based on the default item panel size from resource files
+					const int ORIGINAL_ITEM_PANEL_WIDTH = 140;
+					const int ORIGINAL_ITEM_PANEL_HEIGHT = 124;
+
+					// Set to slightly smaller size (85% of original, up from 75%)
+					int skinWidth = (int)(ORIGINAL_ITEM_PANEL_WIDTH * 1.15f);
+					int skinHeight = (int)(ORIGINAL_ITEM_PANEL_HEIGHT * 1.25f);
+					m_pItemModelPanels[i]->SetSize(skinWidth, skinHeight);
+
+					// Apply custom positioning settings to pan icons and text to the left
+					KeyValues* pKVs = new KeyValues("SkinSlotSettings");
+					pKVs->SetInt("model_center_x", 0);  // Disable centering
+					pKVs->SetInt("model_xpos", -10);     // Position icon towards left
+					pKVs->SetInt("text_center", 0);     // Disable text centering
+					pKVs->SetInt("text_xpos", -30);      // Position text towards left
+					m_pItemModelPanels[i]->ApplySettings(pKVs);
+					pKVs->deleteThis();
+
+					// Force layout recalculation to let the panel auto-scale its contents
+					m_pItemModelPanels[i]->InvalidateLayout(true);
+				}
+
+				// Make the pda slot the same size as the pda2 slot
+				if (i == LOADOUT_POSITION_PDA)
+				{
+					// Use fixed original dimensions to prevent progressive shrinking
+					// Based on the default item panel size from resource files
+					const int ORIGINAL_ITEM_PANEL_WIDTH = 140;
+					const int ORIGINAL_ITEM_PANEL_HEIGHT = 124;
+
+					// Set to same size as pda2 slot
+					int actionWidth = (int)(ORIGINAL_ITEM_PANEL_WIDTH * 1.15f);
+					int actionHeight = (int)(ORIGINAL_ITEM_PANEL_HEIGHT * 1.25f);
+					m_pItemModelPanels[i]->SetSize(actionWidth, actionHeight);
+
+					// Apply custom positioning settings to pan icons and text to the left
+					KeyValues* pKVs = new KeyValues("ActionSlotSettings");
+					pKVs->SetInt("model_center_x", 0);  // Disable centering
+					pKVs->SetInt("model_xpos", -10);     // Position icon towards left
+					pKVs->SetInt("text_center", 0);     // Disable text centering
+					pKVs->SetInt("text_xpos", -30);      // Position text towards left
+					m_pItemModelPanels[i]->ApplySettings(pKVs);
+					pKVs->deleteThis();
+
+					// Force layout recalculation to let the panel auto-scale its contents
+					m_pItemModelPanels[i]->InvalidateLayout(true);
+				}
+			}
+			else {
+				if (i == LOADOUT_POSITION_PDA || i == LOADOUT_POSITION_PDA2)
+				{
+					// Both slots are at position 8, so they'll have the same base coordinates
+					// Place Action slot on the left, Skin slot on the right (but smaller)
+					int actionSkinBaseX = iXPos;
+					int actionSkinBaseY = iYPos;
+
+					if (i == LOADOUT_POSITION_PDA)
+					{
+						// Action slot: normal position
+						m_pItemModelPanels[i]->SetPos(actionSkinBaseX, actionSkinBaseY);
+					}
+					else // LOADOUT_POSITION_PDA2
+					{
+						// Skin slot: positioned to the right of action slot, with more spacing
+						int actionSlotWidth = (int)(140 * 1.15f); // Use the actual scaled width
+						int skinSlotSpacing = 35;  // Increased gap between slots (was 10)
+						int skinSlotX = actionSkinBaseX + actionSlotWidth + skinSlotSpacing;
+						m_pItemModelPanels[i]->SetPos(actionSkinBaseX, actionSkinBaseY);
+					}
+				}
+				else
+				{
+					// Normal positioning for all other slots
+					m_pItemModelPanels[i]->SetPos(iXPos, iYPos);
+				}
+
+				// Make the pda2 slot slightly smaller than other panels
+				if (i == LOADOUT_POSITION_PRIMARY || i == LOADOUT_POSITION_SECONDARY || i == LOADOUT_POSITION_MELEE)
+				{
+					// Apply custom positioning settings to pan icons and text to the left
+//				Width: 315 Height : 157
+
+					const int ORIGINAL_ITEM_PANEL_WIDTH = 315;
+					const int ORIGINAL_ITEM_PANEL_HEIGHT = 157;
+
+					// Set to same size as skin slot
+					m_pItemModelPanels[i]->SetSize(ORIGINAL_ITEM_PANEL_WIDTH, ORIGINAL_ITEM_PANEL_HEIGHT);
+					KeyValues* pKVs = new KeyValues("CosmeticSlotSettings");
+					pKVs->SetInt("text_center", 1);     // Disable text centering
+					pKVs->SetInt("text_xpos", 0);      // Position text towards left
+					m_pItemModelPanels[i]->ApplySettings(pKVs);
+					pKVs->deleteThis();
+
+					// Force layout recalculation to let the panel auto-scale its contents
+					m_pItemModelPanels[i]->InvalidateLayout(true);
+				}
+
+				// Make the skin slot slightly smaller than other panels
+				if (i == LOADOUT_POSITION_PDA2)
+				{
+					// Use fixed original dimensions to prevent progressive shrinking
+					// Based on the default item panel size from resource files
+
+					const int ORIGINAL_ITEM_PANEL_WIDTH = 315;
+					const int ORIGINAL_ITEM_PANEL_HEIGHT = 157;
+
+					// Set to slightly smaller size (85% of original, up from 75%)
+					m_pItemModelPanels[i]->SetSize(ORIGINAL_ITEM_PANEL_WIDTH, ORIGINAL_ITEM_PANEL_HEIGHT);
+
+					// Apply custom positioning settings to pan icons and text to the left
+					KeyValues* pKVs = new KeyValues("SkinSlotSettings");
+					pKVs->SetInt("model_center_x", 1);  // Disable centering
+					pKVs->SetInt("model_xpos", 0);     // Position icon towards left
+					pKVs->SetInt("text_center", 1);     // Disable text centering
+					pKVs->SetInt("text_xpos", 0);      // Position text towards left
+					m_pItemModelPanels[i]->ApplySettings(pKVs);
+					pKVs->deleteThis();
+
+					// Force layout recalculation to let the panel auto-scale its contents
+					m_pItemModelPanels[i]->InvalidateLayout(true);
+				}
+
+				// Make the action slot the same size as the skin slot
+				if (i == LOADOUT_POSITION_PDA)
+				{
+					// Use fixed original dimensions to prevent progressive shrinking
+					// Based on the default item panel size from resource files
+					const int ORIGINAL_ITEM_PANEL_WIDTH = 315;
+					const int ORIGINAL_ITEM_PANEL_HEIGHT = 157;
+
+					// Set to same size as skin slot
+					m_pItemModelPanels[i]->SetSize(ORIGINAL_ITEM_PANEL_WIDTH, ORIGINAL_ITEM_PANEL_HEIGHT);
+
+					// Apply custom positioning settings to pan icons and text to the left
+					KeyValues* pKVs = new KeyValues("ActionSlotSettings");
+					pKVs->SetInt("model_center_x", 1);  // Disable centering
+					pKVs->SetInt("model_xpos", 0);     // Position icon towards left
+					pKVs->SetInt("text_center", 1);     // Disable text centering
+					pKVs->SetInt("text_xpos", 0);      // Position text towards left
+					m_pItemModelPanels[i]->ApplySettings(pKVs);
+					pKVs->deleteThis();
+
+					// Force layout recalculation to let the panel auto-scale its contents
+					m_pItemModelPanels[i]->InvalidateLayout(true);
+				}
+
+			}
 
 			// Update position and visibility of the item option buttons
 			if ( i < m_vecItemOptionButtons.Count() )

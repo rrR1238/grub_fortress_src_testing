@@ -73,15 +73,15 @@ void CTFBat::Smack( void )
 #ifdef GAME_DLL
 	if ( BatDeflects() )
 	{
-#ifdef TF_RAID_MODE
-		if ( TFGameRules()->IsRaidMode() )
-		{
-		}
-		else
-#endif // TF_RAID_MODE
-		{
-			DeflectProjectiles();
-		}
+//#ifdef TF_RAID_MODE
+//		if ( TFGameRules()->IsRaidMode() )
+//		{
+//		}
+//		else
+//#endif // TF_RAID_MODE
+//		{
+//			DeflectProjectiles();
+//		}
 	}
 #endif
 }

@@ -39,7 +39,8 @@ public:
 	virtual void	Spawn();
 	virtual void	Precache();
 	void			Precache( const char *pchBaseModel );
-	virtual bool	IsHostileUpgrade( void ) { return true; }
+	virtual bool	IsAnUpgrade(void);
+	virtual bool	IsHostileUpgrade(void);
 	virtual void	FinishedBuilding( void );
 	virtual void	SetupAttachedVersion( void );
 	virtual void	DetachObjectFromObject( void );
@@ -70,7 +71,7 @@ private:
 	
 	float m_flSelfDestructTime;
 	float m_flSapperStartTime;
-
+	int m_iSapperType;
 	char m_szSapperModel[ _MAX_PATH ];
 	char m_szPlacementModel[ _MAX_PATH ];
 	char szSapperSound[ _MAX_PATH ];

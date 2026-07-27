@@ -43,6 +43,13 @@ extern const float tf_afterburn_max_duration;
 
 #define MAX_FIRE_WEAPON_SCENES 4
 
+//#define ACTION_NONE 0
+//#define ACTION_FORWARD 1
+//#define ACTION_BACKWARD 2
+//#define ACTION_LEFT 3
+//#define ACTION_RIGHT 4
+//#define ACTION_NULL 5
+
 //=============================================================================
 //
 // Player State Information
@@ -163,6 +170,14 @@ public:
 	virtual void		ResetScores( void );
 	virtual void		UpdateOnRemove( void );
 	void				CheckInstantLoadoutRespawn( void );
+	//void InputParse(inputdata_t& inputdata);
+	//float m_flTest;
+	//int parse;
+	//int m_iAction;
+	//int iAction;
+	//KeyValues* keyvalues = new KeyValues("test");
+	//KeyValues* data;
+	//CUtlVector <KeyValues*> test;
 
 	virtual void		ResetPerRoundStats( void );
 
@@ -319,7 +334,7 @@ public:
 	virtual void		RemoveAmmo( int iCount, int iAmmoIndex );
 	virtual void		RemoveAmmo( int iCount, const char *szName );
 	virtual int			GetAmmoCount( int iAmmoIndex ) const;
-	int					GetMaxAmmo( int iAmmoIndex, int iClassIndex = -1 );
+	int					GetMaxAmmo(int iAmmoIndex, int iClassIndex = -1 );
 	virtual int			GetMaxHealth()  const OVERRIDE;
 	int					GetMaxHealthForBuffing();
 	int					GetRuneHealthBonus() const;
@@ -735,7 +750,8 @@ public:
 
 	CNetworkVar( bool, m_bIsABot );
 	CNetworkVar( int, m_nBotSkill );
-
+//	CNetworkVar(int, m_iOverrideAmmoPrimary);
+//	CNetworkVar(int, m_iOverrideAmmoSecondary);
 	int					StateGet( void ) const;
 
 	void				SetOffHandWeapon( CTFWeaponBase *pWeapon );

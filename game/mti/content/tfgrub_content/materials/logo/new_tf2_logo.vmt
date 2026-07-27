@@ -1,6 +1,9 @@
 "UnlitGeneric"
 {
 	"$basetexture" "logo\new_tf2_logo"
-	"$translucent" 1
-	"$ignorez" 1
+	"$translucent" "1"
+	"$ignorez" "1"
 }
+// *** Encountered VTF file with an invalid minor version!
+// *** Encountered VTF file with an invalid full header!
+// Error reading texture header "materials/logo/new_tf2_logo.vtf"

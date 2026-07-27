@@ -1,0 +1,11 @@
+"ServerFinderConfig"
+{
+	"map"		"koth_sawmill_event"
+	"israndommap"		"1"
+	"maxplayers"		"24"
+	"MaxPing"		"0"
+	"RandomCrits"		"1"
+	"DamageSpread"		"0"
+	"gamemode"		"0"
+	"RespawnTimes"		"0"
+}

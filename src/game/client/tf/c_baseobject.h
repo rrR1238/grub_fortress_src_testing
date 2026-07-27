@@ -121,6 +121,8 @@ public:
 	void			HighlightBuildPoints( int flags );
 
 	bool			HasSapper( void );
+	bool			HasFriendlySapper(void);
+	int				GetSapperType(void);
 
 	bool			IsPlasmaDisabled( void );
 
@@ -262,6 +264,8 @@ private:
 	bool			m_bWasActive;
 	int				m_iOldHealth;
 	bool			m_bHasSapper;
+	bool			m_bHasFriendlySapper;
+	int				m_iSapperType;
 	bool			m_bOldSapper;
 	int				m_iObjectType;
 	int				m_iHealth;

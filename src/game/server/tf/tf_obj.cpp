@@ -160,6 +160,8 @@ IMPLEMENT_SERVERCLASS_ST(CBaseObject, DT_BaseObject)
 	SendPropInt(SENDINFO(m_iHealth), -1, SPROP_VARINT ),
 	SendPropInt(SENDINFO(m_iMaxHealth), -1, SPROP_VARINT ),
 	SendPropBool(SENDINFO(m_bHasSapper) ),
+	SendPropBool(SENDINFO(m_bHasFriendlySapper)),
+	SendPropBool(SENDINFO(m_iSapperType)),
 	SendPropInt(SENDINFO(m_iObjectType), Q_log2( OBJ_LAST ) + 1, SPROP_UNSIGNED ),
 	SendPropBool(SENDINFO(m_bBuilding) ),
 	SendPropBool(SENDINFO(m_bPlacing) ),
@@ -388,6 +390,7 @@ void CBaseObject::Spawn( void )
 
 	m_bWasMapPlaced = false;
 	m_bHasSapper = false;
+	m_bHasFriendlySapper = false;
 	if ( HasSpawnFlags(SF_BASEOBJ_INVULN) )
 	{
 		m_takedamage = DAMAGE_NO;
@@ -665,17 +668,16 @@ bool CBaseObject::UpdateAttachmentPlacement( CBaseObject *pObjectOverride )
 {
 	// See if we should snap to a build position
 	// finding one implies it is a valid position
-	if ( FindSnapToBuildPos( pObjectOverride ) )
-	{
-		m_bPlacementOK = true;
+		if (FindSnapToBuildPos(pObjectOverride))
+		{
+			m_bPlacementOK = true;
 
-		Teleport( &m_vecBuildOrigin, &GetLocalAngles(), NULL );
-	}
-	else
-	{
-		ResetPlacement();
-	}
-
+			Teleport(&m_vecBuildOrigin, &GetLocalAngles(), NULL);
+		}
+		else
+		{
+			ResetPlacement();
+		}
 	return m_bPlacementOK;
 }
 
@@ -1213,7 +1215,32 @@ bool CBaseObject::FindSnapToBuildPos( CBaseObject *pObjectOverride )
 			CTFTeam *pTeam = ( CTFTeam * )GetGlobalTeam( iTeam );
 			if ( !pTeam )
 				continue;
-			
+			// look for nearby buildpoints on other objects
+			for (i = 0; i < pTeam->GetNumObjects(); i++)
+			{
+				CBaseObject* pObject = pTeam->GetObject(i);
+				Assert(pObject);
+				if (pObject && !pObject->IsPlacing())
+				{
+					if (FindNearestBuildPoint(pObject, pPlayer, flNearestPoint, vecNearestBuildPoint))
+					{
+						if (GetSapperType() == TYPE_SAPPER_DISPENSER_OVERHEAL) {
+							if (pObject->GetType() != OBJ_DISPENSER) {
+								bSnappedToPoint = false;
+								bShouldAttachToParent = false;
+							}
+							else {
+								bSnappedToPoint = true;
+								bShouldAttachToParent = true;
+							}
+						}
+						else {
+							bSnappedToPoint = true;
+							bShouldAttachToParent = true;
+						}
+					}
+				}
+			}
 			// See if we're allowed to build on Robots
 			// MVM Versus - Patched, you can now sap robot players && Human bots can sap you
 			if ( TFGameRules() && TFGameRules()->GameModeUsesMiniBosses() && 
@@ -1233,28 +1260,13 @@ bool CBaseObject::FindSnapToBuildPos( CBaseObject *pObjectOverride )
 					}
 				}
 			}
-
-			// look for nearby buildpoints on other objects
-			for ( i = 0; i < pTeam->GetNumObjects(); i++ )
-			{
-				CBaseObject *pObject = pTeam->GetObject(i);
-				Assert( pObject );
-				if ( pObject && !pObject->IsPlacing() )
-				{
-					if ( FindNearestBuildPoint( pObject, pPlayer, flNearestPoint, vecNearestBuildPoint ) )
-					{
-						bSnappedToPoint = true;
-						bShouldAttachToParent = true;
-					}
-				}
-			}
 		}	
 	}
 	else
 	{
-		if ( !pObjectOverride->IsPlacing() )
+		if (!pObjectOverride->IsPlacing())
 		{
-			if ( FindNearestBuildPoint( pObjectOverride, pPlayer, flNearestPoint, vecNearestBuildPoint, true ) )
+			if (FindNearestBuildPoint(pObjectOverride, pPlayer, flNearestPoint, vecNearestBuildPoint, true))
 			{
 				bSnappedToPoint = true;
 				bShouldAttachToParent = true;
@@ -2004,13 +2016,28 @@ int CBaseObject::OnTakeDamage( const CTakeDamageInfo &info )
 		// Soak up the damage it would take to drop us to 1 health
 		flDamage = flDamage - m_flHealth;
 		SetHealth( 1 );
-
-		// Pass leftover damage 
-		if ( flDamage )
+		for (int iPoint = 0; iPoint < iNumObjects; iPoint++)
 		{
-			if ( PassDamageOntoChildren( info, &flDamage ) )
-				return flDamage;
+			CBaseObject* pObject = GetBuildPointObject(iPoint);
+
+			if (!pObject || pObject->IsAnUpgrade())
+			{
+				CTakeDamageInfo info2;
+				info2.SetInflictor(info.GetInflictor());
+				info2.SetAttacker(info.GetAttacker());
+				info2.SetWeapon(info.GetWeapon());
+				info2.SetDamageType(info.GetDamageType());
+				info2.SetDamage(0);
+				pObject->Killed(info2);
+				Killed(info2);
+			}
 		}
+		//// Pass leftover damage 
+		//if ( flDamage )
+		//{
+		//	if ( PassDamageOntoChildren( info, &flDamage ) )
+		//		return flDamage;
+		//}
 	}
 
 	if ( flDamage )
@@ -2346,7 +2373,7 @@ void CBaseObject::Killed( const CTakeDamageInfo &info )
 	// if this object has a sapper on it, and was not killed by the sapper (killed by damage other than crush, since sapper does crushing damage),
 	// award an assist to the owner of the sapper since it probably contributed to destroying this object
 	CObjectSapper *pSapper = GetSapper();
-	if ( pSapper && !( DMG_CRUSH & info.GetDamageType() ) && !m_bPlasmaDisable )
+	if ( pSapper && pSapper->GetObjectMode() != MODE_SAPPER_ENGINEER && !(DMG_CRUSH & info.GetDamageType()) && !m_bPlasmaDisable)
 	{
 		// give an assist to the sapper's owner
 		pAssister = pSapper->GetOwner();
@@ -2598,6 +2625,14 @@ CObjectSapper* CBaseObject::GetSapper( void )
 	return dynamic_cast< CObjectSapper* >( FirstMoveChild() );
 }
 
+int CBaseObject::GetSapperMode(void)
+{
+	if (!HasSapper())
+		return NULL;
+
+	return GetSapper()->GetObjectMode();
+}
+
 //-----------------------------------------------------------------------------
 // Purpose: Return true if I have at least 1 sapper on me
 //-----------------------------------------------------------------------------
@@ -2605,6 +2640,22 @@ bool CBaseObject::HasSapper( void )
 {
 	return m_bHasSapper;
 }
+
+bool CBaseObject::HasFriendlySapper(void)
+{
+	return m_bHasFriendlySapper;
+}
+
+int CBaseObject::GetSapperType(void)
+{
+	return m_iSapperType;
+}
+
+void CBaseObject::SetSapperType(int iSapperType)
+{
+	m_iSapperType = iSapperType;
+}
+
 
 //-----------------------------------------------------------------------------
 // Purpose: 
@@ -2615,28 +2666,38 @@ bool CBaseObject::IsPlasmaDisabled( void )
 }
 
 //-----------------------------------------------------------------------------
-void CBaseObject::OnAddSapper( void )
+void CBaseObject::OnAddSapper( int iSapperType )
 {
 	// Assume we can only build 1 sapper per object
 	Assert( m_bHasSapper == false );
-
-	m_bHasSapper = true;
-
-	CTFPlayer *pPlayer = GetBuilder();
-
-	if ( pPlayer )
-	{
-		//pPlayer->HintMessage( HINT_OBJECT_YOUR_OBJECT_SAPPED, true );
-		pPlayer->SpeakConceptIfAllowed( MP_CONCEPT_SPY_SAPPER, GetResponseRulesModifier() );
+	Assert(m_bHasFriendlySapper == false);
+//	Assert(m_iSapperType == 0);
+	if (iSapperType == MODE_SAPPER_ENGINEER) {
+		m_bHasFriendlySapper = true;
+		m_bHasSapper = false;
+	}
+	else {
+		m_bHasSapper = true;
 	}
 
-	UpdateDisabledState();
+	if (iSapperType != MODE_SAPPER_ENGINEER) {
+		CTFPlayer* pPlayer = GetBuilder();
+
+		if (pPlayer)
+		{
+			//pPlayer->HintMessage( HINT_OBJECT_YOUR_OBJECT_SAPPED, true );
+			pPlayer->SpeakConceptIfAllowed(MP_CONCEPT_SPY_SAPPER, GetResponseRulesModifier());
+		}
+		UpdateDisabledState();
+	}
 }
 
 //-----------------------------------------------------------------------------
 void CBaseObject::OnRemoveSapper( void )
 {
 	m_bHasSapper = false;
+	m_bHasFriendlySapper = false;
+	m_iSapperType = 0;
 	UpdateDisabledState();
 }
 
@@ -2756,7 +2817,7 @@ bool CBaseObject::InputWrenchHit( CTFPlayer *pPlayer, CTFWrench *pWrench, Vector
 
 	bool bDidWork = false;
 
-	if ( HasSapper() )
+	if ( HasSapper() && GetSapperMode() != MODE_SAPPER_ENGINEER )
 	{
 		// do damage to any attached buildings
 		CTakeDamageInfo info( pPlayer, pPlayer, pWrench, WRENCH_DMG_VS_SAPPER, DMG_CLUB, TF_DMG_WRENCH_FIX );

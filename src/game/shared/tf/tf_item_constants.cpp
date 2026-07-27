@@ -43,7 +43,6 @@ static const char *s_loadout_position_names[] =
 	"LOADOUT_POSITION_THROWABLE2",
 	"LOADOUT_POSITION_THROWABLE3",
 	"LOADOUT_POSITION_THROWABLE4",
-	
 };
 COMPILE_TIME_ASSERT( ARRAYSIZE( s_loadout_position_names ) == CLASS_LOADOUT_POSITION_COUNT );
 

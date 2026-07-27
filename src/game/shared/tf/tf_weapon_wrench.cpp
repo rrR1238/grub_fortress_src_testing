@@ -140,6 +140,23 @@ void CTFWrench::OnFriendlyBuildingHit( CBaseObject *pObject, CTFPlayer *pPlayer,
 		}
 	}
 }
+void CTFWrench::OnFriendlyTurretNPCHit(CNPC_FloorTurret* pObject, CTFPlayer* pPlayer, Vector hitLoc)
+{
+	// Did this object hit do any work? repair or upgrade?
+	bool bUsefulHit = true;
+
+	CDisablePredictionFiltering disabler;
+
+	if (bUsefulHit)
+	{
+		// play success sound
+		WeaponSound(SPECIAL1);
+	}
+	else
+	{
+		WeaponSound(SPECIAL2);
+	}
+}
 #endif
 
 void CTFWrench::Smack( void )
@@ -184,6 +201,7 @@ void CTFWrench::Smack( void )
 	{
 #ifdef GAME_DLL
 		OnFriendlyBuildingHit( dynamic_cast< CBaseObject * >( trace.m_pEnt ), pPlayer, trace.endpos );
+		OnFriendlyTurretNPCHit(dynamic_cast<CNPC_FloorTurret*>(trace.m_pEnt), pPlayer, trace.endpos);
 #else
 		// NVNT if the local player is the owner of this wrench 
 		//   Notify the haptics system we just repaired something.

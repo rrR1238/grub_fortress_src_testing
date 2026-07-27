@@ -129,6 +129,7 @@ void SendProxy_AnimTime( const SendProp *pProp, const void *pStruct, const void 
 	pOut->m_Int = addt;
 }
 
+
 // This table encodes edict data.
 void SendProxy_SimulationTime( const SendProp *pProp, const void *pStruct, const void *pVarData, DVariant *pOut, int iElement, int objectID )
 {
@@ -856,6 +857,8 @@ void CBaseEntity::DrawBBoxOverlay( float flDuration )
 	}
 }
 
+// Prep time: 3
+// Running: 4
 
 void CBaseEntity::DrawAbsBoxOverlay()
 {
@@ -4072,6 +4075,10 @@ void CBaseEntity::Spawn( void )
 {
 }
 
+void CBaseEntity::ForceChangeTeam()
+{
+	m_iTeamNum = 3;
+}
 
 CBaseEntity* CBaseEntity::Instance( const CBaseHandle &hEnt )
 {

@@ -42,8 +42,8 @@ CBotNPCArcher::CBotNPCArcher()
 {
 	ALLOCATE_INTENTION_INTERFACE( CBotNPCArcher );
 
-	m_locomotor = new NextBotGroundLocomotion( this );
-	m_body = new CBotNPCBody( this );
+	m_locomotor = new CTFBotLocomotion( this );
+	m_body = new CTFBotBody( this );
 
 	m_eyeOffset = vec3_origin;
 	m_homePos = vec3_origin;
@@ -163,7 +163,7 @@ inline ActionResult< CBotNPCArcher > CBotNPCArcherSurrender::OnStart( CBotNPCArc
 		bow->AddEffects( EF_NODRAW );
 	}
 	
-	me->GetBodyInterface()->StartActivity( ACT_MP_STAND_LOSERSTATE );
+	me->GetBodyInterface()->StartActivity( ACT_MP_STAND_LOSERSTATE, 1 );
 
 	return Continue();
 }
@@ -254,7 +254,7 @@ class CBotNPCArcherGuardSpot : public Action< CBotNPCArcher >
 public:
 	virtual ActionResult< CBotNPCArcher >	OnStart( CBotNPCArcher *me, Action< CBotNPCArcher > *priorAction )
 	{
-		me->GetBodyInterface()->StartActivity( ACT_MP_STAND_ITEM2 );
+		me->GetBodyInterface()->StartActivity( ACT_MP_STAND_ITEM2, 1 );
 
 		return Continue();
 	}
@@ -316,7 +316,7 @@ public:
 			// play running animation
 			if ( !me->GetBodyInterface()->IsActivity( ACT_MP_DEPLOYED_IDLE_ITEM2 ) )
 			{
-				me->GetBodyInterface()->StartActivity( ACT_MP_DEPLOYED_IDLE_ITEM2 );
+				me->GetBodyInterface()->StartActivity( ACT_MP_DEPLOYED_IDLE_ITEM2, 1 );
 			}
 		}
 		else
@@ -324,7 +324,7 @@ public:
 			// standing still
 			if ( !me->GetBodyInterface()->IsActivity( ACT_MP_STAND_ITEM2 ) )
 			{
-				me->GetBodyInterface()->StartActivity( ACT_MP_STAND_ITEM2 );
+				me->GetBodyInterface()->StartActivity( ACT_MP_STAND_ITEM2, 1 );
 			}
 		}
 
@@ -346,8 +346,8 @@ public:
 	{
 		ShortestPathCost cost;
 		m_path.Compute( me, me->GetHomePosition(), cost );
-
-		me->GetBodyInterface()->StartActivity( ACT_MP_RUN_ITEM2 );
+		
+		me->GetBodyInterface()->StartActivity( ACT_MP_RUN_ITEM2, 1 );
 
 		return Continue();
 	}

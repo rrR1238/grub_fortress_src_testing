@@ -4,13 +4,31 @@ DESCRIPTION INFO_OPTIONS
 {
 	"category1"
 	{
+		"Misador's Testing Initiative"
+		{ CATEGORY }
+	}
+//	"grub"
+//	{
+//		"Grub – Lead TF:Grub Dev
+//		NOTICE :If I Forgot to credit someone in here, reach out to me"
+//		{ BOOL }
+//		{ "1" }
+//	}
+	"misador"
+	{
+		"Misador441 – Lead M.T.I. Dev
+		NOTICE :If I Forgot to credit someone in here, reach out to me"
+		{ BOOL }
+		{ "1" }
+	}
+	"category1_2"
+	{
 		"Grub Fortress"
 		{ CATEGORY }
 	}
 	"grub"
 	{
-		"Grub – Lead TF:Grub Dev
-		NOTICE :If I Forgot to credit someone in here, reach out to me"
+		"Grub – Lead TF:Grub Dev"
 		{ BOOL }
 		{ "1" }
 	}		
@@ -82,6 +100,13 @@ DESCRIPTION INFO_OPTIONS
 		{ BOOL }
 		{ "1" }
 	}
+	"weapon6"
+	{
+		"Fortunate Son - Weapon file: Fortress Connected. Model: Open Fortress. TF2 port: smh2211. Custom Animations: Mr. PurplePigeon."
+		"https://gamebanana.com/mods/633176"
+		{ BOOL }
+		{ "1" }
+	}
 	"category3"
 	{
 		"Community Help/Contributions"
@@ -94,9 +119,15 @@ DESCRIPTION INFO_OPTIONS
 		{ BOOL }
 		{ "1" }
 	}	
+	"vvis"
+	{
+		"Vvis – Code assistance, provided some code from the FC (Fortress Connected)."
+		{ BOOL }
+		{ "1" }
+	}
 	"cf"
 	{
-		"Custom Fortress - The mod Grub Fortress is a fork of"
+		"Grub Fortress - The mod Misador's Testing Initiative is a fork of"
 		"github.com/ALIEN31ITA/Better-Fortress-2"
 		{ BOOL }
 		{ "1" }

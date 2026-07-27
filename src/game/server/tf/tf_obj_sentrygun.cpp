@@ -25,6 +25,7 @@
 #include "tf_weapon_knife.h"
 #include "tf_logic_robot_destruction.h"
 #include "tf_target_dummy.h"
+#include "tf_fx.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -234,6 +235,19 @@ void CObjectSentrygun::FirstSpawn()
 	BaseClass::FirstSpawn();
 }
 
+bool CObjectSentrygun::IsHL2Turret()
+{
+	bool bHL2Turret;
+	CALL_ATTRIB_HOOK_FLOAT_ON_OTHER(GetOwner(), bHL2Turret, pda_builds_hl2_turrets);
+	if (bHL2Turret)
+	{
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 Vector CObjectSentrygun::GetEnemyAimPosition(CBaseEntity* pEnemy) const
 {
 	// Default to pointing to the origin
@@ -274,7 +288,13 @@ void CObjectSentrygun::SentryThink(void)
 	{
 		CALL_ATTRIB_HOOK_FLOAT_ON_OTHER(GetOwner(), m_flSentryRange, mult_sentry_range);
 	}
-
+	//if (m_hTurret) {
+	//	if (IsBuilding() || IsPlacing()) {
+	//		this->ScriptEnableDraw();
+	//	}
+	//	m_hTurret->SetAbsOrigin(this->GetAbsOrigin());
+	//	m_hTurret->SetAbsAngles(this->GetAbsAngles());
+	//}
 	switch (m_iState)
 	{
 	case SENTRY_STATE_INACTIVE:
@@ -399,7 +419,34 @@ void CObjectSentrygun::OnGoActive(void)
 	{
 		SetBodygroup(FindBodygroupByName("mini_sentry_light"), 1);
 	}
+	//if (IsHL2Turret() && !m_hTurret) {
+	//	m_hTurret = dynamic_cast<CNPC_FloorTurret*>(CreateEntityByName("npc_turret_floor"));
+	//	if (m_hTurret)
+	//	{
+	//		m_hTurret->Precache();
+	//		DispatchSpawn(m_hTurret);
+	//		m_hTurret->Teleport(&this->GetAbsOrigin(), NULL, NULL);
+	//		UTIL_DropToFloor(m_hTurret, MASK_SOLID);
+	//		m_hTurret->Activate();
+	//		m_hTurret->VPhysicsGetObject()->EnableMotion(0);
+	//		m_hTurret->SetSolid(SOLID_NONE);
+	//		this->ScriptDisableDraw();
+	//	}
+//		m_hTurret->VPhysicsGetObject()->EnableMotion(0);
+		//if (m_hTurret) {
+		//	m_hTurret->Precache();
+		//	m_hTurret->Spawn();
+		//	m_hTurret->SetAbsOrigin(this->GetAbsOrigin());
+		//}
+//	}
 
+	// Try to create entity
+
+//	if (m_hTurret) {
+//		CNPC_FloorTurret *pTurret = m_hTurret;
+//		this->SetSolid(SOLID_NONE);
+//		this->ScriptDisableDraw();
+//	}
 	m_iState.Set(SENTRY_STATE_SEARCHING);
 
 	// Orient it
