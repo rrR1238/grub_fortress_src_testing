@@ -687,6 +687,11 @@ not sure if it should be used as a weapon"
 					"attribute_class"	"mod_teleporter_cost"
 					"value" 	"3.2" 
 				}
+				"is experimental item"
+				{
+					"attribute_class"	"is_experimental_item_DISPLAY"
+					"value"				"1"
+				}
 			}
 			"mouse_pressed_sound"	"ui/item_metal_weapon_pickup.wav"
 			"drop_sound"		"ui/item_metal_weapon_drop.wav"
@@ -729,7 +734,7 @@ not sure if it should be used as a weapon"
 			"item_description"	"You have to deal 150 damage with this weapon to charge it."
 			"item_slot"	"secondary"
 			"item_quality"		"rarity1"
-			"anim_slot"	"null"
+			"anim_slot"	"FORCE_NOT_USED"
 			"min_ilevel"	"1"
 			"max_ilevel"	"1"
 			"image_inventory"	"backpack/workshop/weapons/c_models/c_pro_smg/c_pro_smg"
@@ -775,11 +780,18 @@ not sure if it should be used as a weapon"
 				{
 					"ACT_VM_DRAW" 							"ACT_VM_DEPLOY_3"
 					"ACT_VM_IDLE" 							"ACT_VM_IDLE_3"
+					"ACT_VM_HOLSTER"					"ACT_ITEM2_VM_HOLSTER"
+					"ACT_VM_PULLBACK"					"ACT_ITEM2_VM_PULLBACK"
 					"ACT_VM_PRIMARYATTACK" 					"ACT_VM_PRIMARYATTACK_3"
-					"ACT_VM_RELOAD"						"ACT_VM_RELOAD_3"
-					"ACT_SECONDARY_VM_INSPECT_START"					"ACT_SECONDARY_VM_INSPECT_START_SMG"
-					"ACT_SECONDARY_VM_INSPECT_IDLE"					"ACT_SECONDARY_VM_INSPECT_START_SMG"
-					"ACT_SECONDARY_VM_INSPECT_END"					"ACT_SECONDARY_VM_INSPECT_START_SMG"
+					"ACT_VM_SECONDARYATTACK"			"ACT_ITEM2_VM_SECONDARYATTACK"
+					"ACT_VM_RELOAD"						"ACT_SECONDARY_VM_RELOAD_3"
+					"ACT_VM_DRYFIRE"					"ACT_ITEM2_VM_DRYFIRE"
+					"ACT_VM_IDLE_TO_LOWERED"			"ACT_ITEM2_VM_IDLE_TO_LOWERED"
+					"ACT_VM_IDLE_LOWERED"				"ACT_ITEM2_VM_IDLE_LOWERED"
+					"ACT_VM_LOWERED_TO_IDLE"			"ACT_ITEM2_VM_LOWERED_TO_IDLE"
+					"ACT_SECONDARY_VM_INSPECT_START"		"ACT_PRIMARY_ALT1_VM_INSPECT_START"
+					"ACT_SECONDARY_VM_INSPECT_IDLE"		"ACT_PRIMARY_ALT1_VM_INSPECT_IDLE"
+					"ACT_SECONDARY_VM_INSPECT_END"		"ACT_PRIMARY_ALT1_VM_INSPECT_END"
 				}
 				"sound_single_shot"	"Weapon_UrbanProfessional.Single"
 				"sound_burst"		"Weapon_UrbanProfessional.SingleCrit"
@@ -1438,6 +1450,11 @@ not sure if it should be used as a weapon"
 				{
 					"attribute_class"	"engineer_sapper_buff_health"
 					"value"				"1"								
+				}
+				"is experimental item"
+				{
+					"attribute_class"	"is_experimental_item_DISPLAY"
+					"value"				"1"
 				}
 			}
 			"xifier_class_remap"	"sapper"

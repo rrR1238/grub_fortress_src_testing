@@ -2,7 +2,7 @@
 {
 	"cp_dustbowl"
 	{
-		"viewed"		"437"
+		"viewed"		"479"
 	}
 	"d1_town_01"
 	{

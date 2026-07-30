@@ -625,6 +625,7 @@
 			"image_inventory_size_w"		"128"
 			"image_inventory_size_h"		"82"
 			"inspect_panel_dist" 			"32"
+			"anim_slot"	"tranq"
 			"model_player"					"models/workshop/weapons/c_models/c_snub_nose/c_snub_nose.mdl"
 			"attributes"
 			{

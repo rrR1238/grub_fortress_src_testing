@@ -1,7 +1,7 @@
 Welcome to Grub Fortress Open Alpha
 
-TF:Grub weapon selection is:
-- Nailgun (Scout secondary)
+M.T.I. weapon selection is:
+- Nailgun (Engineer secondary)
 - RPG (Soldier primary)
 - Leadpipe (Heavy melee)
 - The Pipebomb Launcher (Demoman secondary)
@@ -11,6 +11,12 @@ TF:Grub weapon selection is:
 - Metal Backpack (Engineer secondary)
 - Der Erwecker (Medic melee)
 - The Quickplay (Spy Watch)
+- The Double Trouble (Enigneer primary)
+- Fortunate Son (Engineer primary)
+- Shortstop (Engineer secondary)
+- MVM PDA (Engineer PDA)
+- Burning Shooter (Soldier secondary)
+- Buff Sapper (Engineer unique weapon)
 Maps unique to TF:Grub:
 - BD Bombyard
 - BD Hunted

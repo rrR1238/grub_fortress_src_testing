@@ -716,7 +716,7 @@
 				"Projectile speed increased"
 				{
 					"attribute_class"	"mult_projectile_speed"
-					"value"	"2"
+					"value"	"2.5"
 				}
 			}
 		}
