@@ -7,8 +7,9 @@ W.I.P. Based on the TF:Grub fork.
 
 ## Credits
 - **Misador's Testing Initiative**
-  - **Misador441** - Lead M.T.I. Dev
+  - **Misador441** – Lead M.T.I. Dev  
     https://www.youtube.com/@Misador441
+  
 - **Grub Fortress**
   - **Grub** – Lead TF:Grub Dev  
     https://www.youtube.com/@GrubTheBadMapper
