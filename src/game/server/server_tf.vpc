@@ -382,8 +382,8 @@ $Project "Server (Misador's Testing Initiative)"
 
 			$Folder	"HL2"
 			{
-				$File	"$SRCDIR\game\server\tf\hl2\weapon_physcannon.cpp"
-				$File	"$SRCDIR\game\server\tf\hl2\weapon_physcannon.h"
+				$File	"$SRCDIR\game\server\tf\hl2stuff\weapon_physcannon.cpp"
+				$File	"$SRCDIR\game\server\tf\hl2stuff\weapon_physcannon.h"
 			}
 			$Folder	"Weapon"
 			{
